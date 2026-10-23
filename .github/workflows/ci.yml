@@ -104,7 +104,7 @@ jobs:
       PGUSER: postgres
     steps:
       - uses: actions/checkout@v5
-      - name: 安裝 PostgreSQL 18 用戶端、PHP、FFmpeg、LibreOffice
+      - name: 安裝 PostgreSQL 18 用戶端、PHP、FFmpeg、LibreOffice Writer
         run: |
           set -euo pipefail
           sudo install -d /usr/share/postgresql-common/pgdg
@@ -113,10 +113,13 @@ jobs:
           echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt ${VERSION_CODENAME}-pgdg main" \
             | sudo tee /etc/apt/sources.list.d/pgdg.list > /dev/null
           export DEBIAN_FRONTEND=noninteractive
-          sudo -E timeout 300 apt-get update -q
-          # Excel／PowerPoint 轉 PDF（Calc、Impress）不在 CI 內：GitHub Runner 安裝會卡住；Word 轉 PDF 有測
-          sudo -E timeout 600 apt-get install -y -q --no-install-recommends postgresql-client-18 libpq5 \
-            php8.3-cli php8.3-pgsql php8.3-mbstring php8.3-xml php8.3-curl ffmpeg libreoffice-writer-nogui fonts-noto-cjk
+          # man-db 的觸發程序在 Runner 上可能跑很久；下載逾時與重試避免鏡像站偶爾卡住
+          sudo rm -f /var/lib/man-db/auto-update
+          APT="-o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 -o Dpkg::Use-Pty=0"
+          .github/ci_step.sh "apt-get update" sudo -E timeout 300 apt-get $APT update -q
+          # Excel／PowerPoint 轉 PDF（Calc、Impress）不在 CI 內；Word 轉 PDF 有測
+          .github/ci_step.sh "apt-get install" sudo -E timeout 900 apt-get $APT install -y -q --no-install-recommends \
+            postgresql-client-18 libpq5 php8.3-cli php8.3-pgsql php8.3-mbstring php8.3-xml php8.3-curl ffmpeg libreoffice-writer-nogui
           echo "/usr/lib/postgresql/18/bin" >> "$GITHUB_PATH"
       - name: Agent 的 Python 套件（agent/requirements.txt，與 Agent 映像相同）
         run: sudo timeout 600 python3 -m pip install -q --break-system-packages -r agent/requirements.txt
