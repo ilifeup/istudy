@@ -30,7 +30,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: 專案機密檢查（.env、金鑰、備份、教材、Token）
-        run: python3 scripts/check_secrets.py
+        run: .github/ci_step.sh "專案機密檢查" python3 scripts/check_secrets.py
       - name: gitleaks（整個 git 歷史）
         run: |
           set -euo pipefail
@@ -44,7 +44,14 @@ jobs:
           echo "$SUM  $F" | sha256sum -c -
           tar -xzf "$F" gitleaks
           cd "$GITHUB_WORKSPACE"
-          "$RUNNER_TEMP/gitleaks" detect --source . --redact --no-banner --exit-code 1
+          rc=0
+          "$RUNNER_TEMP/gitleaks" detect --source . --redact --no-banner --exit-code 1 \
+            --report-format json --report-path "$RUNNER_TEMP/gitleaks.json" || rc=$?
+          # 每個發現寫成註解（檔案、行號、規則、commit、fingerprint；內容已遮蔽）
+          python3 -c 'import json,sys
+          for f in json.load(open(sys.argv[1])) or []:
+              print("::error file=%s,line=%s,title=gitleaks %s::commit %s fingerprint %s" % (f["File"], f["StartLine"], f["RuleID"], f["Commit"][:10], f["Fingerprint"]))' "$RUNNER_TEMP/gitleaks.json" || true
+          exit $rc
 
   node:
     name: node
@@ -58,13 +65,13 @@ jobs:
       - name: 安裝相依套件
         run: npm install --no-audit --no-fund
       - name: TypeScript typecheck
-        run: npm run typecheck
+        run: .github/ci_step.sh "TypeScript typecheck" npm run typecheck
       - name: 建置 Server App 與四個 Client 版別
-        run: node scripts/build.mjs --all
+        run: .github/ci_step.sh "建置" node scripts/build.mjs --all
       - name: Client 測試（連線偵測、更新、Ubuntu 更新服務）
-        run: npm run test:client
+        run: .github/ci_step.sh "Client 測試" npm run test:client
       - name: Client 打包驗證測試
-        run: npm run test:packaging
+        run: .github/ci_step.sh "Client 打包驗證測試" npm run test:packaging
       - name: 語法檢查（shell、Python、PHP）
         run: |
           set -euo pipefail
@@ -120,15 +127,15 @@ jobs:
           psql --version; pg_dump --version; php -v | head -1; ffmpeg -version | head -1; soffice --version; "$ISTUDY_AGE_BIN" --version
           psql -X -d postgres -c 'SELECT version()'
       - name: PHP 規則測試
-        run: php server/tests/unit/rules_test.php
+        run: .github/ci_step.sh "PHP 規則測試" php server/tests/unit/rules_test.php
       # 測試以 root 執行（與開發環境相同：權限、ACL、nobody 切換）
       - name: Migration 測試（全新安裝、dev.53 升級、0011）
-        run: sudo -E env "PATH=$PATH" python3 -m unittest -v server/tests/integration/test_migrations_dev55.py
+        run: .github/ci_step.sh "Migration 測試" sudo -E env "PATH=$PATH" python3 -m unittest -v server/tests/integration/test_migrations_dev55.py
       - name: Server API 整合測試
-        run: sudo -E env "PATH=$PATH" python3 -m unittest -v server/tests/integration/test_api.py
+        run: .github/ci_step.sh "Server API 整合測試" sudo -E env "PATH=$PATH" python3 -m unittest -v server/tests/integration/test_api.py
       - name: Agent 測試
         working-directory: agent
         run: >-
-          sudo -E env "PATH=$PATH" python3 -m unittest -v
+          ../.github/ci_step.sh "Agent 測試" sudo -E env "PATH=$PATH" python3 -m unittest -v
           tests.test_agent tests.test_asr tests.test_backup62 tests.test_dev61 tests.test_dev62 tests.test_istudyctl
           tests.test_mailer tests.test_mediaacl tests.test_office tests.test_qsv_check tests.test_uem
