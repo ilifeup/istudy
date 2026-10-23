@@ -94,3 +94,8 @@ test('online／offline 事件或按「重試」：立即檢查（不等排程）
   await h.check();                        // online 事件
   assert.equal(h.current.state, 'ok');
 });
+
+// 暫時（PR 測試用，不會合併）：故意失敗，驗證 CI 失敗時不會被合併
+test('CI 合併檢查示範：故意失敗', () => {
+  assert.fail('故意失敗：這個 PR 不應該被合併');
+});
