@@ -1,0 +1,46 @@
+# 建置產物與相依套件
+node_modules/
+dist/
+build/
+out/
+*.tsbuildinfo
+__pycache__/
+*.pyc
+.pytest_cache/
+*.log
+
+# 設定與機密：只允許 .env.example
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+
+# 資料庫備份、加密備份、教材（不進版本庫）
+*.age
+istudy-backup-*.tar.gz
+istudy-db-*.sql
+istudy-db-*.sql.gz
+*.dump
+*.mp4
+*.mts
+*.MTS
+*.m2ts
+*.mov
+*.mkv
+*.avi
+*.wmv
+*.mp3
+*.wav
+*.m4a
+/Media/
+
+# 編輯器與系統檔
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
