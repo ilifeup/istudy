@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2021",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noImplicitAny": false,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "lib": ["ES2021", "DOM", "DOM.Iterable"],
+    "types": ["node"],
+    "isolatedModules": true
+  },
+  "include": ["packages/**/*.ts", "packages/**/*.tsx", "apps/*/src/**/*.tsx", "apps/*/src/**/*.ts", "apps/*/electron/**/*.ts", "types/*.d.ts"]
+}

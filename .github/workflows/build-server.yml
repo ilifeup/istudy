@@ -1,0 +1,77 @@
+# Ubuntu Server App 打包（.deb）＋ migration 與 patch 腳本檢查。手動執行或推送 v* 標籤時執行。
+# 只產生 Artifact；不連線、不修改正式 Ubuntu Server（10.3.3.100），不發布、不部署。
+name: Build Server
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+env:
+  ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+
+jobs:
+  server-app:
+    name: server-app
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s --health-timeout 5s --health-retries 30
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: "5432"
+      DB_USER: postgres
+      DB_PASSWORD: x
+      PGHOST: 127.0.0.1
+      PGPORT: "5432"
+      PGUSER: postgres
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: 安裝相依套件
+        run: |
+          npm install --no-audit --no-fund
+          sudo apt-get update -q
+          sudo apt-get install -y -q --no-install-recommends php8.3-cli php8.3-pgsql php8.3-mbstring
+      - name: 建置 Server App
+        run: node scripts/build.mjs --app server
+      - name: 打包 .deb（下載 Electron 官方 Linux 版並核對 SHA-256）
+        run: python3 deploy/package_server_app.py
+      - name: 檢查 .deb
+        run: |
+          set -euo pipefail
+          DEB=$(ls dist/istudy-server-app_*_amd64.deb)
+          dpkg-deb --info "$DEB"
+          dpkg-deb --contents "$DEB" | grep -c . | xargs echo "檔案數："
+      - name: Migration 檢查（全新安裝、dev.53 升級、0011）
+        run: python3 -m unittest -v server/tests/integration/test_migrations_dev55.py
+      - name: patch_dev62.sh 檢查（語法＋流程測試，全部用假指令，不碰主機）
+        run: |
+          bash -n deploy/patch_dev62.sh
+          sudo -E env "PATH=$PATH" bash deploy/tests/patch_dev62_flow_test.sh
+      - name: SHA-256
+        run: |
+          cd dist
+          sha256sum istudy-server-app_*_amd64.deb | tee SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: istudy-server-app-${{ github.sha }}
+          path: |
+            dist/istudy-server-app_*_amd64.deb
+            dist/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 30

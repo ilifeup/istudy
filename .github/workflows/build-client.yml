@@ -1,0 +1,53 @@
+# Client 安裝檔：Win10、Win11、Win7（Electron 22）、Ubuntu。手動執行或推送 v* 標籤時執行。
+# 只產生 Artifact；不發布到 Server 的更新目錄，教室電腦不會因此更新。
+name: Build Client
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+env:
+  ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+  CSC_IDENTITY_AUTO_DISCOVERY: "false"
+
+jobs:
+  client:
+    name: client-${{ matrix.channel }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { channel: win10, os: windows-2022 }
+          - { channel: win11, os: windows-2022 }
+          - { channel: win7, os: windows-2022 }
+          - { channel: ubuntu, os: ubuntu-24.04 }
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 40
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: 安裝相依套件
+        run: npm install --no-audit --no-fund
+      - name: 打包 ${{ matrix.channel }}
+        run: node scripts/package_client.mjs --channel ${{ matrix.channel }}
+      - name: SHA-256
+        run: |
+          cd "dist/clients/${{ matrix.channel }}"
+          ls -la
+          sha256sum $(ls | grep -v '^SHA256SUMS.txt$') | tee SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: istudy-client-${{ matrix.channel }}-${{ github.sha }}
+          path: dist/clients/${{ matrix.channel }}/
+          if-no-files-found: error
+          retention-days: 30

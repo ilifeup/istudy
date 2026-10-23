@@ -1,0 +1,15 @@
+{
+  "project": "iStudy",
+  "delivery": "dev.62",
+  "scope": "MVP：Ubuntu Server（後端）＋Server App＋Client（Win10／Win11 優先，再 Ubuntu、Win7）",
+  "server": "1.0.0-dev.62",
+  "api_level": 1,
+  "min_api_level": 1,
+  "client": {
+    "win7":   { "version": "1.0.0-dev.62", "api_level": 1, "electron": "22.3.27" },
+    "win10":  { "version": "1.0.0-dev.62", "api_level": 1, "electron": "44.9.0" },
+    "win11":  { "version": "1.0.0-dev.62", "api_level": 1, "electron": "44.9.0" },
+    "ubuntu": { "version": "1.0.0-dev.62", "api_level": 1, "electron": "44.9.0" }
+  },
+  "server_app": { "electron": "44.9.0" }
+}

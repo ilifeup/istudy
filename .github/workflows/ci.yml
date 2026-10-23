@@ -1,0 +1,134 @@
+# iStudy CI：每個 PR、main 的每次 push、手動執行。
+# 不連線正式 Server（10.3.3.100），不使用任何 Secrets；GITHUB_TOKEN 只有讀取權限。
+# 合併規則見 docs/GITHUB.md：三個 job（secrets、node、server）都必須是 success，且測試的 Commit 等於 PR 的 Head SHA。
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+
+jobs:
+  secrets:
+    name: secrets
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: 專案機密檢查（.env、金鑰、備份、教材、Token）
+        run: python3 scripts/check_secrets.py
+      - name: gitleaks（整個 git 歷史）
+        run: |
+          set -euo pipefail
+          V=8.21.2
+          F="gitleaks_${V}_linux_x64.tar.gz"
+          cd "$RUNNER_TEMP"
+          curl -sSfL -o "$F" "https://github.com/gitleaks/gitleaks/releases/download/v${V}/${F}"
+          curl -sSfL -o checksums.txt "https://github.com/gitleaks/gitleaks/releases/download/v${V}/gitleaks_${V}_checksums.txt"
+          SUM=$(awk -v f="$F" '$2==f{print $1}' checksums.txt)
+          test -n "$SUM"
+          echo "$SUM  $F" | sha256sum -c -
+          tar -xzf "$F" gitleaks
+          cd "$GITHUB_WORKSPACE"
+          "$RUNNER_TEMP/gitleaks" detect --source . --redact --no-banner --exit-code 1
+
+  node:
+    name: node
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: 安裝相依套件
+        run: npm install --no-audit --no-fund
+      - name: TypeScript typecheck
+        run: npm run typecheck
+      - name: 建置 Server App 與四個 Client 版別
+        run: node scripts/build.mjs --all
+      - name: Client 測試（連線偵測、更新、Ubuntu 更新服務）
+        run: npm run test:client
+      - name: Client 打包驗證測試
+        run: npm run test:packaging
+      - name: 語法檢查（shell、Python、PHP）
+        run: |
+          set -euo pipefail
+          git ls-files '*.sh' | while read -r f; do bash -n "$f"; done
+          python3 -m compileall -q agent server scripts deploy apps
+          git ls-files '*.php' | while read -r f; do php -l "$f" > /dev/null; done
+          echo "OK"
+
+  server:
+    name: server
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s --health-timeout 5s --health-retries 30
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: "5432"
+      DB_USER: postgres
+      DB_PASSWORD: x
+      PGHOST: 127.0.0.1
+      PGPORT: "5432"
+      PGUSER: postgres
+    steps:
+      - uses: actions/checkout@v5
+      - name: 安裝 PostgreSQL 18 用戶端、PHP、FFmpeg、LibreOffice
+        run: |
+          set -euo pipefail
+          sudo install -d /usr/share/postgresql-common/pgdg
+          sudo curl -sSfL -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
+          . /etc/os-release
+          echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt ${VERSION_CODENAME}-pgdg main" \
+            | sudo tee /etc/apt/sources.list.d/pgdg.list > /dev/null
+          sudo apt-get update -q
+          sudo apt-get install -y -q --no-install-recommends postgresql-client-18 libpq5 \
+            php8.3-cli php8.3-pgsql php8.3-mbstring php8.3-xml php8.3-curl ffmpeg libreoffice-writer-nogui fonts-noto-cjk
+          echo "/usr/lib/postgresql/18/bin" >> "$GITHUB_PATH"
+      - name: age（deploy/vendor 內附，核對 SHA-256）
+        run: |
+          set -euo pipefail
+          echo "7df45a6cc87d4da11cc03a539a7470c15b1041ab2b396af088fe9990f7c79d50  deploy/vendor/age-v1.2.1-linux-amd64.tar.gz" | sha256sum -c -
+          tar -xzf deploy/vendor/age-v1.2.1-linux-amd64.tar.gz -C "$RUNNER_TEMP"
+          echo "ISTUDY_AGE_BIN=$RUNNER_TEMP/age/age" >> "$GITHUB_ENV"
+      - name: 版本
+        run: |
+          psql --version; pg_dump --version; php -v | head -1; ffmpeg -version | head -1; soffice --version; "$ISTUDY_AGE_BIN" --version
+          psql -X -d postgres -c 'SELECT version()'
+      - name: PHP 規則測試
+        run: php server/tests/unit/rules_test.php
+      # 測試以 root 執行（與開發環境相同：權限、ACL、nobody 切換）
+      - name: Migration 測試（全新安裝、dev.53 升級、0011）
+        run: sudo -E env "PATH=$PATH" python3 -m unittest -v server/tests/integration/test_migrations_dev55.py
+      - name: Server API 整合測試
+        run: sudo -E env "PATH=$PATH" python3 -m unittest -v server/tests/integration/test_api.py
+      - name: Agent 測試
+        working-directory: agent
+        run: >-
+          sudo -E env "PATH=$PATH" python3 -m unittest -v
+          tests.test_agent tests.test_asr tests.test_backup62 tests.test_dev61 tests.test_dev62 tests.test_istudyctl
+          tests.test_mailer tests.test_mediaacl tests.test_office tests.test_qsv_check tests.test_uem
