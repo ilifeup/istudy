@@ -45,7 +45,7 @@ jobs:
           tar -xzf "$F" gitleaks
           cd "$GITHUB_WORKSPACE"
           rc=0
-          "$RUNNER_TEMP/gitleaks" detect --source . --redact --no-banner --exit-code 1 \
+          "$RUNNER_TEMP/gitleaks" detect --source . --config .gitleaks.toml --redact --no-banner --exit-code 1 \
             --report-format json --report-path "$RUNNER_TEMP/gitleaks.json" || rc=$?
           # 每個發現寫成註解（檔案、行號、規則、commit、fingerprint；內容已遮蔽）
           python3 -c 'import json,sys
@@ -114,8 +114,11 @@ jobs:
             | sudo tee /etc/apt/sources.list.d/pgdg.list > /dev/null
           sudo apt-get update -q
           sudo apt-get install -y -q --no-install-recommends postgresql-client-18 libpq5 \
-            php8.3-cli php8.3-pgsql php8.3-mbstring php8.3-xml php8.3-curl ffmpeg libreoffice-writer-nogui fonts-noto-cjk
+            php8.3-cli php8.3-pgsql php8.3-mbstring php8.3-xml php8.3-curl ffmpeg \
+            libreoffice-writer-nogui libreoffice-calc-nogui libreoffice-impress-nogui fonts-noto-cjk
           echo "/usr/lib/postgresql/18/bin" >> "$GITHUB_PATH"
+      - name: Agent 的 Python 套件（agent/requirements.txt，與 Agent 映像相同）＋測試用 Office 套件
+        run: sudo python3 -m pip install -q --break-system-packages -r agent/requirements.txt openpyxl python-pptx
       - name: age（deploy/vendor 內附，核對 SHA-256）
         run: |
           set -euo pipefail

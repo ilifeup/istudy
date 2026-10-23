@@ -1,0 +1,11 @@
+# gitleaks 設定：沿用預設規則，只放行單元測試裡刻意寫的假金鑰（完整字串比對，不是整個檔案放行）。
+[extend]
+useDefault = true
+
+[allowlist]
+description = "agent/tests/test_mailer.py 的假 relay 金鑰（測試金鑰錯誤的情況，不是機密）"
+regexTarget = "secret"
+regexes = [
+  '''^relay-test-key-0123456789abcdef$''',
+  '''^wrong-key-0123456789abcdefgh$''',
+]
