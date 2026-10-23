@@ -1,0 +1,87 @@
+# iStudy Server（第 17 章）：php／nginx／agent。資料庫是 Ubuntu 主機的 PostgreSQL 18（不在 Docker 內）。
+# 開機時由 istudy.service 在 /Media 掛載完成、主機 PostgreSQL 的 socket 出現後執行 docker compose up -d；
+# 重啟策略為 on-failure，不讓 Docker 在 /Media 掛載前自行啟動容器。
+name: istudy
+
+# 主機 PostgreSQL 18：php、agent 都經「唯讀綁定的主機 Unix socket 目錄」連線，不經 TCP，不對外開任何資料庫連接埠。
+# PG_SOCKET_DIR、DB_PORT 由 istudyctl bootstrap 依主機的 unix_socket_directories／port 寫入 .env。
+x-db-env: &db-env
+  DB_NAME: istudy
+  DB_USER: istudy
+  DB_PASSWORD: ${DB_PASSWORD:?請執行 istudyctl bootstrap 產生 .env}
+  DB_HOST: /var/run/postgresql
+  DB_PORT: "${DB_PORT:-5432}"
+
+x-pg-socket: &pg-socket
+  type: bind
+  source: ${PG_SOCKET_DIR:-/var/run/postgresql}
+  target: /var/run/postgresql
+  read_only: true
+  bind:
+    create_host_path: false        # 目錄不存在時不讓 Docker 以 root 建立（會讓主機 PostgreSQL 無法建立 socket）
+
+services:
+  php:
+    image: istudy/php:${ISTUDY_VERSION:-dev}
+    build:
+      context: .
+      dockerfile: server/php/Dockerfile
+    restart: on-failure
+    environment:
+      <<: *db-env
+      MEDIA_ROOT: /Media
+      ISTUDY_VERSION_FILE: /var/www/VERSION.json
+      ISTUDY_SENDFILE: nginx
+      ISTUDY_CORS_ORIGINS: app://istudy
+    volumes:
+      - *pg-socket
+      - ${MEDIA_ROOT:-/Media}:/Media:ro
+      - ./VERSION.json:/var/www/VERSION.json:ro
+
+  nginx:
+    image: nginx:1.28.0-alpine
+    restart: on-failure
+    ports:
+      - "${ISTUDY_PORT:-4080}:80"      # LAN：一般 API、串流、更新檔、心跳
+      - "127.0.0.1:4081:81"            # 只限本機：Server App（一般 API＋管理 API）
+    volumes:
+      - ./server/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./server/nginx/istudy_fastcgi.conf:/etc/nginx/istudy_fastcgi.conf:ro
+      - ./server/nginx/istudy_protected.conf:/etc/nginx/istudy_protected.conf:ro
+      - ${MEDIA_ROOT:-/Media}:/Media:ro
+      - /srv/istudy/updates:/srv/istudy/updates:ro
+    depends_on:
+      - php
+
+  agent:
+    image: istudy/agent:${ISTUDY_VERSION:-dev}
+    build:
+      context: .
+      dockerfile: agent/Dockerfile
+    restart: on-failure
+    network_mode: host                  # 送出 WOL 廣播封包
+    user: "10001:10001"                 # 不以 root 執行（第 16 章）
+    group_add:
+      - "${RENDER_GID:-109}"            # 使用 /dev/dri（Quick Sync）
+    devices:
+      - /dev/dri:/dev/dri
+    environment:
+      <<: *db-env                       # host 網路不共用檔案系統：socket 仍須綁定掛載（見下方 volumes）
+      MEDIA_ROOT: /Media
+      ISTUDY_MODELS_DIR: /models
+      ISTUDY_BACKUP_DIR: /srv/istudy/backup
+      ISTUDY_BACKUP_REQUIRE_MOUNT: "0"  # 備份放在系統 SSD 的 /srv/istudy/backup（已決定），不要求另外掛載磁碟
+      ISTUDY_HOSTCHECK_FILE: /var/lib/istudy/hostcheck.json
+      ISTUDY_HOST_CONFIG_DIR: /host-config
+      ISTUDY_VERSION_FILE: /opt/istudy/VERSION.json
+      ISTUDY_ENCODER: ${ISTUDY_ENCODER:-auto}
+    volumes:
+      - *pg-socket
+      - ${MEDIA_ROOT:-/Media}:/Media
+      - /srv/istudy/backup:/srv/istudy/backup
+      - /var/lib/istudy/hostcheck.json:/var/lib/istudy/hostcheck.json:ro
+      - ./models:/models:ro
+      - ./VERSION.json:/opt/istudy/VERSION.json:ro
+      - ./compose.yaml:/host-config/compose.yaml:ro
+      - ./.env:/host-config/.env:ro
+      - ./VERSION.json:/host-config/VERSION.json:ro

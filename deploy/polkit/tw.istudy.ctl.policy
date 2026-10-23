@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+<!-- iStudy Server App 主機維護：只允許 pkexec 執行 /usr/local/sbin/istudyctl，需輸入 Ubuntu 系統密碼（5 分鐘內不再詢問） -->
+<policyconfig>
+  <vendor>iStudy</vendor>
+  <action id="tw.istudy.ctl">
+    <description>iStudy 主機維護</description>
+    <description xml:lang="zh_TW">iStudy 主機維護</description>
+    <message>iStudy Server App 需要系統管理員權限才能執行主機維護</message>
+    <message xml:lang="zh_TW">iStudy Server App 需要系統管理員權限才能執行主機維護</message>
+    <!-- 本機登入的桌面：輸入一次後 5 分鐘內不再詢問。RustDesk 等遠端操作時，工作階段可能被視為「非使用中」，
+         這時仍可執行，但每次都要輸入系統密碼（auth_admin）。不論哪一種都一定要輸入密碼。 -->
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>auth_admin</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/local/sbin/istudyctl</annotate>
+  </action>
+</policyconfig>

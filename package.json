@@ -1,0 +1,30 @@
+{
+  "name": "istudy",
+  "version": "1.0.0-dev.62",
+  "private": true,
+  "description": "iStudy 心賞氣悅・無相氣學 助教複習系統（Server＋Server App＋Client MVP）",
+  "scripts": {
+    "build": "node scripts/build.mjs --app server",
+    "build:clients": "node scripts/build.mjs --app client --channel win10 && node scripts/build.mjs --app client --channel win11 && node scripts/build.mjs --app client --channel ubuntu && node scripts/build.mjs --app client --channel win7",
+    "typecheck": "tsc -p tsconfig.json",
+    "deb": "python3 deploy/package_server_app.py",
+    "package:clients": "node scripts/package_client.mjs --all",
+    "test:packaging": "node --test scripts/tests/package_client.test.mjs",
+    "test:client": "node --test scripts/tests/health.test.mjs scripts/tests/client_updater.test.mjs && python3 -m unittest scripts/tests/test_client_update.py",
+    "e2e": "node apps/tests/e2e.mjs --only server"
+  },
+  "dependencies": {
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "pdfjs-dist": "6.2.108",
+    "electron-updater": "6.3.9"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "typescript": "6.0.3",
+    "@types/node": "26.2.0",
+    "playwright": "1.56.0",
+    "electron-builder": "25.1.8",
+    "electron": "44.9.0"
+  }
+}

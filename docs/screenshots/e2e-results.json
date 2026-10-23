@@ -1,0 +1,40 @@
+{
+ "version": "1.0.0-dev.61",
+ "date": "2026-10-22",
+ "full_run": {
+  "passed": 154,
+  "total": 154,
+  "note": "Client win10、win7＋Server App（含 dev.61 新頁面）；逐項結果見 TEST_RESULTS_DEV61.md"
+ },
+ "deb_run": {
+  "passed": 5,
+  "total": 5,
+  "checks": [
+   {
+    "name": ".deb 安裝後可啟動（isPackaged）",
+    "ok": true,
+    "detail": ""
+   },
+   {
+    "name": ".deb 版未部署時顯示「初始部署」（沒有 istudyctl 時提示先執行 install.sh）",
+    "ok": true,
+    "detail": ""
+   },
+   {
+    "name": ".deb 版登入 Super 並顯示總覽",
+    "ok": true,
+    "detail": ""
+   },
+   {
+    "name": ".deb 版主機維護走 pkexec（沒有 pkexec 時顯示處理方式）",
+    "ok": true,
+    "detail": ""
+   },
+   {
+    "name": ".deb 版畫面沒有 JavaScript 錯誤",
+    "ok": true,
+    "detail": ""
+   }
+  ]
+ }
+}

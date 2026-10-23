@@ -1,0 +1,6 @@
+# Agent 只有字幕需要第三方套件；資料庫連線使用 libpq（ctypes，只用標準函式庫）
+# dev.59：移除 faster-whisper（Whisper 引擎已移除；FunASR 由 sherpa-onnx 執行，不需要 ctranslate2／onnxruntime 等套件）
+opencc==1.1.9
+# dev.57：FunASR 模型（Paraformer-zh／SenseVoiceSmall）以 sherpa-onnx 執行；模型由 istudyctl asr-models 下載
+sherpa-onnx==1.13.8
+numpy        # worker/asr/audio.py 直接使用
