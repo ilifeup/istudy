@@ -137,9 +137,13 @@ jobs:
         run: .github/ci_step.sh "Migration 測試" sudo -E env "PATH=$PATH" python3 -m unittest -v server/tests/integration/test_migrations_dev55.py
       - name: Server API 整合測試
         run: .github/ci_step.sh "Server API 整合測試" sudo -E env "PATH=$PATH" python3 -m unittest -v server/tests/integration/test_api.py
-      - name: Agent 測試
+      - name: Agent 測試（每個模組各自一個程序，與開發環境相同；以 root 執行）
         working-directory: agent
-        run: >-
-          ../.github/ci_step.sh "Agent 測試" sudo -E env "PATH=$PATH" python3 -m unittest -v
-          tests.test_agent tests.test_asr tests.test_backup62 tests.test_dev61 tests.test_dev62 tests.test_istudyctl
-          tests.test_mailer tests.test_mediaacl tests.test_office tests.test_qsv_check tests.test_uem
+        run: |
+          # test_mediaacl 會切換成 nobody：讓 nobody 能進到專案資料夾（只開路徑的執行權限）
+          sudo chmod o+x /home/runner /home/runner/work "$(dirname "$GITHUB_WORKSPACE")"
+          fail=0
+          for m in test_agent test_asr test_backup62 test_dev61 test_dev62 test_istudyctl test_mailer test_mediaacl test_office test_qsv_check test_uem; do
+            ../.github/ci_step.sh "Agent $m" sudo -E env "PATH=$PATH" python3 -m unittest -v "tests.$m" || fail=1
+          done
+          exit $fail
