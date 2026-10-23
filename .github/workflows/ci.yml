@@ -52,6 +52,9 @@ jobs:
           for f in json.load(open(sys.argv[1])) or []:
               print("::error file=%s,line=%s,title=gitleaks %s::commit %s fingerprint %s" % (f["File"], f["StartLine"], f["RuleID"], f["Commit"][:10], f["Fingerprint"]))' "$RUNNER_TEMP/gitleaks.json" || true
           exit $rc
+      - name: 測試數量（寫成註解，API 讀得到）
+        if: always()
+        run: .github/ci_counts.sh
 
   node:
     name: node
@@ -79,6 +82,9 @@ jobs:
           python3 -m compileall -q agent server scripts deploy apps
           git ls-files '*.php' | while read -r f; do php -l "$f" > /dev/null; done
           echo "OK"
+      - name: 測試數量（寫成註解，API 讀得到）
+        if: always()
+        run: .github/ci_counts.sh
 
   server:
     name: server
@@ -150,3 +156,6 @@ jobs:
             ../.github/ci_step.sh "Agent $m" sudo -E env "PATH=$PATH" python3 -m unittest -v "tests.$m" || fail=1
           done
           exit $fail
+      - name: 測試數量（寫成註解，API 讀得到）
+        if: always()
+        run: .github/ci_counts.sh

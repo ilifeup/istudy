@@ -9,6 +9,15 @@ name=$1; shift
 log=$(mktemp)
 "$@" 2>&1 | tee "$log"
 rc=${PIPESTATUS[0]}
+# 測試數量（Python unittest「Ran N tests／OK」、node --test「# pass／# fail」、「N … passed／通過」）寫進
+# $RUNNER_TEMP/ci_counts.txt，job 最後由 .github/ci_counts.sh 寫成一則註解，API 讀得到
+summary=$(grep -E '^Ran [0-9]+ tests?|^(OK|FAILED)( \(.*\))?$|^# (tests|pass|fail|skipped) [0-9]+$|[0-9]+ (rule checks passed|通過)' "$log" \
+  | tr '\n' ' ' | sed 's/  */ /g; s/ $//')
+if [ "$rc" -eq 0 ]; then
+  echo "✓ ${name}：${summary:-OK}" >> "${RUNNER_TEMP:-/tmp}/ci_counts.txt"
+else
+  echo "✗ ${name}（exit ${rc}）：${summary}" >> "${RUNNER_TEMP:-/tmp}/ci_counts.txt"
+fi
 if [ "$rc" -ne 0 ]; then
   if grep -q '^======' "$log"; then
     detail=$(sed -n '/^======/,$p' "$log")
