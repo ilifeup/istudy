@@ -22,6 +22,7 @@ import { WolPage } from './admin/Wol';
 import { TagPolicyPage } from './admin/TagPolicy';
 import { PcInfoPage } from './admin/PcInfo';
 import { EmailReportPage } from './admin/EmailReport';
+import { PageLocator } from './PageLocator';
 
 export interface ServerExtension {
   /** 「Server 管理」分頁（Server App 才有） */
@@ -219,6 +220,7 @@ export function App(props: { info: AppInfo; server?: ServerExtension }): any {
           <span className="grow" />
           <span>{server && server.footerLabel ? server.footerLabel : info.versionLabel} · © 2026 無相氣學</span>
         </footer>
+        <PageLocator route={route.page} role={account.role} server={!!server} navigate={(p)=>go(p)} />
         <Toasts items={toasts} />
       </div>
     </AppContext.Provider>
