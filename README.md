@@ -1,6 +1,6 @@
 # iStudy 1.0.0-dev.62（MVP）
 
-心賞氣悅・無相氣學 助教複習系統。這一版是 MVP：**Ubuntu Server 後端＋Server App＋Client App（Win10、Win11、Ubuntu、Win7）**。
+iStudy 學習系統。這一版是 MVP：**Ubuntu Server 後端＋Server App＋Client App（Win10、Win11、Ubuntu、Win7）**。
 
 - 部署步驟：[docs/DEPLOY.md](docs/DEPLOY.md)
 - 開發狀態、測試結果、與計畫書的差異：[docs/STATUS.md](docs/STATUS.md)

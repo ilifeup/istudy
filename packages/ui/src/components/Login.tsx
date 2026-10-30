@@ -153,10 +153,10 @@ export function LoginPage(props:{ info: AppInfo; health: HealthSnapshot; onLogin
     <div className="login-wrap">
       <div className="login-card">
         <div className="login-brand">
-          <span className="seal" aria-hidden="true">無相</span>
+          <span className="seal" aria-hidden="true">iStudy</span>
           <div>
             <div className="brand-name">iStudy</div>
-            <div className="brand-sub">心賞氣悅・無相氣學 助教複習系統{props.serverApp ? '　Server App' : ''}</div>
+            <div className="brand-sub">iStudy 學習系統{props.serverApp ? '　Server App' : ''}</div>
           </div>
         </div>
         <HealthLine health={props.health} onRetry={() => void bridge.retryHealth()} />
@@ -188,7 +188,7 @@ export function LoginPage(props:{ info: AppInfo; health: HealthSnapshot; onLogin
           </div>
         </form>
         {wakeOpen ? <WakePanel onClose={() => setWakeOpen(false)} /> : null}
-        <footer className="login-foot dim">{props.info.versionLabel} · © 2026 無相氣學</footer>
+        <footer className="login-foot dim">{props.info.versionLabel} · © 2026 iStudy</footer>
       </div>
     </div>
   );

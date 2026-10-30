@@ -186,7 +186,7 @@ export function App(props: { info: AppInfo; server?: ServerExtension }): any {
     <AppContext.Provider value={ctx}>
       <div className="app">
         <header className="topnav" aria-label="主選單">
-          <span className="seal small" aria-hidden="true">無相</span>
+          <span className="seal small" aria-hidden="true">iStudy</span>
           <span className="who" title={account.username}>👤 {account.display_name}{account.display_name === roleBadge(account) ? '' : `（${roleBadge(account)}）`}</span>
           <nav className="navlinks">
             {NAV.filter((n) => !(server && n.id === 'feedback')).map((n) => ( /* 問題回報只在 Client App */
@@ -218,7 +218,7 @@ export function App(props: { info: AppInfo; server?: ServerExtension }): any {
         <footer className="statusbar">
           <span>{health.state === 'ok' ? '● Server 已連線' : health.state === 'checking' ? '… 檢查連線中' : '○ Server 無法連線'}</span>
           <span className="grow" />
-          <span>{server && server.footerLabel ? server.footerLabel : info.versionLabel} · © 2026 無相氣學</span>
+          <span>{server && server.footerLabel ? server.footerLabel : info.versionLabel} · © 2026 iStudy</span>
         </footer>
         <PageLocator route={route.page} role={account.role} server={!!server} navigate={(p)=>go(p)} />
         <Toasts items={toasts} />

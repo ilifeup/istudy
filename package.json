@@ -2,7 +2,7 @@
   "name": "istudy",
   "version": "1.0.0-dev.62",
   "private": true,
-  "description": "iStudy 心賞氣悅・無相氣學 助教複習系統（Server＋Server App＋Client MVP）",
+  "description": "iStudy iStudy 學習系統（Server＋Server App＋Client MVP）",
   "scripts": {
     "build": "node scripts/build.mjs --app server",
     "build:clients": "node scripts/build.mjs --app client --channel win10 && node scripts/build.mjs --app client --channel win11 && node scripts/build.mjs --app client --channel ubuntu && node scripts/build.mjs --app client --channel win7",
