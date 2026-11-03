@@ -11,7 +11,9 @@
     "package:clients": "node scripts/package_client.mjs --all",
     "test:packaging": "node --test scripts/tests/package_client.test.mjs",
     "test:client": "node --test scripts/tests/health.test.mjs scripts/tests/client_updater.test.mjs && python3 -m unittest scripts/tests/test_client_update.py",
-    "e2e": "node apps/tests/e2e.mjs --only server"
+    "e2e": "node apps/tests/e2e.mjs --only server",
+    "test:page-atlas": "node --test scripts/tests/page_atlas.test.mjs",
+    "analyze:page-atlas": "node scripts/page-atlas/analyze.mjs"
   },
   "dependencies": {
     "react": "19.2.8",
