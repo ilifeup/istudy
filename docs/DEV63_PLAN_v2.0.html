@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>iSTUDY Dev63｜完整詳細開發計畫書 v2.0｜含 Page Atlas Lite</title>
+<style>
+:root{--bg:#f3f5f3;--paper:#fff;--ink:#1e2a28;--ink2:#4a5a56;--line:#c9d3cf;--soft:#e8eeeb;--pine:#2e5e4e;--ok:#1d6b45;--todo:#5a4a00;--ver:#1f5f8b;--unk:#7a2e2e;--okbg:#e2f1e8;--todobg:#f7efd6;--verbg:#e2eef7;--unkbg:#f6e4e2}
+@media (prefers-color-scheme:dark){:root{--bg:#141a19;--paper:#1c2422;--ink:#e6ece9;--ink2:#b3c0bb;--line:#3a4744;--soft:#24302d;--pine:#8fc5ae;--ok:#8fd3ad;--todo:#e8cf7a;--ver:#8fc3e8;--unk:#f0a39b;--okbg:#1f3329;--todobg:#33301c;--verbg:#1d2c38;--unkbg:#3a2321}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 "Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif}
+header{background:var(--pine);color:#fff;padding:16px}header h1{margin:0;font-size:20px}header p{margin:4px 0 0;opacity:.9;font-size:13px}
+@media (prefers-color-scheme:dark){header{color:#0f1514}}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line);display:flex;overflow-x:auto;gap:4px;padding:6px 8px}
+nav.tabs button{flex:none;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:6px;padding:6px 10px;font:inherit;font-size:13px;cursor:pointer}
+nav.tabs button[aria-selected=true]{border:2px solid var(--pine);font-weight:700}
+main{max-width:1180px;margin:0 auto;padding:12px 16px 40px}
+section.tab{display:none}section.tab.on{display:block}
+h2{font-size:19px;border-left:5px solid var(--pine);padding-left:10px;margin:18px 0 10px}h3{font-size:16px;margin:16px 0 6px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:10px 0}
+.tw{overflow-x:auto;margin:8px 0}table{border-collapse:collapse;width:100%;min-width:560px;background:var(--paper)}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top;font-size:14px}th{background:var(--soft)}
+code{font-family:ui-monospace,Consolas,monospace;font-size:13px;background:var(--soft);padding:0 3px;border-radius:3px;word-break:break-all}
+.s{display:inline-block;border:1px solid;border-radius:4px;padding:0 6px;font-size:12px;font-weight:700;white-space:nowrap}
+.s.ok{color:var(--ok);background:var(--okbg)}.s.todo{color:var(--todo);background:var(--todobg)}.s.ver{color:var(--ver);background:var(--verbg)}.s.unk{color:var(--unk);background:var(--unkbg)}
+.legend span{margin-right:8px}ul{padding-left:20px}li{margin:3px 0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.find{border-left:4px solid var(--unk);padding-left:10px;margin:8px 0}
+svg{max-width:100%;height:auto;display:block;margin:8px auto}svg text{fill:var(--ink);font-family:inherit}svg .box{fill:var(--paper);stroke:var(--line);stroke-width:1.5}svg .hl{stroke:var(--pine);stroke-width:2.5}svg .ln{stroke:var(--ink2);stroke-width:1.5;fill:none;marker-end:url(#a)}
+.small{font-size:13px;color:var(--ink2)}
+@media print{nav.tabs{display:none}section.tab{display:block!important;page-break-before:always}}
+
+section.tab .pane{display:block}section.tab .pane[hidden]{display:block!important} .card p{margin:6px 0} table{margin:8px 0} nav.tabs{flex-wrap:nowrap} .tab h2{scroll-margin-top:65px} .tab .grid{display:grid;gap:10px} @media(max-width:700px){main{padding:8px}th,td{font-size:12px}}</style>
+</head>
+<body>
+<header><h1>iSTUDY Dev63｜完整詳細開發計畫書 v2.0</h1>
+<p>2026-11-03｜Ubuntu 本機開發｜Dev62＋Page Atlas Lite 候選基線｜最新決策優先｜附原始規格與技術審查</p></header>
+<nav class="tabs" id="tabs" role="tablist"></nav>
+<main>
+<div class="card" style="border-left:5px solid #ad6b13"><b>閱讀規則：</b>本文件保留 Claude 2026-11-03 原始審查的實證內容，但其先前建議與後續使用者決策衝突時，以「最新決策」Tab 為唯一正式規範。原始程式行號屬 Dev62 基準；所有本機測試僅為 Claude 回報，尚未在使用者 Ubuntu 實機重驗。</div><div class="card legend small"><b>狀態標示</b>（文字＋符號，不只靠顏色）：
+<span class="s ok">✓ 已確認</span>本機程式已證實
+<span class="s todo">○ 待開發</span>規格已定、程式未做
+<span class="s ver">◐ 待驗證</span>已有程式或推論，需要測試／實機確認
+<span class="s unk">? 無法確認</span>缺資料，不推測</div>
+<section class="tab" data-t="00 最新決策"><h2>Dev63 v2.0｜最新決策總表（唯一優先規範）</h2><div class="card"><b>版本：</b>Dev62 本機副本（GitHub main 0501715 僅作來源標識）＋ Claude 已整合 Page Atlas Lite → Dev63 1.0.0-dev.63。<b>開發位置：</b>Ubuntu 本機；本輪禁止 GitHub 開發、branch、PR、push、merge；禁止正式 DB 異動；先在隔離測試環境開發驗收。既有功能的「全新規格」不做舊版相容層，但任何破壞性 schema 變更都要在測試資料庫先驗證。</div>
+<table><tr><th>範圍</th><th>正式決策</th><th>驗收重點</th></tr>
+<tr><td>Client App 登入前 WOL</td><td>免登入列出 Super 公開的電腦並喚醒；公開清單與喚醒 API 只認 enabled AND show_on_login，維持 LAN／冷卻／稽核</td><td>匿名成功、未公開設備不可列出也不可用 ID 喚醒</td></tr>
+<tr><td>Client App 登入後 WOL</td><td>所有 WOL 入口、操作及登入後喚醒能力移除；不顯示管理頁</td><td>User/Admin/Super 登入後均無 WOL UI，舊登入後 API 停用</td></tr>
+<tr><td>Server App 登入</td><td>只允許 Super、Admin；User 在後端登入政策即拒絕</td><td>Super/Admin 正常；User/匿名拒絕</td></tr>
+<tr><td>Server App 權限</td><td>Super 全部；Admin 僅已核准的唯讀總覽、教材目錄操作、會員與群組、使用記錄及 PC 資訊；其餘維持 Super-only</td><td>路由＋API＋主機操作同時控權</td></tr>
+<tr><td>WOL 設備</td><td>show_on_login 全部 false，既有設備亦不公開，Super 逐台開啟；enabled 獨立；login_display_name 獨立</td><td>migration 不自動公開</td></tr>
+<tr><td>Client 字詞</td><td>Client 所有畫面不出現「Super」，直接刪除不需要的字句；禁止改成「最高管理者」等替代詞</td><td>可見 UI 與建置輸出檢查</td></tr>
+<tr><td>PC 資訊</td><td>Super、Admin 可用</td><td>Admin 只能讀授權資訊，不繼承主機管理權</td></tr>
+<tr><td>Page Atlas Lite</td><td>P0；API／DB 索引必須逐頁驗證，與新導覽一致；保留 Lite，不做深度 Call Graph</td><td>逐頁證據、索引驗證、私有邊界與角色測試</td></tr>
+<tr><td>Log 清除</td><td>四類：Server error、Agent jobs、Host maintenance、Client-uploaded，各類各自有「全部清除」；不混入使用記錄或 audit_log</td><td>各來源隔離、確認、清除後稽核仍存在</td></tr>
+<tr><td>USB 教材</td><td>UDisks2 + 受控主機 istudyctl media-import；Super/Admin App 操作不等於授予 Linux sudo</td><td>來源唯讀、白名單、複製校驗、掃描建檔、錯誤復原</td></tr>
+<tr><td>最愛</td><td>完全移除最愛功能與欄位；只保留書籤</td><td>相關 API/UI/DB 依賴消除，書籤正常</td></tr>
+</table>
+<h3>不得誤解</h3><p>「Server App Admin 可登入」不代表 Admin 可以管理 WOL、系統維護或原檔永久刪除；「Client 登入前免登入喚醒」不代表公開所有設備；「Page Atlas 整合測試通過」不代表 API／DB 來源對應已驗證。</p></section><section class="tab" data-t="1 執行摘要">
+<h2>1｜執行摘要與重大發現</h2>
+<div class="card"><p>Dev63 規格 v1.3 的需求，絕大多數在 Dev62 程式中<b>尚未實作</b>；本報告以本機 Dev62 原始碼逐項核對規格提到的檔案、函式、API 與資料表。Page Atlas Lite 以 ZIP 快照審查，並在報告之後整合進 Dev62 程式（另附 ZIP）。</p>
+<p><b>正式開發決策（使用者 2026-11-03）</b>：Ubuntu 本機開發；本輪不在 GitHub 開發、不建 PR、不推送；不操作正式資料庫；全新規格、不做舊版相容；Page Atlas Lite P0 納入；WOL <code>show_on_login</code> 全部預設 false，由 Super 逐台開啟；<code>enabled</code> 與 <code>show_on_login</code> 完全獨立；移除最愛、只留書籤。</p></div>
+<h3>重大發現（依風險排序）</h3>
+<div class="find"><span class="s ok">✓ 已確認</span> <b>F1｜登入後的喚醒 API 任何登入者都能用</b>：<code>server/src/routes/public.php:224</code> <code>POST /api/wol/wake</code> 只呼叫 <code>wake_request(actor())</code>，<code>wake_request()</code> 內沒有角色檢查 → User 也能喚醒。規格只列出 manage.php 的路由，<b>漏了這一條</b>；Dev63 必須改成 Super-only。</div>
+<div class="find"><span class="s ok">✓ 已確認</span> <b>F2｜WOL 讀取類 API 仍允許 Admin</b>：<code>manage.php</code> 的 <code>GET /api/wol/devices</code>（536）、<code>POST /api/wol/probe</code>（552）、<code>GET /api/wol/scan/{id}</code>（574）、<code>GET /api/devices/pending</code>（607）都是 <code>require_role('admin')</code>；寫入（<code>POST /api/wol/scan</code>、<code>POST/PATCH/DELETE /api/wol/devices</code>、<code>POST /api/devices/{id}/register</code>）已是 <code>require_wol_editor()</code>（Super）。<code>packages/ui/src/App.tsx:66</code> <code>adminItems()</code> 在 <code>atLeast(a,'admin')</code> 分支加入 WOL。與規格描述一致。</div>
+<div class="find"><span class="s ok">✓ 已確認</span> <b>F3｜Server App 目前只接受 Super 登入</b>：Dev62 登入頁明確顯示「Server App 只接受 Super 登入」，且 <code>server/src/auth.php:109</code> <code>require_local_super()</code>（本機管理埠＋Super）保護 <code>admin.php</code> 共 47 處。規格要求 Admin 能在 Server App 看總覽、操作教材目錄，User 能用學習中心 → <b>必須改登入政策並新增狹義 API</b>，不能放寬 <code>require_local_super()</code>。</div>
+<div class="find"><span class="s ok">✓ 已確認</span> <b>F4｜USB 匯入沒有現成的取得管道</b>：Agent 在 Docker 內只掛 <code>/Media</code>；瀏覽器／Electron 前端不能讀 Server 的 USB；Server App 主機操作走 <code>pkexec istudyctl</code>（需要 sudo 密碼，Admin 可能沒有）。USB 匯入需要新的受控主機服務設計（見第 6 章），是 Dev63 最大的技術風險。</div>
+<div class="find"><span class="s ok">✓ 已確認</span> <b>F5｜PDF 搜尋區分大小寫且沒有高亮</b>：<code>packages/ui/src/pages/DocViewer.tsx:162</code> 用 <code>textCache…includes(q.trim())</code> 只找出「哪幾頁」，沒有轉小寫、沒有文字層高亮與定位。</div>
+<div class="find"><span class="s ok">✓ 已確認</span> <b>F6｜共用 UI 有 16 處「Super」字樣</b>：<code>packages/ui/src</code>（Server App 與 Client App 共用）內 Login.tsx（含登入頁喚醒說明 77、78、95 行）、Wol.tsx、TagPolicy.tsx、EmailReport.tsx、Audit.tsx 等。因為是共用元件，「Client 不顯示 Super」需要決定用詞（建議兩個 App 一起改成「最高管理者」）。</div>
+<div class="find"><span class="s ok">✓ 已確認</span> <b>F7｜最愛有資料欄位與 6 個檔案依賴</b>：<code>server/sql/schema.sql:190 is_favorite BOOLEAN</code>；<code>personal.php</code>(10 處)、<code>catalog.php</code>(2)、<code>Bookmarks.tsx</code>(4)、<code>Search.tsx</code>(2)、<code>Courses.tsx</code>(4)、<code>MediaControls.tsx</code>(3)。移除需 migration 刪欄位（正式 DB 的最愛紀錄會消失，使用者已同意）。</div>
+<div class="find"><span class="s ver">◐ 待驗證</span> <b>F8｜Win10 更新 404 最可能是 Server 沒有發布檔</b>：<code>server/nginx/default.conf:23</code> <code>location /updates/ → alias /srv/istudy/updates/</code>。Client 讀 <code>/updates/win10/latest.yml</code>；Server 尚未用「Client 版本與更新 → 發布新版」放檔時一定 404。先在 Server 執行 <code>ls -la /srv/istudy/updates/win10/</code>，有檔仍 404 才除錯程式。</div>
+<div class="find"><span class="s ok">✓ 已確認</span> <b>F9｜Page Atlas Lite 快照可直接疊加在 Dev62</b>：ZIP 的 <code>source/</code> 內 5 個既有檔案（App.tsx、styles.css、index.php、package.json、ci.yml）與 main 只差 Atlas 相關幾行；<code>page-atlas-lite-pr5.patch</code> 是對 PR #5 分支的補丁，<b>不適用 main</b>，整合改用 <code>source/</code> 檔案。私有索引 34 頁全部 <code>dbStatus=unverified</code>。</div>
+</section>
+<section class="tab" data-t="2 現況差異">
+<h2>2｜Dev62 現況與 Dev63 目標差異</h2>
+<div class="tw"><table><tr><th>領域</th><th>Dev62 現況（本機程式）</th><th>Dev63 目標</th><th>狀態</th></tr>
+<tr><td>Server 導覽</td><td><code>apps/server/src/srv.tsx</code> <code>SRV_NAV</code> 18 項（srv-overview … srv-host）＋首次設定 srv-setup</td><td>6 分類＋學習中心＋個人資料</td><td><span class="s todo">○ 待開發</span></td></tr>
+<tr><td>Server App 登入</td><td>只接受 Super</td><td>Super／Admin／User 依角色顯示</td><td><span class="s todo">○ 待開發</span></td></tr>
+<tr><td>共用管理導覽</td><td><code>App.tsx</code> <code>adminItems()</code>：admin 起：帳號管理、課程群組、使用記錄、WOL；super：Tag 設定、PC 資訊、Email 報告</td><td>WOL 只 Super；User 無使用記錄／PC 資訊／WOL；帳號＋群組合併「會員與群組」</td><td><span class="s todo">○ 待開發</span></td></tr>
+<tr><td>WOL</td><td>寫入 Super-only；讀取／探測／掃描結果／待登記 Admin；登入後喚醒任何人；公開清單 <code>registered AND enabled</code></td><td>登入後全部 Super-only；公開清單 <code>enabled AND show_on_login</code>＋<code>login_display_name</code></td><td><span class="s todo">○ 待開發</span></td></tr>
+<tr><td>教材</td><td><code>Folders.tsx</code> 試掃描、深度掃描、資料夾設定、目錄樹；Dev62 有 Super 永久刪除（Agent purge）</td><td>USB 匯入、批次改名／刪除、目錄＋清單合併、Admin 受限操作</td><td><span class="s todo">○ 待開發</span></td></tr>
+<tr><td>總覽</td><td><code>Overview.tsx</code>：系統狀態、Client 版本、Server 診斷；<code>/api/admin/overview</code> 本機＋Super</td><td>詳細規格、ZFS 12TB×2、最近 3 筆備份／使用記錄、Admin 唯讀</td><td><span class="s todo">○ 待開發</span></td></tr>
+<tr><td>Log</td><td><code>GET /api/admin/logs</code> 查詢、<code>POST /api/admin/logs</code>（Server App 回報主機維護結果）；無刪除</td><td>各來源清除＋全部清除（Super、確認、稽核）</td><td><span class="s todo">○ 待開發</span></td></tr>
+<tr><td>備份</td><td>方案 B：age 加密 <code>.tar.gz.age</code>（db.sql、字幕、設定、Manifest、RESTORE.md），10～15 天保留、FTPS 遠端、主機驗證</td><td>保留全部能力＋內容明細、大小與成長、空間預檢顯示</td><td><span class="s ok">✓ 已確認</span>（現有）／<span class="s todo">○ 待開發</span>（顯示）</td></tr>
+<tr><td>播放器／PDF</td><td>「CC 字幕：開／關」（Player.tsx:242）；PDF 搜尋區分大小寫、只到頁</td><td>「字幕」；大小寫無關、高亮、定位、上一筆／下一筆</td><td><span class="s todo">○ 待開發</span></td></tr>
+<tr><td>書籤／最愛</td><td>兩者並存（<code>is_favorite</code>、<code>is_bookmarked</code>）</td><td>只留書籤</td><td><span class="s todo">○ 待開發</span></td></tr>
+<tr><td>Page Atlas</td><td>main 沒有</td><td>Lite P0：34 頁索引、Super-only 私有 API</td><td><span class="s ver">◐ 已整合到本機副本，待驗證</span></td></tr>
+</table></div>
+</section>
+<section class="tab" data-t="3 系統架構">
+<h2>3｜Server／Client 系統架構</h2>
+<svg aria-label="系統架構圖" role="img" viewbox="0 0 760 330"><defs><marker id="a" markerheight="7" markerwidth="7" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path d="M0,0L10,5L0,10z" fill="currentColor"></path></marker></defs>
+<rect class="box" height="90" rx="8" width="220" x="10" y="20"></rect><text font-weight="700" text-anchor="middle" x="120" y="45">Client App（Electron）</text><text font-size="13" text-anchor="middle" x="120" y="68">Win10/11/7、Ubuntu</text><text font-size="13" text-anchor="middle" x="120" y="88">packages/ui 共用畫面</text>
+<rect class="box" height="90" rx="8" width="220" x="10" y="140"></rect><text font-weight="700" text-anchor="middle" x="120" y="165">Server App（Electron）</text><text font-size="13" text-anchor="middle" x="120" y="188">apps/server＋packages/ui</text><text font-size="13" text-anchor="middle" x="120" y="208">pkexec istudyctl（主機）</text>
+<rect class="box hl" height="90" rx="8" width="200" x="290" y="20"></rect><text font-weight="700" text-anchor="middle" x="390" y="45">LAN 埠 :4080</text><text font-size="13" text-anchor="middle" x="390" y="68">Nginx → PHP API</text><text font-size="13" text-anchor="middle" x="390" y="88">require_role(...)</text>
+<rect class="box hl" height="90" rx="8" width="200" x="290" y="140"></rect><text font-weight="700" text-anchor="middle" x="390" y="165">本機管理埠 127.0.0.1</text><text font-size="13" text-anchor="middle" x="390" y="188">/api/admin/*</text><text font-size="13" text-anchor="middle" x="390" y="208">require_local_super()</text>
+<rect class="box" height="60" rx="8" width="200" x="550" y="20"></rect><text font-weight="700" text-anchor="middle" x="650" y="55">PostgreSQL 18（主機）</text>
+<rect class="box" height="60" rx="8" width="200" x="550" y="100"></rect><text font-weight="700" text-anchor="middle" x="650" y="125">Agent（Docker）</text><text font-size="12" text-anchor="middle" x="650" y="145">轉檔、ASR、掃描、備份</text>
+<rect class="box" height="60" rx="8" width="200" x="550" y="180"></rect><text font-weight="700" text-anchor="middle" x="650" y="205">/Media（ZFS）</text><text font-size="12" text-anchor="middle" x="650" y="225">教材、playback、subtitles</text>
+<rect class="box" height="55" rx="8" width="460" x="290" y="260"></rect><text font-weight="700" text-anchor="middle" x="520" y="283">istudyctl（主機 root）</text><text font-size="12" text-anchor="middle" x="520" y="303">備份解密驗證、上傳、維護、UEM；Dev63 USB 匯入候選位置</text>
+<path class="ln" d="M230 65H290"></path><path class="ln" d="M230 185H290"></path><path class="ln" d="M490 60H550"></path><path class="ln" d="M490 185L550 140"></path><path class="ln" d="M650 160V180"></path><path class="ln" d="M120 230V287H290"></path>
+</svg>
+<div class="card"><b>Dev63 架構原則</b><ul>
+<li>前端隱藏 ≠ 授權：UI、路由守衛、PHP API、主機代理四層都要檢查角色。</li>
+<li>Super 管理 API 維持「本機管理埠＋Super」；Admin 需要的功能另建<b>狹義 API</b>（只回傳摘要、只允許特定教材操作）。</li>
+<li>Server App 與 Client App 都用 <code>packages/ui</code>；差異以 <code>server</code> 旗標與角色決定，不要複製一套畫面。</li>
+<li>Page Atlas 私有索引只在 PHP 端（<code>server/src/private/</code>，不在 Nginx 的 <code>server/public</code> 根目錄下），前端 bundle 只有頁碼／頁名／路由。</li></ul></div>
+</section>
+<section class="tab" data-t="4 權限審查">
+<div class="card"><b>Dev63 正式覆寫：</b>Server App 僅 Super/Admin 可登入，User 後端拒絕；Client 登入後完全沒有 WOL；登入前公開 WOL 保留；PC 資訊 Super/Admin 可用。以下舊表格如有不同，以此為準。</div><h2>4｜Super／Admin／User 權限審查</h2>
+<div class="tw"><table><tr><th>功能</th><th>Super</th><th>Admin</th><th>User</th><th>未登入</th><th>Dev62 實際（程式）</th><th>Dev63 要改</th></tr>
+<tr><td>Server 管理（18 頁）</td><td>✓</td><td>只有總覽（唯讀）、教材目錄（受限）</td><td>✗</td><td>✗</td><td><code>require_local_super()</code>；Server App 拒絕非 Super 登入 <span class="s ok">✓ 已確認</span></td><td>開放 Server App 登入給三角色；新 Admin API <span class="s todo">○</span></td></tr>
+<tr><td>原檔刪除確認／永久刪除</td><td>✓</td><td>✗</td><td>✗</td><td>✗</td><td>Super-only <span class="s ok">✓</span></td><td>維持；Admin 一般教材刪除另建，不繼承 <span class="s todo">○</span></td></tr>
+<tr><td>WOL 管理（三子功能）</td><td>✓</td><td>✗</td><td>✗</td><td>✗</td><td>讀取 admin、寫入 super、登入後喚醒任何人 <span class="s ok">✓</span></td><td>全部 <code>require_role('super')</code> <span class="s todo">○</span></td></tr>
+<tr><td>登入頁喚醒</td><td colspan="3">登入後不用這條</td><td>只看公開設備＋喚醒</td><td><code>/api/wol/public/devices</code>、<code>/api/wol/public/wake</code>：LAN 限定、冷卻 <span class="s ok">✓</span></td><td>加 <code>show_on_login</code> 篩選、顯示名稱；不回傳 MAC <span class="s todo">○</span></td></tr>
+<tr><td>帳號／群組</td><td>✓</td><td>依既有授權</td><td>✗</td><td>✗</td><td><code>adminItems()</code> admin 起 <span class="s ok">✓</span></td><td>合併「會員與群組」，API 權限逐項不擴權 <span class="s todo">○</span></td></tr>
+<tr><td>使用記錄</td><td>✓</td><td>依既有授權</td><td>✗</td><td>✗</td><td>admin 起 <span class="s ok">✓</span></td><td>User 不顯示（目前 User 本來就看不到 admin 項目）<span class="s ver">◐</span></td></tr>
+<tr><td>PC 資訊</td><td>✓</td><td>依既有授權</td><td>✗</td><td>✗</td><td>Dev62 是 Super-only（<code>a.role==='super'</code>）<span class="s ok">✓</span></td><td>規格寫「Admin 依既有授權」→ 目前 Admin 沒有，<b>是否要開放給 Admin 待決定</b> <span class="s unk">? </span></td></tr>
+<tr><td>Log 清除</td><td>✓</td><td>✗</td><td>✗</td><td>✗</td><td>無清除 API</td><td>新增 Super-only <span class="s todo">○</span></td></tr>
+<tr><td>Page Atlas</td><td>✓（Server、Client）</td><td>✗</td><td>✗</td><td>✗</td><td>—</td><td><code>GET /api/page-atlas</code> <code>require_role('super')</code>（LAN 埠也可，供 Client Super）<span class="s ver">◐</span></td></tr>
+</table></div>
+<div class="card"><b>API 拒絕測試最低要求</b>：每個新／改 API 都要測 未登入（401）、User（403）、Admin 越權（403）、路徑越界（400/403）、Super（200）。WOL 與 Page Atlas 另外測「直接輸入路由」。</div>
+</section>
+<section class="tab" data-t="5 六分類">
+<h2>5｜Server 六分類 UI 與導覽</h2>
+<div class="tw"><table><tr><th>新分類</th><th>Dev62 路由（srv.tsx）</th><th>合併方式</th><th>可見角色</th></tr>
+<tr><td>總覽</td><td>srv-overview</td><td>原頁增強；最下方 Log 記錄（備份 3 筆、Client 使用 3 筆、More）</td><td>Super 完整、Admin 唯讀</td></tr>
+<tr><td>教材管理</td><td>srv-folders、srv-media、srv-convert、srv-originals、srv-subtitles、srv-docs、srv-outgo</td><td>目錄＋清單同一工作區；轉檔＋文件轉換＝「轉換工作」；字幕＋Outgo 共用 ASR 元件；原檔確認獨立</td><td>Super；Admin 只有教材目錄的授權操作</td></tr>
+<tr><td>裝置管理</td><td>srv-clients、srv-uem；共用 WOL、PC 資訊</td><td>裝置清單＋版本；WOL Super-only</td><td>Super</td></tr>
+<tr><td>系統維護</td><td>srv-check、srv-backup、srv-logs、srv-host</td><td>系統檢查 8 子 Tab 改分組收合；Log 改來源篩選</td><td>Super</td></tr>
+<tr><td>統計報告</td><td>srv-reports；使用記錄查詢</td><td>報表與稽核分開資料來源</td><td>Super</td></tr>
+<tr><td>系統設定</td><td>srv-schedule、srv-ie、srv-login</td><td>同一設定容器、分類表單</td><td>Super</td></tr>
+</table></div>
+<div class="card"><b>實作建議</b><ul>
+<li>保留所有既有 <code>srv-*</code> 路由 ID 作為子頁（深連結、Page Atlas、測試都依賴），新增 6 個分類只是第一層導覽與分組，不改子頁 ID。<span class="s todo">○</span></li>
+<li>Server App 頂層：「Server 管理／學習中心／個人資料」；學習中心內是課程目錄、瀏覽｜學習（瀏覽記錄＋書籤）、搜尋，播放器／PDF 由學習中心開啟。<span class="s todo">○</span></li>
+<li>Client App 以學習功能為主；Super 登入後的管理項目沿用 <code>adminItems()</code>，用詞不含「Super」。<span class="s todo">○</span></li>
+<li>首次設定精靈（srv-setup）不屬於 6 分類，維持獨立入口。<span class="s ver">◐ 規格未提，建議</span></li></ul></div>
+</section>
+<section class="tab" data-t="6 教材匯入">
+<h2>6｜教材管理與 USB 匯入</h2>
+<svg aria-label="USB 匯入流程" role="img" viewbox="0 0 760 110"><g font-size="13">
+<rect class="box" height="60" rx="6" width="115" x="5" y="25"></rect><text text-anchor="middle" x="62" y="50">①選來源磁碟</text><text font-size="11" text-anchor="middle" x="62" y="70">主機列出掛載點</text>
+<rect class="box" height="60" rx="6" width="115" x="130" y="25"></rect><text text-anchor="middle" x="187" y="50">②選來源目錄</text><text font-size="11" text-anchor="middle" x="187" y="70">可遞迴</text>
+<rect class="box" height="60" rx="6" width="115" x="255" y="25"></rect><text text-anchor="middle" x="312" y="50">③選目的</text><text font-size="11" text-anchor="middle" x="312" y="70">/Media/ 授權子目錄</text>
+<rect class="box" height="60" rx="6" width="115" x="380" y="25"></rect><text text-anchor="middle" x="437" y="50">④預檢</text><text font-size="11" text-anchor="middle" x="437" y="70">空間／衝突／格式</text>
+<rect class="box" height="60" rx="6" width="115" x="505" y="25"></rect><text text-anchor="middle" x="562" y="50">⑤背景複製</text><text font-size="11" text-anchor="middle" x="562" y="70">.part→改名、校驗</text>
+<rect class="box hl" height="60" rx="6" width="125" x="630" y="25"></rect><text text-anchor="middle" x="692" y="50">⑥深度掃描建檔</text><text font-size="11" text-anchor="middle" x="692" y="70">沿用 Agent scan</text></g></svg>
+<div class="card"><b>關鍵技術限制（已確認）</b><ul>
+<li>Agent 容器只掛 <code>/Media</code>，看不到 <code>/media/&lt;user&gt;/USB</code>。<span class="s ok">✓</span></li>
+<li>前端不能讀 Server 的 USB；Server App 主機操作走 <code>pkexec istudyctl</code>，會要求系統密碼。<span class="s ok">✓</span></li>
+<li>現有深度掃描（Agent <code>scan</code> 工作）會建立 media、folder 資料與教材 ID，匯入完成後應沿用，不另寫建檔程式。<span class="s ok">✓</span></li></ul>
+<b>建議方案（待使用者決定）</b><ol>
+<li><b>A 案（建議）</b>：新增 <code>istudyctl media-import</code> 主機指令（root）：列出可讀掛載點、預檢、以暫存名稱複製到 <code>/Media/…</code>、完成後寫入 jobs 觸發 Agent 深度掃描。由 Server App 透過 pkexec 呼叫；Admin 需要在 Server 主機上有 sudo 權限，或由 Super 執行匯入、Admin 只做匯入後的改名／刪除。</li>
+<li>B 案：設定 polkit 規則讓指定 Linux 群組免密碼執行 <code>istudyctl media-import</code>（需權限設計與稽核）。</li>
+<li>C 案：Agent 容器額外唯讀掛 <code>/media</code>（USB 自動掛載點），由 Agent 工作複製 → 變更 compose 與權限，風險較高。</li></ol>
+<b>批次改名／刪除</b>：檔案系統與 DB（media 路徑、playback、subtitles、doc-cache 關聯）必須在同一個工作內一致更新；刪除要區分「一般教材刪除」與「原檔刪除確認」（後者 Super-only，Admin 不繼承）；刪除前檢查轉檔／字幕佇列中的工作。<span class="s todo">○ 待開發</span><br/>
+<b>無法確認</b>：USB 在正式主機的掛載方式（GNOME 自動掛載或手動）、是否有 exFAT/NTFS 支援、大量檔案的實際數量。<span class="s unk">? 需實機</span></div>
+</section>
+<section class="tab" data-t="7 WOL">
+<div class="card"><b>正式決策：</b>Client App 登入前 WOL 免登入可喚醒已公開設備；登入後 WOL 功能全部移除，不提供登入後喚醒 API。Server App WOL 管理僅 Super。所有設備 show_on_login 預設 false，既有設備也不自動公開；不建立相容層。</div><h2>7｜WOL 完整整合規格</h2>
+<div class="tw"><table><tr><th>enabled</th><th>show_on_login</th><th>Client 登入頁</th><th>Super WOL 管理</th></tr>
+<tr><td>否</td><td>否</td><td>不顯示、不可喚醒</td><td>可看、可改</td></tr><tr><td>否</td><td>是</td><td>不顯示、不可喚醒</td><td>可看、可改</td></tr>
+<tr><td>是</td><td>否</td><td>不顯示</td><td>可喚醒</td></tr><tr><td>是</td><td>是</td><td>顯示 <code>login_display_name</code>（空白用 name）＋喚醒</td><td>完整</td></tr></table></div>
+<h3>修改清單</h3>
+<div class="tw"><table><tr><th>位置</th><th>Dev62（已確認）</th><th>Dev63</th></tr>
+<tr><td>migration 0012（建議名 <code>0012_dev63.sql</code>）</td><td><code>client_devices</code> 欄位：id、device_code、name、os_hint、mac、broadcast、port、send_count、cooldown_sec、enabled、sort_order、registered、all_macs、last_*</td><td>新增 <code>show_on_login BOOLEAN NOT NULL DEFAULT FALSE</code>、<code>login_display_name VARCHAR(100)</code>；既有設備一律 false（使用者決定）</td></tr>
+<tr><td><code>server/src/routes/public.php:158</code> <code>GET /api/wol/public/devices</code></td><td><code>WHERE registered AND enabled</code>；另回 <code>registered_total</code>、<code>disabled_total</code></td><td><code>WHERE registered AND enabled AND show_on_login</code>；名稱用 <code>COALESCE(NULLIF(trim(login_display_name),''), name)</code>；不回 MAC；數量訊息改為「已登記但未設定顯示」</td></tr>
+<tr><td><code>public.php:219</code> <code>POST /api/wol/public/wake</code></td><td>LAN 限定、冷卻</td><td>同樣條件（enabled AND show_on_login），維持冷卻與稽核</td></tr>
+<tr><td><code>public.php:224</code> <code>POST /api/wol/wake</code></td><td><code>wake_request(actor())</code> 任何登入者</td><td>Super-only</td></tr>
+<tr><td><code>manage.php</code> 536/552/574/607</td><td><code>require_role('admin')</code></td><td><code>require_role('super')</code></td></tr>
+<tr><td><code>manage.php</code> 設備 CRUD、<code>device_out()</code></td><td>寫入 Super（<code>require_wol_editor()</code>）</td><td>加兩欄的讀寫、trim、長度 100、輸出跳脫</td></tr>
+<tr><td><code>packages/ui/src/admin/Wol.tsx</code></td><td>Admin 有 StatusTab（<code>canEdit=false</code>）；Super 有一鍵「啟用」</td><td>整頁 Super-only；設備表單加「顯示在登入頁」開關與「登入頁顯示名稱」；清單加一欄顯示狀態</td></tr>
+<tr><td><code>packages/ui/src/App.tsx:66</code> <code>adminItems()</code></td><td>WOL 在 admin 分支</td><td>移到 super 分支；路由守衛</td></tr>
+<tr><td><code>packages/ui/src/components/Login.tsx</code> WakePanel</td><td>第 77、78、95 行說明含「Super」</td><td>刪除底部說明整行；所有文字不含 Super</td></tr></table></div>
+<div class="card small">注意：Dev62 讓新增、登記的設備預設 <code>enabled=true</code>；Dev63 的 <code>show_on_login</code> 預設 false 後，部署完成時登入頁清單會是空的，需由 Super 逐台開啟（使用者已決定）。部署說明要寫清楚，避免被誤以為故障。</div>
+</section>
+<section class="tab" data-t="8 Atlas 審查">
+<h2>8｜Page Atlas Lite 程式碼審查（ZIP 快照）</h2>
+<div class="card small">來源：<code>Page_Atlas_Lite.zip</code>（README：PR #5 階段的本機 Lite 整合快照，非 PR #6 最新版）。ZIP 自述：Page Atlas 測試 59/59、Preview 4/4 本機通過；typecheck 因缺 @types/node 失敗；實際 build、bundle 掃描、CI、Ubuntu 驗收未執行。</div>
+<div class="tw"><table><tr><th>檔案</th><th>內容</th><th>沿用／修改</th></tr>
+<tr><td><code>packages/ui/src/page-atlas/registry.ts</code></td><td>公開資料：34 頁 <code>{id, route, name, app}</code>（IS-C-001～015、IS-S-001～019）、<code>atlasForRoute()</code></td><td>沿用；Dev63 導覽改完後更新頁名／新增頁 <span class="s todo">○</span></td></tr>
+<tr><td><code>packages/ui/src/page-atlas/PageAtlas.tsx</code></td><td>搜尋（頁碼、名稱、路由、元件、來源，大小寫無關）、清單、上一頁／下一頁、複製摘要、開啟頁面、<code>AtlasBadge</code></td><td>沿用 <span class="s ok">✓ 文字無「Super」</span></td></tr>
+<tr><td><code>packages/ui/src/App.tsx</code>（改）</td><td><code>canAtlas = account.role === 'super'</code>；導覽按鈕「Page Atlas」；路由 <code>page-atlas</code>；非 Super 顯示無權限</td><td>沿用；與 Dev63 角色導覽一起調整 <span class="s todo">○</span></td></tr>
+<tr><td><code>server/src/routes/page_atlas.php</code></td><td><code>GET /api/page-atlas</code>，<code>require_role('super')</code>，讀 <code>server/src/private/page_atlas.json</code>（拒絕 symlink）</td><td>沿用 <span class="s ok">✓</span></td></tr>
+<tr><td><code>server/src/private/page_atlas.json</code></td><td>34 頁，含 component、source、api、db、elements；apiStatus：source-reference-only 29／unverified 5；dbStatus：全部 unverified</td><td>導覽改版後重產；DB 只填已驗證 <span class="s todo">○</span></td></tr>
+<tr><td><code>server/public/index.php</code>（改）</td><td>路由清單加 <code>page_atlas</code></td><td>沿用</td></tr>
+<tr><td><code>scripts/page-atlas/analyze.mjs</code>（19 KB）</td><td>掃描原始碼產生 API／元件線索（開發工具，非執行期）</td><td>保留為手動工具，不擴充成 Call Graph <span class="s ver">◐</span></td></tr>
+<tr><td><code>scripts/page-atlas/validate-private-index.mjs</code>、<code>verify-renderers.mjs</code>、<code>build-readiness.mjs</code>、<code>scripts/atlas_bundle_audit.mjs</code></td><td>索引一致性、建置後 bundle 洩漏檢查</td><td>沿用</td></tr>
+<tr><td><code>scripts/preview.mjs</code>＋<code>scripts/preview/*</code></td><td>esbuild 本機預覽（mock API，輸出 <code>.ui-preview/</code>）</td><td>開發工具；<code>.ui-preview/</code> 應加入 .gitignore <span class="s todo">○</span></td></tr>
+<tr><td><code>scripts/tests/page_atlas*.test.mjs</code>（11 檔）、<code>preview_isolation.test.mjs</code></td><td>schema、私有邊界、bundle guard、PHP runtime、HTTP session（401/403/200）、registry 一致性、renderer build、scope</td><td>沿用；需在 Ubuntu 本機實跑 <span class="s ver">◐</span></td></tr>
+<tr><td><code>package.json</code>、<code>.github/workflows/ci.yml</code>（改）</td><td><code>test:page-atlas</code>、<code>check:renderer-deps</code>、<code>analyze:page-atlas</code>、<code>test:preview-isolation</code>；CI 加 Atlas 步驟</td><td>沿用（本輪不跑 GitHub CI）</td></tr>
+<tr><td><code>page-atlas-lite-pr5.patch</code></td><td>對 PR #5 分支（含深度 Call Graph）的補丁</td><td><b>不使用</b>（基準不是 main）</td></tr></table></div>
+<h3>資料契約</h3>
+<div class="tw"><table><tr><th>欄位</th><th>位置</th><th>規則</th></tr>
+<tr><td>id</td><td>公開＋私有</td><td><code>IS-C-###</code>／<code>IS-S-###</code>，唯一、不重用；頁面合併時舊 ID 標記停用，不改給別頁</td></tr>
+<tr><td>route／name／app</td><td>公開＋私有</td><td>route 必須等於 App.tsx／srv.tsx 實際路由 ID；app = client｜server</td></tr>
+<tr><td>component／source／elements</td><td>私有</td><td>對應實際檔案；改版後重產</td></tr>
+<tr><td>api＋apiStatus</td><td>私有</td><td>source-reference-only＝原始碼字串參照；未驗證不得當成執行路徑</td></tr>
+<tr><td>db＋dbStatus</td><td>私有</td><td>只有 verified 才顯示；目前全部 unverified，UI 顯示「待確認」</td></tr></table></div>
+<div class="card"><b>防洩漏</b>：私有 JSON 在 <code>server/src/private/</code>（Nginx 根目錄是 <code>server/public</code>）<span class="s ok">✓ 已確認</span>；前端只 import <code>registry.ts</code>（不含 source/api/db）<span class="s ok">✓</span>；建置後 bundle 掃描 <span class="s ver">◐ 待驗證</span>；PHP 映像內含 <code>server/src</code>，不經 HTTP 提供 <span class="s ver">◐ 實機確認 Nginx 設定</span>。<br/>
+<b>避免過度開發</b>：P0 只維持「頁碼、搜尋、前後頁、複製摘要、Super-only API、私有索引」；Call Graph、SQL lineage、自動截圖、新資料表一律不做；<code>analyze.mjs</code> 只當手動產生索引的輔助。</div>
+</section>
+<section class="tab" data-t="9 Atlas×導覽">
+<h2>9｜Page Atlas × Dev63 導覽整合</h2>
+<svg aria-label="整合順序" role="img" viewbox="0 0 760 90"><g font-size="13">
+<rect class="box" height="50" rx="6" width="140" x="5" y="20"></rect><text text-anchor="middle" x="75" y="50">① 權限矩陣</text>
+<rect class="box" height="50" rx="6" width="140" x="160" y="20"></rect><text text-anchor="middle" x="230" y="50">② 6 分類＋學習中心</text>
+<rect class="box hl" height="50" rx="6" width="140" x="315" y="20"></rect><text text-anchor="middle" x="385" y="50">③ 更新 Atlas 索引</text>
+<rect class="box" height="50" rx="6" width="140" x="470" y="20"></rect><text text-anchor="middle" x="540" y="50">④ 權限／bundle 測試</text>
+<rect class="box" height="50" rx="6" width="130" x="625" y="20"></rect><text text-anchor="middle" x="690" y="50">⑤ Ubuntu 驗收</text></g>
+<path class="ln" d="M145 45H160M300 45H315M455 45H470M610 45H625"></path></svg>
+<div class="tw"><table><tr><th>項目</th><th>做法</th><th>狀態</th></tr>
+<tr><td>Server 18 個子頁</td><td>子頁路由 ID 保留 → IS-S-001～018 不變；6 個分類頁若成為可進入頁面，新增 IS-S-020～025</td><td><span class="s todo">○</span></td></tr>
+<tr><td>學習中心、瀏覽｜學習、會員與群組</td><td>新頁新增 ID；被合併的舊頁（書籤 IS-C-005、帳號 IS-C-009、群組 IS-C-010）標記「已併入」，不刪 ID</td><td><span class="s todo">○</span></td></tr>
+<tr><td>AtlasBadge（頁碼）</td><td>Client／Server 都只有 Super 看得到；Admin／User 不顯示</td><td><span class="s ok">✓ 程式如此</span></td></tr>
+<tr><td>Client 只顯示 client 頁</td><td><code>PageAtlas</code> 依 <code>server</code> 旗標過濾 <code>app==='client'</code></td><td><span class="s ok">✓</span></td></tr>
+<tr><td>一致性檢查</td><td><code>validate-private-index.mjs</code> 與 registry 測試要改成直接比對 <code>SRV_NAV</code> 與 <code>adminItems()</code> 實際路由，避免手寫清單漂移</td><td><span class="s ver">◐ 需確認現有測試是否比對實際路由</span></td></tr></table></div>
+</section>
+<section class="tab" data-t="10 API／DB">
+<h2>10｜API／資料庫／前後端修改清單</h2>
+<div class="tw"><table><tr><th>層</th><th>項目</th><th>動作</th><th>批次</th></tr>
+<tr><td>DB</td><td><code>client_devices.show_on_login</code>、<code>login_display_name</code></td><td>新增</td><td>A</td></tr>
+<tr><td>DB</td><td><code>is_favorite</code>（schema.sql:190 所在的個人狀態表）</td><td>刪除欄位；同步刪除相關 API 參數</td><td>D</td></tr>
+<tr><td>DB</td><td>教材匯入工作紀錄（建議沿用 <code>jobs</code> 新類型 <code>media_import</code>，不新增表）</td><td>新增 job type（CHECK 約束）</td><td>B</td></tr>
+<tr><td>DB</td><td>Log 清除稽核：沿用 <code>audit_log</code>（actor_name、actor_role、action、details、client_ip、client_name）</td><td>新增 action 值；清除範圍不含 audit_log</td><td>C</td></tr>
+<tr><td>API</td><td><code>manage.php</code> WOL 讀取／探測／掃描結果／待登記；<code>public.php</code> <code>/api/wol/wake</code></td><td>改 Super-only</td><td>A</td></tr>
+<tr><td>API</td><td><code>/api/wol/public/devices</code>、<code>/api/wol/public/wake</code></td><td>加 show_on_login 篩選、顯示名稱</td><td>A</td></tr>
+<tr><td>API</td><td>Admin 總覽摘要（新，例：<code>GET /api/manage/overview</code>）</td><td>新增，唯讀摘要</td><td>A/C</td></tr>
+<tr><td>API</td><td>Admin 教材操作（新，例：<code>/api/manage/media/rename</code>、<code>/delete</code>）</td><td>新增，路徑白名單、稽核</td><td>B</td></tr>
+<tr><td>API</td><td><code>DELETE /api/admin/logs?source=…</code>、全部清除</td><td>新增，Super、確認、稽核、批次</td><td>C</td></tr>
+<tr><td>API</td><td><code>/api/admin/overview</code> 加最近 3 筆備份、3 筆使用記錄；ZFS 狀態</td><td>擴充</td><td>C</td></tr>
+<tr><td>主機</td><td><code>istudyctl media-import</code>（建議）</td><td>新增</td><td>B</td></tr>
+<tr><td>前端</td><td><code>srv.tsx</code> SRV_NAV、<code>App.tsx</code> adminItems、<code>Wol.tsx</code>、<code>Login.tsx</code>、<code>Overview.tsx</code>、<code>Folders.tsx</code>、<code>MediaList.tsx</code>、<code>BackupsLogs.tsx</code>、<code>Settings.tsx</code>（排程）、<code>DocViewer.tsx</code>、<code>Player.tsx</code>、<code>SubtitlePanel.tsx</code>、<code>styles.css</code>、<code>Bookmarks.tsx</code>、<code>Search.tsx</code>、<code>Courses.tsx</code>、<code>MediaControls.tsx</code></td><td>修改</td><td>A–D</td></tr>
+<tr><td>前端</td><td>Page Atlas：<code>registry.ts</code>、<code>page_atlas.json</code></td><td>導覽改完後更新</td><td>A 之後</td></tr></table></div>
+<p class="small">API 路徑名稱為建議，實作時依既有路由慣例決定；表中「Dev62」欄位與行號皆為本機程式實際內容。</p>
+</section>
+<section class="tab" data-t="11 Client／閱讀">
+<h2>11｜PDF、字幕、書籤及 Client 改善</h2>
+<div class="tw"><table><tr><th>項目</th><th>Dev62（已確認）</th><th>Dev63 作法</th></tr>
+<tr><td>PDF 搜尋</td><td><code>DocViewer.tsx:162</code> 逐頁 <code>includes(q.trim())</code>，區分大小寫，只列頁碼</td><td>pdf.js text layer：取得每段文字與座標，<code>toLocaleLowerCase()</code> 比對；全部命中黃色、目前命中橘色＋外框（不只靠顏色）；「3／18」；上一筆／下一筆自動換頁並 <code>scrollIntoView</code>；縮放後重算；無文字層顯示「掃描 PDF，需要 OCR」</td></tr>
+<tr><td>字幕按鈕</td><td><code>Player.tsx:242</code>「CC 字幕：開／關」</td><td>改「字幕：開／關」，邏輯不變</td></tr>
+<tr><td>字幕面板</td><td>固定版面</td><td>CSS <code>container-type:inline-size</code>＋<code>@container</code>（Electron 22 的 Chromium 108 已支援，Win7 版可用）；窄時時間與內容上下排列、清單獨立捲動</td></tr>
+<tr><td>最愛</td><td>6 個前後端檔案＋DB 欄位</td><td>全部移除；「瀏覽｜學習」保留瀏覽記錄與書籤</td></tr>
+<tr><td>登入頁</td><td>喚醒清單＋底部說明</td><td>刪底部說明；小螢幕可操作</td></tr>
+<tr><td>PC Info 英吋</td><td>—</td><td>取消，不開發</td></tr></table></div>
+</section>
+<section class="tab" data-t="12 維運">
+<h2>12｜總覽、UEM、備份、Log 與排程</h2>
+<div class="tw"><table><tr><th>項目</th><th>現況</th><th>Dev63</th><th>狀態</th></tr>
+<tr><td>總覽診斷</td><td><code>Overview.tsx</code> 三區；<code>/api/admin/diagnostics</code></td><td>通過項不再寫「通過」只留 ✓；顯示 CPU、RAM、PG 版本／DB 大小、Agent、Docker、FFmpeg／VA-API／QSV、LibreOffice、儲存；狀態四種：通過／警告／失敗／無資料</td><td><span class="s todo">○</span></td></tr>
+<tr><td>主機檢查逾期提示</td><td>在總覽</td><td>移到 UEM「需要處理」表格</td><td><span class="s todo">○</span></td></tr>
+<tr><td>ZFS 顯示</td><td>「/Media 剩餘空間」</td><td>「磁碟陣列 ZFS（12TB × 2）」mirror 狀態、實際容量；資料來源用 UEM 的 zpool 解析（Agent／PHP 無法直接執行 zpool）</td><td><span class="s ver">◐ 資料來源需確認</span></td></tr>
+<tr><td>最近 3 筆使用記錄</td><td><code>audit_log</code> 有 actor_name、action、client_ip、client_name、created_at</td><td>直接查 audit_log；Admin 只看摘要</td><td><span class="s ok">✓ 欄位存在</span>／<span class="s ver">◐ Client 行為是否都有記錄</span></td></tr>
+<tr><td>備份 2.3 MB</td><td>方案 B 只含 DB、字幕、設定（不含教材）</td><td>顯示內容明細、壓縮前後、每日成長、SSD 剩餘；舊 <code>istudy-backup-*.tar.gz</code> 與部署產生的 <code>istudy-db-*.sql</code> 不會自動清理 → 納入容量統計與清理策略</td><td><span class="s ok">✓ 設計如此</span>／<span class="s unk">? 實機檔案清單</span></td></tr>
+<tr><td>Log 清除</td><td>只有查詢</td><td>來源：server、agent、host、client；各自清除＋全部清除；確認視窗（範圍、筆數、不可復原）；清除動作寫入 audit_log；大量資料分批刪除</td><td><span class="s todo">○</span></td></tr>
+<tr><td>排程</td><td>設定鍵 <code>schedule</code>（start、end、auto_convert、auto_whisper、whisper_after_convert、backup_time）</td><td>四區塊：自動處理時間（跨午夜說明）、影片轉檔、字幕辨識、每日備份；標示「立即執行」不受時段限制</td><td><span class="s todo">○</span></td></tr></table></div>
+</section>
+<section class="tab" data-t="13 批次">
+<div class="card"><b>正式開發順序：</b>基線確認 → A 權限與導覽 → Atlas P0 索引／API／DB 驗證 → B USB 教材管理 → C 維運 → D Client → E 回歸與實機驗收。可平行進行互不衝突的工作，但每批需通過驗收；GitHub 不參與本輪開發。</div><h2>13｜開發批次、依賴及優先順序</h2>
+<div class="tw"><table><tr><th>順序</th><th>批次</th><th>內容</th><th>依賴</th><th>理由</th></tr>
+<tr><td>1</td><td>A 權限與導覽</td><td>WOL Super-only（含 /api/wol/wake）、show_on_login、Server App 三角色登入、6 分類、學習中心、會員與群組、Client 無 Super 字樣</td><td>—</td><td>安全問題（F1、F2）與所有畫面的骨架</td></tr>
+<tr><td>2</td><td>Page Atlas 索引更新</td><td>依新導覽更新 registry 與私有索引、一致性測試</td><td>A</td><td>避免改兩次</td></tr>
+<tr><td>3</td><td>D Client／閱讀</td><td>PDF 搜尋高亮、字幕面板、字幕標籤、移除最愛</td><td>A（學習中心）</td><td>使用者每天會用</td></tr>
+<tr><td>4</td><td>C Server 維運</td><td>總覽、UEM 移位、備份顯示、Log 清除、排程白話化</td><td>A（Admin 總覽 API）</td><td>多為顯示與 Super 功能</td></tr>
+<tr><td>5</td><td>B 教材管理</td><td>USB 匯入、批次改名／刪除、目錄＋清單合併</td><td>A；USB 方案決定</td><td>風險最高，需先定主機服務方案</td></tr>
+<tr><td>並行</td><td>E 實機驗證</td><td>Win10 更新 404（先查發布檔）、備份實際內容</td><td>—</td><td>不需改程式即可先查</td></tr></table></div>
+</section>
+<section class="tab" data-t="14 測試驗收">
+<h2>14｜測試案例與驗收標準</h2>
+<div class="tw"><table><tr><th>編號</th><th>測試</th><th>預期</th></tr>
+<tr><td>T-A1</td><td>Admin、User、未登入直接呼叫 WOL 管理 API（devices、probe、scan、pending、register、CRUD、<code>/api/wol/wake</code>）</td><td>401／403，設備資料不變</td></tr>
+<tr><td>T-A2</td><td>WOL 真值表 4 種組合 × 登入頁清單、公開喚醒</td><td>只有 enabled AND show_on_login 出現與可喚醒；名稱用 login_display_name，空白回退</td></tr>
+<tr><td>T-A3</td><td>公開清單回應內容</td><td>無 MAC、無待登記、無內部欄位</td></tr>
+<tr><td>T-A4</td><td>Server App 以 Super／Admin／User 登入</td><td>Super 6 分類；Admin 只有總覽（唯讀）＋教材目錄；User 只有學習中心＋個人資料</td></tr>
+<tr><td>T-A5</td><td>Client UI 全文字掃描（建置後 bundle 與畫面）</td><td>沒有「Super」</td></tr>
+<tr><td>T-AT1</td><td><code>GET /api/page-atlas</code> 未登入／User／Admin／Super</td><td>401／403／403／200</td></tr>
+<tr><td>T-AT2</td><td>建置後 5 個 renderer bundle 掃描私有欄位（source、api、db、private）</td><td>不出現</td></tr>
+<tr><td>T-AT3</td><td>registry 與實際路由比對</td><td>每個可進入頁面有唯一 ID，無多餘 ID</td></tr>
+<tr><td>T-B1</td><td>USB 匯入：少量、大量、同名、空間不足、拔除 USB、中斷後重試</td><td>不留半成品；DB 筆數＝檔案數；抽樣播放／開文件</td></tr>
+<tr><td>T-B2</td><td>Admin 批次改名／刪除；嘗試原檔刪除確認</td><td>改名後播放、字幕、文件仍可開；原檔刪除 403</td></tr>
+<tr><td>T-C1</td><td>Log 各來源清除、全部清除</td><td>筆數正確；audit_log 有清除紀錄；Admin 403</td></tr>
+<tr><td>T-C2</td><td>總覽備份「正常」文字</td><td>最近一次成功且驗證才顯示正常；否則顯示異常</td></tr>
+<tr><td>T-D1</td><td>PDF 搜尋 ABC／abc／中文、跨頁、縮放後</td><td>全部命中、目前項目明顯、上一筆／下一筆定位到文字</td></tr>
+<tr><td>T-D2</td><td>字幕面板 800×600、1024×768、1366×768、1920×1080、半螢幕、Win7 版</td><td>無溢出、按鈕不被遮</td></tr>
+<tr><td>T-D3</td><td>全系統搜尋「最愛」「favorite」</td><td>UI、API、DB 都沒有</td></tr>
+<tr><td>T-E1</td><td>Win10 Client 從舊版更新</td><td>latest.yml 200、下載、安裝、回報版本</td></tr></table></div>
+<p class="small">全部測試先在測試資料庫與測試資料夾執行；不碰正式 DB 與正式教材。未實際執行的項目不得標 PASS。</p>
+</section>
+<section class="tab" data-t="15 風險決策">
+<div class="card"><b>以下舊「待決策」事項已定案：</b>Server App Super/Admin 登入；USB UDisks2＋受控主機匯入服務；Client 移除 Super 字樣、不替換稱呼；PC Info Super/Admin；四類系統 Log 分開清除。請勿重複詢問。</div><h2>15｜重大風險、規格衝突與待決策事項</h2>
+<div class="tw"><table><tr><th>#</th><th>項目</th><th>說明</th><th>需要決定</th></tr>
+<tr><td>D1</td><td>Admin 在 Server App 的入口</td><td>Dev62 Server App 拒絕非 Super；<code>/api/admin/*</code> 本機＋Super</td><td>確認 Server App 開放三角色登入（規格是這樣寫）</td></tr>
+<tr><td>D2</td><td>USB 匯入方案</td><td>A 案 istudyctl＋pkexec（需 sudo）／B 案 polkit 免密碼群組／C 案容器掛載</td><td>選方案；Admin 是否真的要能匯入，或只做匯入後的改名刪除</td></tr>
+<tr><td>D3</td><td>「Super」用詞</td><td>共用元件，Client 與 Server 同一份文字</td><td>建議兩邊都改「最高管理者」</td></tr>
+<tr><td>D4</td><td>PC 資訊給 Admin？</td><td>規格寫「依既有授權」，但 Dev62 是 Super-only</td><td>維持 Super-only 或開放 Admin</td></tr>
+<tr><td>D5</td><td>Log「全部清除」範圍</td><td>是否包含 audit_log（使用記錄）</td><td>建議不包含；使用記錄另有保留政策</td></tr>
+<tr><td>D6</td><td>版本號</td><td>本次整合 ZIP 只加入 Page Atlas，VERSION.json 仍是 1.0.0-dev.62</td><td>各批次完成後再改 1.0.0-dev.63</td></tr>
+<tr><td>R1</td><td>show_on_login 預設 false</td><td>部署後登入頁清單為空</td><td>已決定；部署文件要提醒</td></tr>
+<tr><td>R2</td><td>刪除 is_favorite</td><td>正式 DB 資料消失（不可復原）</td><td>已決定；部署前備份</td></tr>
+<tr><td>R3</td><td>規格內文仍有「Dev62」「PR 不自動合併」等舊敘述</td><td>以 2026-11-03 決策為準（Ubuntu 本機、無 PR）</td><td>—</td></tr>
+<tr><td>R4</td><td>Page Atlas 快照來源</td><td>PR #5 階段快照，不等於 PR #6 最新</td><td>若 PR #6 之後有修改，需由使用者另行比對</td></tr></table></div>
+</section>
+<section class="tab" data-t="16 工作清單">
+<h2>16｜完整開發工作清單與進度表</h2>
+<div class="tw"><table><tr><th>ID</th><th>批次</th><th>工作</th><th>主要檔案</th><th>狀態</th></tr>
+<tr><td>A-01</td><td>A</td><td>WOL 登入後 API 全部 Super-only（含 /api/wol/wake）</td><td>manage.php、public.php</td><td><span class="s todo">○ 待開發</span></td></tr>
+<tr><td>A-02</td><td>A</td><td>migration：show_on_login、login_display_name</td><td>server/sql/migrations/0012_*.sql、schema.sql</td><td><span class="s todo">○</span></td></tr>
+<tr><td>A-03</td><td>A</td><td>公開清單／喚醒加篩選與顯示名稱</td><td>public.php</td><td><span class="s todo">○</span></td></tr>
+<tr><td>A-04</td><td>A</td><td>Wol.tsx Super-only＋新欄位；adminItems</td><td>Wol.tsx、App.tsx</td><td><span class="s todo">○</span></td></tr>
+<tr><td>A-05</td><td>A</td><td>Login.tsx 刪底部說明、移除 Super 字樣</td><td>Login.tsx 等 16 處</td><td><span class="s todo">○</span></td></tr>
+<tr><td>A-06</td><td>A</td><td>Server App 三角色登入與頂層入口</td><td>apps/server、App.tsx、auth.php</td><td><span class="s todo">○</span></td></tr>
+<tr><td>A-07</td><td>A</td><td>Server 6 分類導覽（保留子頁 ID）</td><td>srv.tsx、index.tsx</td><td><span class="s todo">○</span></td></tr>
+<tr><td>A-08</td><td>A</td><td>學習中心、瀏覽｜學習、會員與群組</td><td>App.tsx、pages/*</td><td><span class="s todo">○</span></td></tr>
+<tr><td>A-09</td><td>A</td><td>Admin 總覽唯讀 API</td><td>manage.php（或新檔）、Overview.tsx</td><td><span class="s todo">○</span></td></tr>
+<tr><td>AT-01</td><td>Atlas</td><td>整合 Lite 程式到本機 Dev62</td><td>page-atlas/*、page_atlas.php、scripts</td><td><span class="s ver">◐ 已整合，見 ZIP 說明</span></td></tr>
+<tr><td>AT-02</td><td>Atlas</td><td>依新導覽更新索引與一致性測試</td><td>registry.ts、page_atlas.json</td><td><span class="s todo">○</span></td></tr>
+<tr><td>AT-03</td><td>Atlas</td><td>bundle 洩漏、HTTP 401/403/200、Ubuntu 驗收</td><td>scripts/tests/page_atlas*</td><td><span class="s ver">◐</span></td></tr>
+<tr><td>D-01</td><td>D</td><td>PDF 大小寫無關搜尋＋高亮定位</td><td>DocViewer.tsx、styles.css</td><td><span class="s todo">○</span></td></tr>
+<tr><td>D-02</td><td>D</td><td>字幕面板容器響應、「字幕」標籤</td><td>SubtitlePanel.tsx、Player.tsx、styles.css</td><td><span class="s todo">○</span></td></tr>
+<tr><td>D-03</td><td>D</td><td>移除最愛（UI、API、DB）</td><td>personal.php、catalog.php、Bookmarks/Search/Courses/MediaControls、migration</td><td><span class="s todo">○</span></td></tr>
+<tr><td>C-01</td><td>C</td><td>總覽詳細診斷、ZFS、最近 3 筆＋More</td><td>Overview.tsx、admin.php</td><td><span class="s todo">○</span></td></tr>
+<tr><td>C-02</td><td>C</td><td>UEM「需要處理」加入主機檢查逾期</td><td>UEM 頁、uem.py</td><td><span class="s todo">○</span></td></tr>
+<tr><td>C-03</td><td>C</td><td>Log 清除＋全部清除＋稽核</td><td>admin.php、BackupsLogs.tsx</td><td><span class="s todo">○</span></td></tr>
+<tr><td>C-04</td><td>C</td><td>備份內容明細、容量、舊備份清理策略</td><td>BackupsLogs.tsx、admin.php、istudyctl</td><td><span class="s todo">○</span></td></tr>
+<tr><td>C-05</td><td>C</td><td>排程白話化</td><td>Settings.tsx（排程頁）</td><td><span class="s todo">○</span></td></tr>
+<tr><td>B-01</td><td>B</td><td>USB 匯入（方案決定後）</td><td>istudyctl、Folders.tsx、jobs</td><td><span class="s unk">? 待決定方案</span></td></tr>
+<tr><td>B-02</td><td>B</td><td>批次改名／刪除（檔案＋DB 一致）</td><td>Agent、manage／admin API、MediaList.tsx</td><td><span class="s todo">○</span></td></tr>
+<tr><td>B-03</td><td>B</td><td>目錄＋清單合併工作區</td><td>Folders.tsx、MediaList.tsx</td><td><span class="s todo">○</span></td></tr>
+<tr><td>E-01</td><td>E</td><td>Win10 更新 404：查 /srv/istudy/updates/win10/</td><td>實機</td><td><span class="s ver">◐ 待實機</span></td></tr>
+<tr><td>E-02</td><td>E</td><td>備份實際檔案清單與大小</td><td>實機</td><td><span class="s unk">? 待實機</span></td></tr>
+<tr><td>Z-01</td><td>收尾</td><td>VERSION.json、各 package 版本改 1.0.0-dev.63；部署腳本 patch_dev63.sh；文件</td><td>VERSION.json、deploy/</td><td><span class="s todo">○</span></td></tr></table></div>
+</section>
+<section class="tab" data-t="17 USB 詳細設計"><h2>USB 教材大量匯入｜正式技術方案</h2><div class="card"><b>採用：</b>Ubuntu UDisks2 裝置偵測／掛載，受控的主機端 istudyctl media-import 負責預檢、複製與校驗，完成後交由既有 Agent 深度掃描與 PostgreSQL 建檔。不得讓 Agent 直接取得整個 /media 主機掛載，也不得讓 App Admin 任意執行 root 指令。</div>
+<h3>權限與信任邊界</h3><table><tr><th>層</th><th>責任</th><th>安全條件</th></tr><tr><td>UDisks2／主機</td><td>列出 USB 裝置、UUID、檔案系統、唯讀掛載</td><td>禁止不受控裝置路徑；拒絕 symlink 越界；不執行來源檔</td></tr><tr><td>Server App</td><td>Super/Admin 選來源與目的、檢視衝突、確認工作</td><td>Session／角色驗證；只顯示受控掛載來源</td></tr><tr><td>受控匯入服務</td><td>Job ID、預檢、分段複製、校驗、完成標記、取消</td><td>固定 allowlist 指令／目錄；不接受任意 shell；稽核 actor</td></tr><tr><td>Agent／DB</td><td>掃描、教材 ID、metadata、衍生檔案工作</td><td>沿用既有 scan；失敗可重跑且不重複建檔</td></tr></table>
+<h3>匯入精靈七階段</h3><ol><li>偵測 USB：列出標籤、UUID、容量、格式、掛載狀態；處理 exFAT／NTFS／ext4 與無權限情況。</li><li>來源選擇：允許 USB 根目錄或子目錄、遞迴；只讀來源、排除 symlink 與特殊檔案。</li><li>目的選擇：只能 /Media 的允許子目錄；規範檔名、相對路徑、Unicode 與重名策略。</li><li>預覽：檔數、總容量、可用空間、重名與雜湊策略、預估作業量；不能把估計時間當保證。</li><li>確認：列出來源／目的／檔數與衝突處置；產生不可重複的 Job ID。</li><li>執行：.part 暫存、逐檔同步與 SHA-256 校驗、完成後原子改名；進度、失敗、取消、USB 中斷可重試。</li><li>建檔：只針對已完成檔案觸發既有深度掃描；輸出成功／略過／失敗明細與教材 ID。</li></ol>
+<h3>批次改名與刪除</h3><p>先預覽再確認；不可使用任意路徑。檔案與 DB 路徑／媒體／字幕／轉檔佇列關聯一致更新。禁止直接對多個檔案宣稱單一 DB 交易可涵蓋檔案系統；採分段狀態機、失敗補償、可重試與稽核。Admin 的一般教材刪除不得擴權到 Super 原檔永久刪除。</p>
+<h3>USB 驗收矩陣</h3><table><tr><th>測試</th><th>合格標準</th></tr><tr><td>正常大量匯入／重名</td><td>清單預覽準確，重名策略可預期，檔案與 DB 一致</td></tr><tr><td>USB 中途拔除／磁碟滿</td><td>可恢復或安全失敗，不產生誤認完成的教材</td></tr><tr><td>Admin 權限</td><td>可執行授權匯入，不需 Linux sudo／任意 root</td></tr><tr><td>路徑穿越／symlink／惡意檔名</td><td>全部拒絕越界，主機無未授權修改</td></tr><tr><td>重複執行／掃描失敗</td><td>可重試、無重複教材 ID、完整錯誤報告</td></tr></table>
+<p class="small">方案參考：<a href="https://github.com/storaged-project/udisks">UDisks2</a>、<a href="https://www.freedesktop.org/software/polkit/docs/latest/">polkit</a>、<a href="https://www.freedesktop.org/software/systemd/man/latest/systemd-mount.html">systemd-mount</a>。本方案為架構決策，Ubuntu 實機權限及掛載行為尚待驗證。</p></section><section class="tab" data-t="18 Atlas P0 驗收"><h2>Page Atlas Lite｜Claude 整合成果與 P0 驗收契約</h2><div class="card"><b>候選基線：</b>istudy_dev63-base_dev62PageAtlasLite.zip；Dev62 main 0501715 的本機副本疊加 Page_Atlas_Lite.zip 的 source/。不得使用針對 PR #5 分支的 patch 套在 main。<br/><b>Claude 回報：</b>TypeScript 型別、5 Renderer build、59/59 Atlas、4/4 Preview、PHP lint、34 頁索引及前端 bundle 私有索引掃描通過。<b>注意：</b>這是交付者自述，尚未由本次文件編製重新執行，亦未在使用者 Ubuntu 實機驗收。</div>
+<h3>現成檔案與使用方式</h3><table><tr><th>檔案</th><th>定位</th><th>Dev63 要做</th></tr><tr><td>packages/ui/src/page-atlas/registry.ts</td><td>前端公開頁碼／頁名／route</td><td>6 分類、學習中心、合併頁後更新；不得放敏感 source/API/DB</td></tr><tr><td>packages/ui/src/page-atlas/PageAtlas.tsx</td><td>搜尋、前後頁、複製、跳轉、Badge</td><td>依新角色與新導覽驗收</td></tr><tr><td>server/src/routes/page_atlas.php</td><td>Super-only 私有 API</td><td>401／403／200 與直接路由驗收</td></tr><tr><td>server/src/private/page_atlas.json</td><td>頁面 source／component／API／DB</td><td>逐頁核對實際路由、Controller、資料查詢；未證實不得標 verified</td></tr><tr><td>scripts/page-atlas/*、scripts/tests/page_atlas*</td><td>索引生成、驗證、隔離測試</td><td>保留 Lite P0，不擴充 Call Graph、SQL lineage、自動截圖、額外 DB 表</td></tr></table>
+<h3>P0 必須完成的核對</h3><ol><li>確認 34 頁原始索引與 Dev63 新增／合併／停用頁碼的完整對應，ID 不重複、不錯指、不重用。</li><li>每頁 route 對照實際 App.tsx／srv.tsx 路由與權限；Server App 只允許 Super/Admin 登入，Client 登入後無 WOL。</li><li>每頁 component／source 指向存在的實際檔案與元件；頁面跳轉與上一頁／下一頁可用。</li><li>每個 API 參照必須追到呼叫與後端 route；標註「已驗證／僅原始碼參照／未確認」。</li><li>每個 DB 參照須有實際查詢／schema／migration 證據；不能因為名稱相似就標 verified。</li><li>私有 JSON 不可進前端 bundle；未登入／User／Admin 不得取得；Super 可在允許的 App 中使用。</li><li>對索引驗證產出可稽核報告：page ID、route、source、API、DB、證據、驗證日期、結果。</li><li>Ubuntu 本機重新執行型別、build、PHP lint、59＋4 測試及 API 權限；全部 P0 通過才能宣稱驗收完成。</li></ol>
+<h3>不做的事</h3><p>不新增 ui_pages 等五張資料表；不做跨語言深度 Call Graph、自動 SQL lineage、自動截圖引擎；不合併 GitHub PR #5/#6。本輪以候選 ZIP 本機程式為唯一整合來源。</p></section><section class="tab" data-t="19 Log 詳細規格"><h2>Log 四類來源｜分開全部清除</h2><table><tr><th>分類</th><th>資料來源需確認</th><th>清除操作</th></tr><tr><td>Server error</td><td>Server PHP／Web 錯誤 Log</td><td>此類「全部清除」</td></tr><tr><td>Agent jobs</td><td>轉檔／ASR／掃描 Job Log</td><td>此類「全部清除」</td></tr><tr><td>Host maintenance</td><td>主機維護與 UEM Log</td><td>此類「全部清除」</td></tr><tr><td>Client-uploaded</td><td>Client 上傳的診斷 Log</td><td>此類「全部清除」</td></tr></table><p>四類各自有「全部清除」，不能將其解讀為一個跨來源的總清除。使用記錄與安全 audit_log 不屬於四類系統 Log，不可被清除操作連帶刪除。清除前必須顯示類別、範圍、筆數與不可復原提示；只允許 Super；執行後保留獨立稽核記錄。若來源為檔案，需安全截斷／輪替而非刪除正在被寫入的檔案；若為 DB，採批次刪除並控制交易大小。所有來源實際表與路徑須先驗證。</p></section><section class="tab" data-t="20 交付與里程碑"><h2>Ubuntu 本機開發交付與品質門檻</h2><table><tr><th>階段</th><th>交付物</th><th>驗收門檻</th></tr><tr><td>0 基線</td><td>候選 ZIP SHA-256、VERSION.json、檔案清單、Ubuntu 工作目錄與隔離測試 DB</td><td>不得覆蓋目前運行版；先做可還原快照</td></tr><tr><td>A 安全與導覽</td><td>WOL／角色 API、Server 六分類、Admin 權限、Client 去 WOL 與字樣</td><td>角色矩陣、匿名 WOL 真值表、深連結拒絕</td></tr><tr><td>Atlas P0</td><td>完整頁碼、source／component／API／DB 證據表</td><td>所有 P0 對應已驗證；私有索引隔離</td></tr><tr><td>B 教材</td><td>USB 精靈、受控主機服務、匯入報告、批次改刪</td><td>USB 拔除／重試／越權／DB 一致性</td></tr><tr><td>C 維運</td><td>總覽、UEM、備份、Log 四類、排程</td><td>數據來源可追溯，清除互不影響</td></tr><tr><td>D Client</td><td>PDF 搜尋高亮、字幕面板、只留書籤</td><td>Win10/11／Ubuntu 及適用舊版相容測試</td></tr><tr><td>E 最終</td><td>更新 404 判斷、備份檢查、全功能回歸、Dev63 版本標記</td><td>Ubuntu 實機驗收後才更新正式版本號與部署</td></tr></table><p><b>提交規則：</b>本輪不在 GitHub 開發；本機變更應保留版本化檔案、差異摘要、測試報告與還原方案。不能用 CI 綠燈代替實機驗收。任何正式部署、正式 DB 變更或不可逆刪除均須另行核准。</p></section><section class="tab" data-t="附01 01｜總綱與決策紀錄" id="intro" role="tabpanel"><div class="card" style="border-left:5px solid #ad6b13"><b>原始 v1.3 規格保留（歷史參考）：</b>若與最新決策衝突，以上方「00 最新決策」及新專章為準。此附錄不代表全部內容已實作。</div><h2>01｜總綱與決策紀錄</h2><div class="call"><strong>版本定位更正：</strong>本計畫書原檔名含 Dev62，實際為「以現有 Dev62 程式為基準，規劃下一版 Dev63」；已存在的 Dev62 功能與 Dev63 待做功能須逐項比對，不可把規格已定當成已完成。Page Atlas Lite P0 為 Dev63 新增必要模組；PR #5／#6 仍為 Draft，不自動合併。</div><div class="call"><b>版本定位：</b>iSTUDY Dev62 新版需求整合與 Dev61 缺陷修正。<b>本文件是規格／開發計畫，不代表程式已修改、測試或部署。</b>Page Atlas PR #6 維持 Draft，暫停處理，不與本次 Dev62 合併。</div><div class="grid"><div class="tile"><b>先分 App</b><small>Server App／Client App 不混用導覽</small></div><div class="tile"><b>再分角色</b><small>Super／Admin／User 三層權限</small></div><div class="tile"><b>減少 Tab</b><small>Server 18 → 6 主分類；學習中心收合</small></div></div><h3>不可遺漏的決策</h3><ul><li>Server App 頂層採「Server 管理／學習中心／個人資料」，學習導覽收合為一個入口；Client App 仍以學習功能為主。</li><li>Server 管理原 18 個 Tab 整理為 6 類：總覽、教材管理、裝置管理、系統維護、統計報告、系統設定；不以 6 個大 Tab 再塞入 18 個子 Tab。</li><li>Admin 於 Server 管理只開放「總覽（查看）」及「教材目錄（匯入／重新命名／刪除等已授權操作）」，其餘 Server 管理功能不顯示且不可用。</li><li>WOL 僅 Super 可用；一般 User 不顯示、不可使用「使用記錄／PC 資訊／WOL 管理」。</li><li>Client App 所有可見文字不得出現 Super；登入頁喚醒電腦區塊最下方說明整行刪除。</li><li>書籤保留一種；完全移除最愛，系統全新、無舊資料相容要求。</li><li>字幕面板依元件實際可用尺寸自動響應；影片「CC 字幕」改「字幕」。</li><li>PDF 搜尋不區分英文大小寫，搜尋命中高亮、目前結果強調、上一筆／下一筆、自動定位。</li><li>Log 各類別有清除功能，並提供「一鍵全部清除」（Super 專用、需確認及記錄）。</li><li>PC Info 不做螢幕幾吋偵測。</li><li>Outgo 名稱固定為「Outgo（音轉文）」。</li><li>WOL 設備編輯新增「顯示到 Client 登入頁」獨立開關及「登入頁 PC 顯示名稱」；只有 enabled 與 show_on_login 同時為真才公開列出。</li></ul><h3>需求來源與查核狀態</h3><p>本文件整合本次對話中的決策、Dev61 回報錯誤及已查閱的 GitHub <code>main</code> 程式：<code>apps/server/src/srv.tsx</code>、<code>apps/server/src/pages/{Overview,Folders,Clients,BackupsLogs,Settings}.tsx</code>、<code>server/src/routes/admin.php</code> 等。靜態程式分析與執行環境驗證分開記載；未取得 Ubuntu 實機備份檔、Client 更新檔及執行測試結果。</p><h3>Dev63 新增 P0 模組：Page Atlas Lite</h3><p>本次正式補入 Page Atlas Lite 的需求、UI 架構圖、Super／Admin／User 權限、程式檔案／API／私有索引、PR #5／#6 狀態、Dev63 開發依賴與驗收門檻。請見獨立「Page Atlas Lite」Tab。</p></section><section class="tab" data-t="附02 02｜Server " id="apps" role="tabpanel"><div class="card" style="border-left:5px solid #ad6b13"><b>原始 v1.3 規格保留（歷史參考）：</b>若與最新決策衝突，以上方「00 最新決策」及新專章為準。此附錄不代表全部內容已實作。</div><h2>02｜Server App／Client App 與三角色架構</h2><div class="diagram"><div class="diagram-title">圖 1｜App × 角色 × 功能邊界</div><svg aria-label="Server App 與 Client App 角色權限架構" role="img" viewbox="0 0 980 335"><defs><marker id="arr" markerheight="8" markerwidth="8" orient="auto" refx="7" refy="4"><path d="M0,0 L8,4 L0,8" fill="#648775"></path></marker></defs><rect fill="#edf5f0" height="305" rx="14" stroke="#8caf9b" width="458" x="12" y="10"></rect><rect fill="#f3f6fa" height="305" rx="14" stroke="#9baebc" width="458" x="510" y="10"></rect><text fill="#285f4b" font-size="23" font-weight="bold" text-anchor="middle" x="241" y="43">Server App</text><text fill="#45677d" font-size="23" font-weight="bold" text-anchor="middle" x="739" y="43">Client App</text><g font-size="17" text-anchor="middle"><rect fill="#d3e7da" height="63" rx="9" width="410" x="35" y="63"></rect><text font-weight="bold" x="240" y="89">Super</text><text font-size="13" x="240" y="111">完整管理 6 類 + 學習中心</text><rect fill="#fff2d8" height="63" rx="9" width="410" x="35" y="138"></rect><text font-weight="bold" x="240" y="163">Admin</text><text font-size="13" x="240" y="185">總覽唯讀 + 教材目錄授權操作 + 學習</text><rect fill="#fff" height="63" rx="9" width="410" x="35" y="213"></rect><text font-weight="bold" x="240" y="240">User</text><text font-size="13" x="240" y="261">學習中心／個人資料；無 Server 管理</text><rect fill="#dae7ef" height="63" rx="9" width="410" x="533" y="63"></rect><text font-weight="bold" x="738" y="89">Super 登入</text><text font-size="13" x="738" y="111">學習 + 授權功能；介面不得顯示 Super 字樣</text><rect fill="#fff" height="63" rx="9" width="410" x="533" y="138"></rect><text font-weight="bold" x="738" y="164">Admin 登入</text><text font-size="13" x="738" y="185">學習 + 授權的共用管理（不含 WOL）</text><rect fill="#fff" height="63" rx="9" width="410" x="533" y="213"></rect><text font-weight="bold" x="738" y="239">User 登入</text><text font-size="13" x="738" y="261">學習 + 個人資料；無管理操作</text></g><text fill="#607a6c" font-size="13" text-anchor="middle" x="490" y="302">前端隱藏 ≠ 授權；後端 API 必須強制驗證</text></svg></div><h3>Server App 頂層入口</h3><div class="grid"><div class="tile"><b>Server 管理</b><small>Super 全部；Admin 只看授權項目；User 不顯示</small></div><div class="tile"><b>學習中心</b><small>整合 Client 共用學習導覽；所有登入角色</small></div><div class="tile"><b>個人資料</b><small>所有登入角色</small></div></div><h3>學習中心整合（重要）</h3><div class="tbl"><table><thead><tr><th>舊入口</th><th>新入口／行為</th><th>適用</th></tr></thead><tbody><tr><td>課程目錄</td><td>學習中心 → 課程目錄</td><td>Server／Client</td></tr><tr><td>瀏覽記錄 + 書籤</td><td>學習中心 →「瀏覽｜學習」；保留瀏覽歷史、單一書籤</td><td>Server／Client</td></tr><tr><td>搜尋</td><td>學習中心內搜尋</td><td>Server／Client</td></tr><tr><td>教材播放／PDF</td><td>學習中心內直接開啟播放器／閱讀器</td><td>Server／Client</td></tr><tr><td>個人資料</td><td>保留頂層「個人資料」</td><td>Server／Client</td></tr></tbody></table></div><div class="call">Client 登入頁喚醒電腦清單、狀態、喚醒按鈕保留；底部含「Super 在 WOL 管理設定」的整段說明刪除。Client UI 全域搜尋、替換所有可見「Super」文字，不能只修登入頁。</div><div class="callout"><h3>圖｜WOL 三入口分流（已定案）</h3><div class="diagram" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px"><div class="panel"><strong>Server App｜Super</strong><p>裝置管理 → WOL 管理</p><p>喚醒與狀態<br/>設備清單<br/>待登記設備</p></div><div class="panel"><strong>Client App｜Super 登入後</strong><p>裝置管理 → WOL 管理</p><p>喚醒與狀態<br/>設備清單<br/>待登記設備</p><p>介面不顯示 Super 字樣</p></div><div class="panel"><strong>Client App｜登入前</strong><p>只有「喚醒電腦」</p><p>已啟用設備＋喚醒按鈕</p><p>無設備清單管理／待登記</p></div><div class="panel"><strong>Admin／User 登入後</strong><p>WOL 管理完全隱藏</p><p>直接 API 呼叫亦拒絕</p></div></div></div></section><section class="tab" data-t="附03 03｜權限矩陣與 A" id="roles" role="tabpanel"><div class="card" style="border-left:5px solid #ad6b13"><b>原始 v1.3 規格保留（歷史參考）：</b>若與最新決策衝突，以上方「00 最新決策」及新專章為準。此附錄不代表全部內容已實作。</div><h2>03｜權限矩陣與 API 安全</h2><div class="tbl"><table><thead><tr><th>App／功能</th><th>Super</th><th>Admin</th><th>User</th><th>後端要求</th></tr></thead><tbody><tr><td>Server｜總覽</td><td>完整</td><td>唯讀</td><td>禁止</td><td>Admin 專用安全摘要 API；禁止重用 Super 全權路由</td></tr><tr><td>Server｜教材目錄／教材庫</td><td>完整</td><td>允許導入、批次重新命名、刪除、掃描建檔（受限路徑）</td><td>禁止</td><td>受控檔案 API；路徑白名單、稽核、角色檢查</td></tr><tr><td>Server｜原檔刪除確認</td><td>允許</td><td>禁止</td><td>禁止</td><td>獨立 Super-only 操作</td></tr><tr><td>Server｜轉檔／字幕／Outgo／排程</td><td>允許</td><td>禁止</td><td>禁止</td><td>Super-only</td></tr><tr><td>Server｜裝置管理／UEM／Client 更新</td><td>允許</td><td>禁止</td><td>禁止</td><td>Super-only</td></tr><tr><td>Server｜系統維護／備份／Log 清除</td><td>允許</td><td>禁止</td><td>禁止</td><td>Super-only</td></tr><tr><td>Server｜統計報告／系統設定</td><td>允許</td><td>禁止</td><td>禁止</td><td>Super-only</td></tr><tr><td>共用｜帳號管理／課程群組</td><td>允許</td><td>依既有明確授權；合併「會員與群組」</td><td>禁止</td><td>既有 API 權限逐項核對，不擴權</td></tr><tr><td>共用｜使用記錄</td><td>允許</td><td>依既有明確授權；不等於 Server Log 清除</td><td>禁止</td><td>檢查查詢及匯出權限</td></tr><tr><td>共用｜PC 資訊</td><td>允許</td><td>依既有明確授權</td><td>禁止</td><td>不可透過直接路由繞過</td></tr><tr><td>共用｜WOL</td><td>允許</td><td>禁止</td><td>禁止</td><td>Super-only，含所有喚醒／設定 API</td></tr><tr><td>學習中心／個人資料</td><td>允許</td><td>允許</td><td>允許</td><td>維持既有內容可見性規則</td></tr></tbody></table></div><h3>程式檢查發現的衝突</h3><div class="call caution"><b>現況：</b><code>server/src/routes/admin.php</code> 對 <code>/api/admin/*</code> 使用 <code>require_local_super()</code>，且設計為僅在本機管理端口提供。現有 Server 導覽對 Admin 又未完整過濾。<b>不能只放寬整個管理 API 或只隱藏按鈕。</b></div><h3>建議的實作邊界</h3><ul><li>Server 管理的 Super API 保持本機、Super-only；新增狹義的 Admin 總覽唯讀 API 及教材操作 API，不讓 Admin 任意存取其他管理資料。</li><li>管理者檔案匯入應由 Server 上受控的來源磁碟／目錄選擇服務處理，禁止任意系統路徑、路徑穿越、符號連結跳出授權根目錄。</li><li>所有教材變更記錄操作人、時間、來源、目的、受影響教材 ID、結果及失敗原因。</li><li>UI、路由守衛、API、主機代理／命令執行四層都驗證角色；驗收直接請求 API 的拒絕案例。</li><li>Admin 對教材刪除權限需區分一般教材管理刪除與轉檔後原始素材刪除確認；後者絕不繼承。</li></ul><div class="callout"><h3>WOL 權限差異｜必修技術缺陷（P0）</h3><p><strong>最新定案：只有 Super 能進入完整 WOL 管理三個子功能：①喚醒與狀態 ②設備清單 ③待登記設備。</strong>不論 Server App 或 Client App，Admin／User 登入後都不得顯示 WOL 管理入口、三個子功能，也不得呼叫其管理、狀態、喚醒、探測、掃描 API。<strong>唯一例外：Client App 登入前的公開「喚醒電腦」區塊，只能看到已啟用設備及喚醒按鈕，不得顯示設備管理或待登記資訊。</strong></p><p><code>packages/ui/src/App.tsx</code> 的 <code>adminItems()</code> 目前在 <code>atLeast(a,'admin')</code> 分支加入 <code>{id:'wol', label:'WOL 管理'}</code>；應改為只在 <code>a.role === 'super'</code> 加入。<code>packages/ui/src/admin/Wol.tsx</code> 目前讓 Admin 使用「喚醒與狀態」，需改為完整 Super-only 路由守衛。</p><p><code>server/src/routes/manage.php</code> 目前 <code>GET /api/wol/devices</code>、<code>POST /api/wol/probe</code>、<code>GET /api/wol/scan/{id}</code>、<code>GET /api/devices/pending</code> 仍有 <code>require_role('admin')</code>；<code>POST /api/wol/wake</code> 也須逐項檢查。<code>require_wol_editor()</code> 已限制設備寫入，但不足以保護讀取與喚醒。所有登入後 WOL API 必須逐一改成 <code>require_role('super')</code> 或等效的強制權限判斷；不要只隱藏 Tab。</p><p>登入前公開喚醒 API 必須獨立保留最小必要範圍：僅回傳已啟用且允許公開喚醒的設備名稱／狀態，使用受控設備 ID 觸發喚醒，具備頻率限制、冷卻與稽核；不能因管理 API 收緊而破壞登入頁喚醒。公開路由名稱及授權流程需從程式核對後才能改動。</p><p><strong>驗收：</strong>Server／Client × Super／Admin／User × 直接輸入路由／直接請求 API；Admin 與 User 管理端應為 403／不可見；未登入者只可使用 Client 登入頁限定喚醒能力，不能列出 MAC、管理設定或待登記資料。</p></div></section><section class="tab" data-t="附04 04｜Server " id="nav" role="tabpanel"><div class="card" style="border-left:5px solid #ad6b13"><b>原始 v1.3 規格保留（歷史參考）：</b>若與最新決策衝突，以上方「00 最新決策」及新專章為準。此附錄不代表全部內容已實作。</div><h2>04｜Server 管理 18 → 6 分類</h2><p>以下保留你喜歡的「六格管理入口」圖，並做成可點選查看功能的互動版；手機與桌面自動排列。</p><div class="diagram"><div class="diagram-title">圖 2｜建議的 Server 管理新結構（互動示意）</div><div class="six" id="six"></div><div aria-live="polite" class="detail" id="six-detail"></div></div><h3>18 個原始 Tab 對照</h3><div class="tbl"><table><thead><tr><th>新分類</th><th>原 Tab 編號／功能</th><th>合併深度</th></tr></thead><tbody><tr><td>總覽</td><td>1 總覽</td><td>原頁增強，Admin 唯讀</td></tr><tr><td>教材管理</td><td>2 教材目錄、3 教材清單、4 轉檔佇列、6 原檔刪除確認、7 字幕、8 文件轉換、9 Outgo（音轉文）</td><td>目錄＋清單真正合併；轉換工作合併；字幕／Outgo 共用 ASR 元件；原檔確認保留獨立安全操作</td></tr><tr><td>裝置管理</td><td>11 Client 版本與更新、17 主機盤點（UEM）；共用 WOL／PC 資訊</td><td>共用裝置清單與版本資訊；WOL 僅 Super</td></tr><tr><td>系統維護</td><td>14 系統檢查與管理、15 備份、16 Log、18 主機維護</td><td>資訊彙整、保留各高風險操作界線</td></tr><tr><td>統計報告</td><td>10 統計與報告；使用記錄查詢</td><td>報表與稽核資料不同，不混資料表</td></tr><tr><td>系統設定</td><td>5 排程設定、12 匯入／匯出授權、13 登入頁設定；系統檢查內開發規範</td><td>統一設定容器、分類表單</td></tr></tbody></table></div><h3>具體合併準則</h3><ul><li>教材目錄＋教材清單：同一教材工作區，左側資料夾樹、右側檔案清單；窄螢幕改上下排列。</li><li>轉檔佇列＋文件轉換：統一「轉換工作」工作區，影片／Office 文件類型篩選；保留不同工作狀態。</li><li>字幕＋Outgo：共用 ASR 引擎選擇、品質／工作狀態元件，但不同來源與輸出流程分開。</li><li>系統檢查的 8 子 Tab 改成「環境檢查／診斷／驗收／規範」分類或可收合區塊，不再橫向排列 8 個 Tab。</li><li>Log 的 4 子 Tab 改來源篩選；可各自清除與全部清除。</li><li>Server 管理主分類不是所有角色都可見：Admin 只顯示「總覽」及「教材管理」中的教材目錄授權部分。</li></ul></section><section class="tab" data-t="附05 05｜教材管理：匯入" id="materials" role="tabpanel"><div class="card" style="border-left:5px solid #ad6b13"><b>原始 v1.3 規格保留（歷史參考）：</b>若與最新決策衝突，以上方「00 最新決策」及新專章為準。此附錄不代表全部內容已實作。</div><h2>05｜教材管理：匯入、掃描、命名、刪除</h2><div class="call danger"><b>最高優先驗收項：</b>匯入大量教材必須完整建立資料庫教材 ID 等索引資訊，並可讓 Admin 使用。確認功能正確之前，不視為完成。</div><div class="diagram"><div class="diagram-title">圖 3｜USB／磁碟大量教材導入流程</div><div class="flow"><div class="step">① 選擇來源磁碟<br/><b>USB／外接碟</b></div><div class="arrow">→</div><div class="step">② 選來源目錄<br/><b>可遞迴子目錄</b></div><div class="arrow">→</div><div class="step">③ 選目的路徑<br/><b>預設 /Media/</b></div><div class="arrow">→</div><div class="step">④ 預檢與確認<br/><b>空間／衝突／數量</b></div><div class="arrow">→</div><div class="step">⑤ 匯入與驗證<br/><b>進度／重試／校驗</b></div><div class="arrow">→</div><div class="step">⑥ 深度掃描建檔<br/><b>教材 ID／DB</b></div></div></div><h3>操作規格</h3><div class="tbl"><table><thead><tr><th>階段</th><th>必要行為</th><th>驗收</th></tr></thead><tbody><tr><td>來源選擇</td><td>Server 偵測可讀的已掛載磁碟與目錄；顯示裝置名稱、掛載點、容量；不可讓瀏覽器假裝可直接讀取 Server USB</td><td>插拔 USB、無權限、卸載中都有正確狀態</td></tr><tr><td>目的選擇</td><td>預設 /Media/；允許選擇授權的課程子目錄；不允許覆寫系統資料夾</td><td>路徑穿越／symlink 越界拒絕</td></tr><tr><td>預檢</td><td>遞迴統計數量／容量；檢查可用空間、同名、重複、特殊字元、檔案格式</td><td>不符合條件時不開始匯入</td></tr><tr><td>匯入</td><td>背景工作；顯示已處理／總數、速度、成功／失敗；可安全中止、重試；避免半成品被當正式教材</td><td>大批量、網路中斷、磁碟中斷可恢復或明確失敗</td></tr><tr><td>掃描建檔</td><td>完成後沿用既有教材深度掃描規則，建立／更新 media、folder、course 等實際相關資料；教材 ID 唯一、路徑正確</td><td>DB 筆數、檔案數、抽樣播放／文件開啟相符</td></tr><tr><td>批次 Rename</td><td>勾選後預覽新名稱與衝突；檔案／DB／相關路徑一致更新</td><td>重名、批次部分失敗可處理</td></tr><tr><td>批次 Delete</td><td>勾選、確認數量與路徑、檢查關聯與工作佇列；刪除後 DB 不留錯誤索引</td><td>避免誤刪播放唯一副本；操作可稽核</td></tr></tbody></table></div><h3>教材管理工作區示意</h3><div class="screen"><div class="screenbar">教材管理 › 教材庫　　[導入大量檔案]　[深度掃描]　[重新命名]　[刪除]</div><div class="screenbody"><div class="side"><b>目錄樹</b><div class="sub">/Media</div><div class="sub">▸ 課程 A</div><div class="sub">▸ 課程 B</div></div><div class="main"><b>教材清單</b><div class="sub">☐　教材 001　影片　已建檔</div><div class="sub">☐　教材 002　PDF　已建檔</div><div class="sub">☐　教材 003　音訊　待處理</div><small class="muted">窄視窗時目錄樹自動移至上方</small></div></div></div><h3>現況程式</h3><p><code>Folders.tsx</code> 目前提供試掃描、深度掃描、資料夾設定及目錄樹；缺少上述來源磁碟選擇、複製進度、批次 Rename／Delete 的完整流程。Admin 不可直接呼叫現有 Super-only 掃描 API，需另外設計受控授權。</p></section><section class="tab" data-t="附06 06｜總覽、診斷與 " id="overview" role="tabpanel"><div class="card" style="border-left:5px solid #ad6b13"><b>原始 v1.3 規格保留（歷史參考）：</b>若與最新決策衝突，以上方「00 最新決策」及新專章為準。此附錄不代表全部內容已實作。</div><h2>06｜總覽、診斷與 UEM</h2><h3>總覽開放 Admin 唯讀</h3><p>Admin 可看必要系統健康與教材相關資訊，但不得因此取得主機操作、備份還原、版本發布、敏感設定或完整日誌權限。Super 保留全部操作。</p><h3>Server 診斷 UI</h3><ul><li>已通過項目不再重複顯示「通過」文字：前方勾選已足夠；每項顯示實際技術規格與量測值。</li><li>擴充 CPU 型號／核心／執行緒／負載、RAM 總量／可用量、PostgreSQL 版本／DB 大小、Agent 版本與心跳、Docker／服務、FFmpeg／VA-API／QSV、LibreOffice、網路服務、儲存健康等。</li><li>檢測結果區分「通過／警告／失敗／無資料」，避免無資料誤判正常；可見的技術資訊依角色做遮罩。</li><li>「主機檢查未更新（例如 1734 分鐘前）」從總覽移至 UEM「需要處理」表格，顯示最近檢查時間、逾期分鐘、原因及重新檢查入口（Super）。</li><li>「/Media 剩餘空間」標題改為「磁碟陣列 ZFS（12TB × 2）」；顯示 mirror 狀態、實際容量、已用／剩餘與健康；不得宣稱 24TB 可用。</li></ul><h3>總覽最下方新增「Log 記錄」</h3><div class="screen"><div class="screenbar">Server 總覽 › Log 記錄</div><div class="screenbody"><div class="main"><b>最近 3 筆備份</b><div class="sub">① 時間｜成功／失敗｜大小｜驗證狀態</div><div class="sub">② 時間｜成功／失敗｜大小｜驗證狀態</div><div class="sub">③ 時間｜成功／失敗｜大小｜驗證狀態</div><small>每日系統設定＆字幕＆資料庫備份正常／不含教材</small></div><div class="main"><b>最近 3 筆 Client App 使用記錄</b><div class="sub">① 時間｜IP｜使用者｜動作</div><div class="sub">② 時間｜IP｜使用者｜動作</div><div class="sub">③ 時間｜IP｜使用者｜動作</div><small>各區右上角 More → 小視窗查看更多</small></div></div></div><div class="call caution"><b>固定文字與真實狀態的處理：</b>依你的要求保留「每日系統設定＆字幕＆資料庫備份正常／不含教材」文字，但「正常」必須以最近一次成功且驗證的實際備份為條件；失敗／未執行時改顯示異常，不可誤報。此處為功能正確性所需。</div><p>More 小視窗須支援時間、狀態、更多筆數及分頁；Admin 只能讀到授權的摘要，IP 與使用者資訊依隱私及管理需求限制；Super 可看完整記錄。</p><h3>程式現況</h3><p><code>Overview.tsx</code> 現有系統狀態、Client 版本、Server 診斷三區；<code>/api/admin/overview</code> 目前 Super-only，且尚未提供兩組「最近三筆」資料。</p></section><section class="tab" data-t="附07 07｜Client " id="client" role="tabpanel"><div class="card" style="border-left:5px solid #ad6b13"><b>原始 v1.3 規格保留（歷史參考）：</b>若與最新決策衝突，以上方「00 最新決策」及新專章為準。此附錄不代表全部內容已實作。</div><h2>07｜Client App、播放器、字幕與 PDF</h2><h3>Client App 登入頁</h3><ul><li>整個 Client UI（登入、提示、錯誤、說明、按鈕、空狀態）禁止出現「Super」字樣；管理者身份在後端仍存在，不影響授權。</li><li>喚醒電腦區塊保留已登記電腦、作業系統、回報狀態、喚醒與全部喚醒；刪除最下面整行說明文字。</li><li>登入畫面的小螢幕排列需可操作；不讓喚醒清單擠出視窗。</li></ul><h3>字幕面板：真正自動響應</h3><div class="diagram"><div class="diagram-title">圖 4｜同一播放器依容器寬度自動排列</div><div class="grid"><div class="tile"><b>寬容器</b><div class="sub">▶ 影片畫面</div><div class="sub">搜尋｜字幕設定｜操作</div><div class="sub">00:12　字幕內容…</div></div><div class="tile"><b>中等容器</b><div class="sub">▶ 影片畫面</div><div class="sub">搜尋　字幕設定</div><div class="sub">00:12　字幕內容…</div></div><div class="tile"><b>窄容器</b><div class="sub">▶ 影片</div><div class="sub">搜尋<br/>字幕設定</div><div class="sub">00:12<br/>字幕內容自動換行…</div></div></div></div><ul><li>採用 CSS Container Queries 為主要方式，依字幕面板／播放器容器實際可用寬度自動變化；必要時以 ResizeObserver 同步需 JS 量測的操作。</li><li>建立輕量共用 ResponsiveLayout／容器尺寸規則，避免為單一字幕頁引入大型框架。</li><li>工具列自動換行、字幕時間與內容可改上下排列、字幕清單獨立捲動、按鈕不被遮擋、影片區域不被過度擠壓。</li><li>視窗拖曳改變大小時立即響應；測試 800×600、1024×768、1366×768、1920×1080、半螢幕及瀏覽器縮放。</li><li>播放器「CC 字幕」改成「字幕」；只改標籤，不影響字幕開關與選擇邏輯。</li></ul><h3>PDF 搜尋：大小寫無關＋高亮定位</h3><div class="diagram"><div class="diagram-title">圖 5｜PDF 搜尋命中示意</div><div class="screen"><div class="screenbar">PDF 教材　　搜尋：[ server ]　　結果 3 / 18　　[上一筆] [下一筆] [清除]</div><div style="padding:22px;background:#fff"><p>系統提供 <mark class="highlight">Server</mark> 管理服務，包含相關設定與診斷。</p><p>使用者可以透過 <mark class="current">SERVER</mark> 介面管理教材。</p><p>其他頁面中的 <mark class="highlight">server</mark> 也應命中並高亮。</p></div></div></div><ul><li>英文搜尋不區分大小寫（ABC／abc／Abc 都能命中）；中文正常比對。</li><li>所有命中位置黃色高亮，當前命中橘色高亮；顯示目前筆數／總筆數。</li><li>上一筆／下一筆切換時自動換頁、捲動並定位到實際文字，不只跳到頁碼。</li><li>放大縮小、旋轉（若支援）、換頁後，高亮覆蓋層跟隨文字座標重新計算。</li><li>清除搜尋移除高亮；處理跨行文字、無文字層的掃描 PDF（明確提示需 OCR，不可假稱可搜尋）。</li></ul><h3>收藏功能精簡</h3><p>全新系統沒有舊資料要保留：<b>只保留「加入書籤／取消書籤」</b>。刪除「最愛」按鈕、狀態、篩選與相應資料欄位及 API（依實際 schema/migration 檢查），不做舊資料轉換。「瀏覽｜學習」仍保留瀏覽記錄與書籤兩種不同用途。</p><h3>PC Info</h3><p>保留解析度、縮放等既有資訊；<b>取消螢幕實體英吋／EDID 偵測需求</b>。</p></section><section class="tab" data-t="附08 08｜Dev61 B" id="bugs" role="tabpanel"><div class="card" style="border-left:5px solid #ad6b13"><b>原始 v1.3 規格保留（歷史參考）：</b>若與最新決策衝突，以上方「00 最新決策」及新專章為準。此附錄不代表全部內容已實作。</div><h2>08｜Dev61 Bug：Client 更新、備份、排程</h2><h3>P1｜BUG-01｜Win10 Client 更新 HTTP 404（先確認 Dev62 是否已修復）</h3><div class="call danger"><b>實際回報：</b>AcerMiniPc_Win10／Win10／1.0.0-dev.61；版本顯示「✓ 最新」，更新狀態卻是「✗ 更新失敗：Cannot find channel latest.yml」，請求 <code>http://10.3.3.100:4080/updates/win10/latest.yml?noCache=...</code> 回 404；最後回報 2026-11-02 16:17，IP 10.3.3.2，離線。</div><div class="tbl"><table><thead><tr><th>檢查順序</th><th>Debug 內容</th><th>完成條件</th></tr></thead><tbody><tr><td>1 發布檔</td><td>檢查 win10 更新目錄、latest.yml、安裝檔、hash、版本對應及發布日誌</td><td>版本 metadata 與安裝檔實際存在</td></tr><tr><td>2 HTTP</td><td>檢查 Nginx／Server 的 /updates/win10/ 映射、檔案權限、404 與 URL 大小寫</td><td>用 Client 相同 URL 可取到 metadata</td></tr><tr><td>3 Client</td><td>核對 electron-updater provider/channel、更新頻率、noCache、dev 版更新設定</td><td>無新版本時正常判定，不以 404 假裝成功</td></tr><tr><td>4 端到端</td><td>實機 Win10 由舊版→新版，更新狀態與 Server 清單一致</td><td>成功下載、驗證、安裝、回報</td></tr></tbody></table></div><h3>BUG-02｜備份 2.3 MB 與 SSD 容量風險</h3><p>2.3 MB 不足以證明備份異常，須實際拆解資料庫、字幕、Office 文件、設定、manifest 與加密包大小；核對是否意外包含快取／重複檔。</p><ul><li>顯示每份備份的內容明細、壓縮前／後大小、總量、每日成長量、SSD 剩餘容量與保留天數。</li><li>保留現有 age 加密、解密驗證、完整性檢查、隔離還原測試、遠端 FTPS 驗證能力；不得為了 UI 精簡而刪除。</li><li>備份前做可用空間預檢與安全餘量，避免把 SSD 塞滿；磁碟不足時停止新備份並明確告警。</li><li>檢查 10～15 天保留清理是否正常執行；現有程式指出舊未加密 .tar.gz 與部署 SQL 不會自動清理，必須納入容量盤點及處理策略。</li><li>不能只看備份成功訊息：需檢查檔案可解密、校驗與可隔離還原；顯示最後成功時間。</li></ul><h3>BUG-03｜排程設定難以理解</h3><div class="tbl"><table><thead><tr><th>新區塊</th><th>顯示方式</th></tr></thead><tbody><tr><td>自動處理時間</td><td>允許轉檔／字幕的開始與結束時間；清楚顯示跨午夜</td></tr><tr><td>影片轉檔</td><td>開關、目前狀態、何時開始、佇列數量</td></tr><tr><td>字幕辨識</td><td>開關、是否等轉檔完成、引擎與工作狀態說明</td></tr><tr><td>每日備份</td><td>備份時間、最近成功、下次預計、保留天數入口</td></tr></tbody></table></div><p>保留實際排程語意：轉檔／字幕受時段限制，備份是獨立每日時間；明確標示「立即執行」是否繞過排程。修改設定前後須顯示效果及確認成功。</p></section><section class="tab" data-t="附09 09｜Log、使用記" id="logs" role="tabpanel"><div class="card" style="border-left:5px solid #ad6b13"><b>原始 v1.3 規格保留（歷史參考）：</b>若與最新決策衝突，以上方「00 最新決策」及新專章為準。此附錄不代表全部內容已實作。</div><h2>09｜Log、使用記錄與清除</h2><h3>Log 來源與 UI</h3><div class="tbl"><table><thead><tr><th>來源</th><th>舊子 Tab</th><th>新介面</th></tr></thead><tbody><tr><td>Server</td><td>Server 錯誤記錄</td><td>來源篩選：Server</td></tr><tr><td>Agent</td><td>Agent 工作記錄</td><td>來源篩選：Agent</td></tr><tr><td>Host</td><td>主機維護</td><td>來源篩選：主機維護</td></tr><tr><td>Client</td><td>Client 上傳的 Log</td><td>來源篩選：Client</td></tr></tbody></table></div><h3>清除功能（依你的決策）</h3><ul><li>每一來源有「清除目前類別」按鈕；另有顯著「全部清除」按鈕，可一鍵清除四類 Log。</li><li>清除功能 Super-only；Admin、User 不顯示、API 直接呼叫也必須拒絕。</li><li>按下全部清除後顯示明確確認視窗（範圍、筆數、不可復原），確認後執行；不強制額外保留一般 Log。</li><li>清除操作仍須保留最小必要的安全稽核事件（執行者、時間、範圍、筆數、結果），避免完全無法追蹤誰清除了 Log；稽核存放與清除範圍需明確分離。</li><li>提供清除結果與失敗原因；高資料量採批次或後端工作，避免請求逾時。</li><li>總覽最近三筆 Client 使用記錄不是「Client 上傳錯誤 Log」的同義詞：要核對使用記錄表是否有使用者、IP、動作欄位，缺資料時不可虛構。</li></ul><div class="call caution">目前 <code>server/src/routes/admin.php</code> 已有 <code>GET /api/admin/logs</code> 查詢路由；清除 API、資料保留及稽核策略需新增與測試。</div></section><section class="tab" data-t="附10 10｜開發批次、驗收" id="plan" role="tabpanel"><div class="card" style="border-left:5px solid #ad6b13"><b>原始 v1.3 規格保留（歷史參考）：</b>若與最新決策衝突，以上方「00 最新決策」及新專章為準。此附錄不代表全部內容已實作。</div><h2>10｜開發批次、驗收與風險</h2><h3>建議批次（相關變更集中提交）</h3><div class="tbl"><table><thead><tr><th>批次</th><th>工作內容</th><th>驗收門檻</th></tr></thead><tbody><tr><td>A｜權限與導覽</td><td>Server／Client 入口、Super／Admin／User 角色守衛、Server 6 分類、學習中心、會員與群組、WOL 限 Super</td><td>角色矩陣前端＋API 全通過；原路由不失效</td></tr><tr><td>B｜教材管理</td><td>來源磁碟、批次導入、掃描建 DB、rename/delete、目錄＋清單合併</td><td>大量檔案及異常中斷測試通過</td></tr><tr><td>C｜Server 維運</td><td>總覽診斷、UEM 警告移動、備份摘要、Client 使用記錄、Log 清除、排程白話化</td><td>數據正確、容量保護、權限正確</td></tr><tr><td>D｜Client／閱讀</td><td>登入頁文字、字幕容器響應、字幕標籤、PDF 高亮搜尋、單一書籤</td><td>不同視窗尺寸、跨頁搜尋、所有角色</td></tr><tr><td>E｜Dev61 P1 驗證</td><td>Win10 latest.yml 404、備份 2.3MB 內容與保留策略</td><td>實機更新、備份還原與磁碟預警驗收</td></tr></tbody></table></div><h3>跨功能驗收清單</h3><ul class="checklist"><li>Server Super 能看 6 分類與完整授權功能；Admin 只看總覽與教材目錄；User 無 Server 管理入口</li><li>Client 所有可見 UI 無「Super」文字；登入頁底部喚醒說明已移除</li><li>WOL Admin／User UI 隱藏且 API 403；Super 可正常操作</li><li>學習中心保留課程、瀏覽記錄、書籤、搜尋、播放器、PDF；無「最愛」</li><li>USB 大量匯入成功後資料庫 ID、路徑、檔案類型、教材數量一致</li><li>Admin 可批次 rename/delete 一般教材；不可操作原檔刪除確認</li><li>Win10 更新列 P1：先檢查 Dev62 實際更新發布結果，若已修復僅補回歸驗收；若仍 404 再除錯</li><li>備份內容與大小可追蹤；空間不足不會塞滿 SSD；可隔離還原</li><li>總覽診斷顯示詳細規格；UEM 警告只在 UEM「需要處理」</li><li>總覽 Log 區兩組各 3 筆，More 可展開，資料權限正確</li><li>Log 各類別及全部清除按鈕可用；清除後結果及稽核正確</li><li>字幕面板在不同容器大小無溢出；影片字幕按鈕名稱已改</li><li>PDF 大小寫無關搜尋、文字高亮、結果定位、上一筆下一筆正常</li><li>排程設定白話說明與實際執行行為一致</li><li>CI／測試／實機驗收完成前不得宣稱 Dev62 已完成</li></ul><h3>實作安全界線</h3><ul><li>不操作正式資料庫、不對正式教材做破壞性測試；先在測試資料與測試磁碟驗收。</li><li>先建立 GitHub 一致基線，集中處理同一批相關變更，避免大量零碎 Commit；PR 不自動合併。</li><li>所有新 API 都要有拒絕測試（未登入、User、Admin 越權、路徑越界）。</li><li>本規格中的 UI 圖為設計示意，不是已完成畫面；執行結果、版本號與部署狀態以實際 CI／Server 回報為準。</li></ul><h3>待實機確認，不擅自推定</h3><ul><li>Windows 更新發布目錄及 Nginx 真實映射。</li><li>2.3 MB 備份檔的檔案清單、大小來源及 SSD 實際可用空間。</li><li>USB 掛載方式與 Server App 是否可透過受控主機服務列出磁碟。</li><li>教材掃描規則、DB schema、檔案重新命名對字幕／轉檔／播放索引的影響。</li><li>Client 使用記錄是否完整保存使用者、IP、動作及時間。</li></ul><p class="callout"><strong>更新：</strong>Win10 更新 404 改為 P1，先確認 Dev62 是否已排除；WOL 的 <code>adminItems()</code>、<code>Wol.tsx</code> 與 <code>server/src/routes/manage.php</code> API 收緊為 P0。完整檔案對照與狀態請見「技術定位」、「開發進度」Tab。</p><p class="call"><b>批次 A 補充：</b>WOL 登入頁顯示設定與自訂名稱為 P0；同一批完成 DB migration、Super 設備表單、登入前清單 API、角色拒絕測試與 UI 回歸。Windows 10 更新 404 仍為 P1，先驗證 Dev62 是否已排除。</p></section><section class="tab" data-t="附11 11｜WOL 設備編" id="wol-login" role="tabpanel"><div class="card" style="border-left:5px solid #ad6b13"><b>原始 v1.3 規格保留（歷史參考）：</b>若與最新決策衝突，以上方「00 最新決策」及新專章為準。此附錄不代表全部內容已實作。</div>
+<h2>11｜WOL 設備編輯：Client 登入頁喚醒清單顯示控制（新增 P0）</h2>
+<div class="call"><b>使用者確認需求（2026-11-03）：</b>Server App 或 Client App 的 <b>Super 登入後 → WOL 管理 → 設備清單 → 編輯設備</b>，新增兩個獨立欄位：①「是否顯示到 Client App 登入頁的喚醒清單中」開關；②「顯示到 Client App 登入頁的喚醒清單中的 PC 顯示名稱」。<b>不得與現有「是否啟用 WOL」混成同一個欄位。</b></div>
+<h3>圖 6｜設備編輯 UI 變更示意</h3>
+<div class="diagram"><div class="diagram-title">Super｜WOL 管理 → 設備清單 → 編輯設備（設計示意，非已完成畫面）</div>
+<div class="grid"><div class="tile"><b>設備名稱</b><small>最遠Client_Win7</small></div><div class="tile"><b>是否啟用 WOL（原有）</b><small>啟用／停用：控制能否發送喚醒</small></div><div class="tile" style="border:2px solid #3c8b72;background:#edf7f1"><b>新增｜顯示在 Client 登入頁</b><small>□ 是　□ 否（獨立開關）</small></div><div class="tile" style="border:2px solid #3c8b72;background:#edf7f1"><b>新增｜登入頁 PC 顯示名稱</b><small>例：教室 A-01；不修改設備內部名稱</small></div></div>
+<p class="dim">其餘 MAC、LAN IP、廣播位址、連接埠、發送次數、冷卻秒數、排序等原欄位全部保留。</p></div>
+<h3>欄位定義／資料庫</h3><table><thead><tr><th>UI 欄位</th><th>建議 DB 欄位</th><th>資料型別／預設</th><th>語意與驗證</th></tr></thead><tbody>
+<tr><td>是否顯示到 Client App 登入頁的喚醒清單中</td><td><code>client_devices.show_on_login</code></td><td><code>BOOLEAN NOT NULL DEFAULT FALSE</code></td><td>獨立顯示開關；新設備預設不公開；只允許 Super 修改</td></tr>
+<tr><td>登入頁 PC 顯示名稱</td><td><code>client_devices.login_display_name</code></td><td><code>VARCHAR(100)</code>（建議）</td><td>允許空白時回退內部 <code>name</code>；trim、長度限制、輸出跳脫，不能以 HTML 執行</td></tr>
+<tr><td>原有 WOL 啟用</td><td><code>client_devices.enabled</code></td><td>既有欄位</td><td>是否允許發送喚醒；與 show_on_login 為兩個不同狀態</td></tr>
+</tbody></table>
+<h3>顯示條件真值表</h3><table><thead><tr><th>enabled</th><th>show_on_login</th><th>Client 登入頁</th><th>Super 登入後 WOL 管理</th></tr></thead><tbody>
+<tr><td>否</td><td>否</td><td>不顯示／不可喚醒</td><td>設備仍可查看與修改</td></tr>
+<tr><td>否</td><td>是</td><td>不顯示／不可喚醒</td><td>可查看並調整設定</td></tr>
+<tr><td>是</td><td>否</td><td>不顯示</td><td>可從管理端喚醒</td></tr>
+<tr><td>是</td><td>是</td><td><b>顯示 login_display_name（空白則 name）及喚醒按鈕</b></td><td>完整管理</td></tr>
+</tbody></table>
+<h3>程式與 API 修改定位（需實作時逐一核對）</h3><table><thead><tr><th>檔案／介面</th><th>精確修改要求</th></tr></thead><tbody>
+<tr><td><code>packages/ui/src/admin/Wol.tsx</code></td><td><code>DevicesTab</code>、設備編輯表單：加入 <code>show_on_login</code> 開關與 <code>login_display_name</code> 輸入欄；新建／編輯、讀取／儲存、提示、表格顯示一致。只有 Super 可進入 <code>StatusTab</code>、<code>DevicesTab</code>、<code>PendingTab</code>。</td></tr>
+<tr><td><code>server/src/routes/manage.php</code></td><td>設備序列化 <code>device_out()</code>、<code>device_rows()</code>、寫入驗證與 <code>POST /api/wol/devices</code>、<code>PATCH /api/wol/devices/{id}</code>；保留 <code>require_wol_editor()</code> 的 Super-only 寫入限制。另核對 <code>GET /api/wol/devices</code>、<code>POST /api/wol/probe</code>、<code>POST /api/wol/wake</code>、<code>GET /api/wol/scan/{id}</code>、<code>GET /api/devices/pending</code>，修正仍使用 <code>require_role('admin')</code> 的管理端路由。</td></tr>
+<tr><td><code>packages/ui/src/App.tsx</code></td><td><code>adminItems(a: Account)</code>：WOL 不得在 <code>atLeast(a,'admin')</code> 分支，僅於 <code>a.role === 'super'</code> 分支出現；路由也須防止 Admin／User 直接開啟。</td></tr>
+<tr><td>Client 登入頁與公開喚醒 API</td><td>核對實際登入元件與公開端點（不可猜測路由名稱）；登入前清單只回傳 <code>enabled=true AND show_on_login=true</code> 的設備及必要公開欄位；使用 <code>login_display_name</code>，不洩漏 MAC、管理設定、待登記設備；保留冷卻／頻率限制／稽核。刪除登入頁底部說明，所有 Client UI 不顯示「Super」字樣。</td></tr>
+<tr><td>資料庫 migration</td><td>新增兩個欄位、預設值及必要索引；新系統不需歷史資料轉換；但應確認既有設備的預設不會意外公開。</td></tr>
+</tbody></table>
+<h3>角色與入口邊界</h3><table><thead><tr><th>入口</th><th>喚醒與狀態</th><th>設備清單／編輯</th><th>待登記設備</th></tr></thead><tbody>
+<tr><td>Server App｜Super 登入後</td><td>允許</td><td>允許（含新增欄位）</td><td>允許</td></tr>
+<tr><td>Client App｜Super 登入後</td><td>允許</td><td>允許（含新增欄位）</td><td>允許</td></tr>
+<tr><td>Server／Client｜Admin、User 登入後</td><td>禁止</td><td>禁止</td><td>禁止</td></tr>
+<tr><td>Client App｜未登入的登入頁</td><td>只有符合條件的「喚醒電腦」清單／按鈕</td><td>禁止</td><td>禁止</td></tr>
+</tbody></table>
+<h3>驗收與測試</h3><ul class="checklist">
+<li>Super 可新增／修改兩欄，重新整理後設定仍在；Admin／User UI 不顯示且直接 API 403</li>
+<li><code>enabled=false, show_on_login=true</code> 不出現在登入頁；<code>enabled=true, show_on_login=false</code> 也不出現</li>
+<li>兩者皆 true 才顯示；登入頁名稱採 <code>login_display_name</code>，空白時回退內部設備名稱</li>
+<li>更改登入頁名稱不影響 WOL 內部設備名稱、MAC、LAN IP、廣播位址與更新回報</li>
+<li>未登入清單不可洩漏 MAC、待登記設備及內部管理欄位；喚醒仍有冷卻／限流／稽核</li>
+<li>Client 登入頁只有喚醒功能，無設備編輯、掃描、登記入口，無「Super」可見文字</li>
+<li>Server／Client Super 可使用 WOL 三子功能；Admin／User 全部拒絕</li>
+</ul><div class="call caution"><b>進度：</b>新增需求已確認並納入 v1.2；尚未建立 migration、修改 API／React 元件、執行 CI 或實機驗收。不得標記為已完成。</div>
+</section><section class="tab" data-t="附12 12｜程式檔案、函式" id="tech"><div class="card" style="border-left:5px solid #ad6b13"><b>原始 v1.3 規格保留（歷史參考）：</b>若與最新決策衝突，以上方「00 最新決策」及新專章為準。此附錄不代表全部內容已實作。</div><h2>12｜程式檔案、函式、API 與修改點對照</h2><p class="dim">下列依 GitHub <code>ilifeup/istudy</code> 的 <code>main</code> 靜態檢查；檔案位置、函式與目前權限是待修改基線，不代表已部署或驗收。</p><p class="call"><b>新增 WOL 欄位技術追蹤：</b><code>client_devices.show_on_login</code>、<code>client_devices.login_display_name</code>、<code>Wol.tsx</code> 設備編輯表單、<code>manage.php</code> 的 <code>device_out()</code>／<code>POST /api/wol/devices</code>／<code>PATCH /api/wol/devices/{id}</code>、登入前公開喚醒清單的 <code>enabled AND show_on_login</code> 篩選。詳見「WOL 登入顯示」Tab。</p><table><thead><tr><th>功能</th><th>程式定位／技術關鍵字</th><th>修改與驗收</th></tr></thead><tbody>
+<tr><td>共用管理導覽</td><td><code>packages/ui/src/App.tsx</code> → <code>adminItems(a: Account)</code>、<code>atLeast(a,'admin')</code>、<code>account.role === 'super'</code></td><td>Admin 移除 WOL；User 移除使用記錄、PC 資訊、WOL；角色切換／直連測試</td></tr>
+<tr><td>WOL 三子功能</td><td><code>packages/ui/src/admin/Wol.tsx</code> → <code>WolPage</code>、<code>StatusTab</code>、<code>DevicesTab</code>、<code>PendingTab</code>；<code>tab='status'|'devices'|'pending'</code></td><td>登入後三個子功能都只限 Super；不能讓 Admin 留在 StatusTab</td></tr>
+<tr><td>WOL 管理 API</td><td><code>server/src/routes/manage.php</code> → <code>require_wol_editor()</code>、<code>require_role('admin')</code>、<code>/api/wol/devices</code>、<code>/api/wol/probe</code>、<code>/api/wol/wake</code>、<code>/api/wol/scan</code>、<code>/api/devices/pending</code>、<code>/api/devices/{id}/register</code></td><td>盤點 GET／POST／PATCH／DELETE 全部讀寫與喚醒路由，管理端一律 Super-only；公開登入喚醒例外分離</td></tr>
+<tr><td>Server 管理權限</td><td><code>server/src/routes/admin.php</code> → <code>require_local_super()</code>、<code>/api/admin/overview</code>、<code>/api/admin/media</code>、<code>/api/admin/config</code></td><td>不可將 <code>/api/admin/*</code> 整體放寬；Admin 總覽唯讀與教材受控操作建立狹義授權 API</td></tr>
+<tr><td>Server 六分類</td><td><code>apps/server/src/srv.tsx</code>、<code>apps/server/src/index.tsx</code>、<code>packages/ui/src/App.tsx</code>；既有 <code>srv-*</code> 路由</td><td>6 類導覽＋Server 學習中心；原路由保留對照；Admin 只看總覽與教材目錄</td></tr>
+<tr><td>教材匯入</td><td><code>apps/server/src/pages/Folders.tsx</code>、<code>MediaList.tsx</code>；後端掃描與 <code>media</code>、<code>folders</code>、<code>course_id</code>、<code>rel_path</code>、<code>media_id</code></td><td>USB 磁碟→來源目錄→/Media 目的目錄→批次複製→掃描→DB ID；rename/delete 同步檔案與資料庫，Admin 授權</td></tr>
+<tr><td>總覽／診斷</td><td><code>apps/server/src/pages/Overview.tsx</code>、<code>server/src/routes/admin.php</code> → <code>/api/admin/overview</code>、<code>diagnostics</code>、<code>backup_history</code>、<code>client_devices</code></td><td>Admin 唯讀摘要 API；ZFS 12TB×2、規格明細、最近 3 筆備份／Client 使用記錄；UEM 警告移位</td></tr>
+<tr><td>備份／Log</td><td><code>apps/server/src/pages/BackupsLogs.tsx</code>；<code>/api/admin/logs</code>、<code>system_logs</code>、<code>client_logs</code>、<code>backup_history</code></td><td>各來源清除與全部清除 Super-only；備份大小、成長、空間預檢與隔離還原</td></tr>
+<tr><td>Client 更新</td><td><code>apps/server/src/pages/Clients.tsx</code>、<code>/api/admin/client-updates</code>、<code>/updates/win10/latest.yml</code>、<code>electron-updater</code></td><td><strong>P1</strong>：先驗證 Dev62 是否已修復 404，未復現不重寫</td></tr>
+<tr><td>字幕／PDF／書籤</td><td><code>packages/ui/src/styles.css</code>、<code>packages/ui/src/pages/DocViewer.tsx</code>、<code>Bookmarks.tsx</code>；CSS <code>@container</code>、<code>ResizeObserver</code>、PDF text layer／highlight layer</td><td>容器自動響應、字幕標籤、大小寫無關搜尋與精確高亮；僅保留書籤，移除最愛資料模型</td></tr>
+</tbody></table><h3>API 權限測試矩陣（最低要求）</h3><table><thead><tr><th>呼叫</th><th>Super</th><th>Admin</th><th>User</th><th>未登入</th></tr></thead><tbody><tr><td>WOL 管理：devices／pending／probe／wake／scan／CRUD</td><td>允許</td><td>拒絕</td><td>拒絕</td><td>拒絕</td></tr><tr><td>Client 登入頁公開喚醒</td><td colspan="4">僅在登入前公開頁面的受控喚醒流程開放；不可繞過頻率限制或讀取管理資訊</td></tr><tr><td>Server 總覽摘要</td><td>允許</td><td>唯讀</td><td>拒絕</td><td>拒絕</td></tr><tr><td>教材匯入／一般教材 rename／delete</td><td>允許</td><td>限定範圍</td><td>拒絕</td><td>拒絕</td></tr><tr><td>原檔刪除確認／備份／Log 清除</td><td>允許</td><td>拒絕</td><td>拒絕</td><td>拒絕</td></tr></tbody></table><h3>Page Atlas Lite 技術定位補充</h3><p>詳見「Page Atlas Lite」獨立 Tab：<code>PageAtlas.tsx</code>、<code>registry.ts</code>、<code>page_atlas.php</code>、<code>page_atlas.json</code>、<code>GET /api/page-atlas</code>、<code>require_role('super')</code>、<code>adminItems()</code>、<code>ATLAS_PAGES</code>。與 Server 六分類、Client 學習中心路由調整同步更新。</p></section><section class="tab" data-t="附13 14｜Page At" id="atlas" role="tabpanel"><div class="card" style="border-left:5px solid #ad6b13"><b>原始 v1.3 規格保留（歷史參考）：</b>若與最新決策衝突，以上方「00 最新決策」及新專章為準。此附錄不代表全部內容已實作。</div>
+<h2>14｜Page Atlas Lite P0：Dev63 必須導入的頁面索引模組</h2>
+<div class="call"><strong>正式決策：</strong>Dev63 導入 Page Atlas <strong>Lite P0</strong>，不導入 PR #5 的深度 Call Graph 解析器。先完成頁碼、頁名、搜尋、來源程式、元件、API／DB 簡易參照、上一頁／下一頁、複製給 AI；權限、安全隔離、測試與 Ubuntu 實機驗收是必要條件。此章為 Dev63 需求，不代表 Dev62 已有此功能。</div>
+<h3>14.1｜目的與避免過度開發</h3>
+<p>讓管理者與 AI 在討論、截圖、驗收及除錯時，能用穩定的頁碼定位畫面及相關程式。優先滿足單人維護與快速開發，不把靜態分析器做成另一套大型平台。</p>
+<div class="diagram"><div class="diagram-title">圖 6｜Page Atlas Lite 與 Server／Client／角色關係</div>
+<div class="atlas-arch"><div class="atlas-node"><strong>Server App</strong><small>Super：可開啟 Page Atlas 管理頁</small><small>Admin／User：不可見、不可用</small></div><div class="atlas-arrow">→</div><div class="atlas-node"><strong>Page Atlas Lite P0</strong><small>頁碼／名稱／搜尋／上一頁／下一頁</small><small>來源／元件／API／DB／複製給 AI</small></div><div class="atlas-arrow">→</div><div class="atlas-node"><strong>PHP 私有索引 API</strong><small>Super-only + 不暴露私有檔案</small><small>來源與資料關聯僅顯示已驗證項</small></div></div>
+<div class="atlas-arch"><div class="atlas-node"><strong>Client App</strong><small>Super：可見頁碼／可用允許的索引功能</small><small>Admin／User：不顯示頁碼或 Atlas 入口</small><small>Client UI 不得顯示「Super」文字</small></div><div class="atlas-arrow">↔</div><div class="atlas-node"><strong>Server／Client 頁面登錄表</strong><small>頁碼 IS-S-xxx／IS-C-xxx</small><small>對應現有路由；改版時同步維護</small></div></div>
+</div>
+<h3>14.2｜功能範圍與驗收</h3>
+<div class="tbl"><table><thead><tr><th>編號</th><th>P0 功能</th><th>詳細需求／驗收</th></tr></thead><tbody>
+<tr><td>AT-01</td><td>頁碼與頁名</td><td>每個實際可進入頁面具穩定唯一 ID；初版索引約 34 頁（現有 PR #6 為 34 頁初稿），區分 Server／Client。合併 Tab 後更新頁名、路由對應，不能只保留舊的 18 頁路由假設。</td></tr>
+<tr><td>AT-02</td><td>搜尋／篩選</td><td>依頁碼、名稱、路由搜尋；區分 App；無結果與載入失敗應可理解。</td></tr>
+<tr><td>AT-03</td><td>上一頁／下一頁</td><td>在篩選結果中切換，邊界不可越界；路由與目前顯示頁面保持一致。</td></tr>
+<tr><td>AT-04</td><td>複製給 AI</td><td>可複製頁碼、頁名、路由、來源檔、元件、已驗證 API／DB；未知欄位標示「待確認」，不可虛構。</td></tr>
+<tr><td>AT-05</td><td>程式來源與元件</td><td>source、component 與路由必須對應 Dev63 實際程式；UI 六分類改版後需重建或更新索引。</td></tr>
+<tr><td>AT-06</td><td>API／DB 參照</td><td>只列有證據的 API／DB，標記 verified／unverified；不得把空白資料顯示成「沒有 API／DB」。</td></tr>
+<tr><td>AT-07</td><td>管理權限</td><td>僅 Super 可使用 Page Atlas 管理及讀取私有索引；Admin、User 不顯示入口、不顯示頁碼且 API 403；Client 顯示文字不出現「Super」。</td></tr>
+<tr><td>AT-08</td><td>安全與發佈</td><td>私有 JSON 不可由公開 HTTP、打包後的 Client Bundle、source map 或一般使用者 API 取得；禁用目錄穿越與越權直接路由。</td></tr>
+<tr><td>AT-09</td><td>最簡操作驗收</td><td>點選索引可定位頁面；複製內容正確；不同角色與 App 各自驗收；無須 P0 強制自動截圖。</td></tr>
+<tr><td>AT-10</td><td>截圖（選用）</td><td>如已有穩定且安全的人工截圖／貼圖流程可沿用；不把自動截圖、截圖存 DB 設為 P0 阻擋條件。</td></tr>
+</tbody></table></div>
+<h3>14.3｜程式檔案、路由、資料欄位（依 PR #6 現有程式核對）</h3>
+<div class="tbl"><table><thead><tr><th>位置</th><th>目前內容／Dev63 待辦</th></tr></thead><tbody>
+<tr><td><code>packages/ui/src/App.tsx</code></td><td>App 路由、Super 專用 Atlas 入口／頁碼顯示；需與 Dev63 Server 六分類、Client 學習中心及角色矩陣重新對齊。</td></tr>
+<tr><td><code>packages/ui/src/page-atlas/PageAtlas.tsx</code></td><td><code>PageAtlas</code>、<code>AtlasBadge</code>、搜尋、前後頁、複製 AI；需驗證 API 整合、頁面導航與響應式 UI。</td></tr>
+<tr><td><code>packages/ui/src/page-atlas/registry.ts</code></td><td><code>ATLAS_PAGES</code>、<code>AtlasPage</code>；目前 34 個初始頁碼／路由；Dev63 合併導覽後需檢查對照及覆蓋率。</td></tr>
+<tr><td><code>server/public/index.php</code></td><td>註冊 Page Atlas PHP route；確認既有路由註冊方式與權限入口一致。</td></tr>
+<tr><td><code>server/src/routes/page_atlas.php</code></td><td><code>GET /api/page-atlas</code>；目前使用 <code>require_role('super')</code>；需測試未登入／Admin／User 不可讀取。</td></tr>
+<tr><td><code>server/src/private/page_atlas.json</code></td><td>私有索引，含 <code>id</code>、<code>route</code>、<code>name</code>、<code>app</code>、<code>source</code>、<code>component</code>、<code>api</code>、<code>db</code>、<code>dbStatus</code>；目前 PR #6 大量 source/API/DB 欄位仍為待確認。</td></tr>
+<tr><td><code>.github/workflows/ci.yml</code>、<code>scripts/tests/</code></td><td>補上 Lite 測試與 CI，檢查角色權限、私有索引、Bundle 不洩漏、索引一致性、渲染器與既有功能回歸。</td></tr>
+</tbody></table></div>
+<h3>14.4｜PR 與開發進度（2026-11-03 GitHub 靜態查核）</h3>
+<div class="tbl"><table><thead><tr><th>工作項</th><th>目前狀態</th><th>Dev63 下一步</th></tr></thead><tbody>
+<tr><td><a href="https://github.com/ilifeup/istudy/pull/5">PR #5：深度 Call Graph Analyzer</a></td><td>Draft、未合併；研究保留／不合併 main。</td><td>保留研究歷史；待 Lite 正式驗收、合併且成果保存後，再決定關閉，不把深度解析納入 P0。</td></tr>
+<tr><td><a href="https://github.com/ilifeup/istudy/pull/6">PR #6：Page Atlas Lite P0</a></td><td>Draft、未合併；已推送初版核心，HEAD <code>3f1d166c</code>。</td><td>按使用者決策先暫停；Dev63 排程再啟動整合與驗收，未核准前不可合併。</td></tr>
+<tr><td>React UI／34 頁初始索引</td><td>PR #6 已有初版程式；尚未證實正式可用。</td><td>補齊實際來源、API／DB 關聯；因 18→6 分類、學習中心合併而校正頁碼與路由。</td></tr>
+<tr><td>私有 API</td><td>PR #6 已有 <code>GET /api/page-atlas</code> 與私有 JSON；尚未完成完整安全驗收。</td><td>測試 401／403、私有檔案隔離、無登入與低權限角色。</td></tr>
+<tr><td>測試／CI／Ubuntu 驗收</td><td>PR #6 尚未完成整合與確認；不得宣稱 PASS。</td><td>集中補齊 Lite 測試、TypeScript／Bundle 檢查、GitHub CI、Ubuntu 實機測試。</td></tr>
+<tr><td>正式 main／Dev62</td><td>Page Atlas Lite 未合併 main；不算 Dev62 已完成。</td><td>列為 Dev63 新功能；按依賴順序先穩定導覽，再更新索引。</td></tr>
+</tbody></table></div>
+<h3>14.5｜與 Dev63 其他需求的相依關係</h3>
+<div class="diagram"><div class="diagram-title">圖 7｜避免重複返工的整合順序</div><div class="flow"><div class="step"><b>1｜確定權限</b><br/>Server／Client × Super／Admin／User</div><div class="step"><b>2｜整理導覽</b><br/>Server 18→6／Client 學習中心</div><div class="step"><b>3｜更新 Atlas</b><br/>頁碼、來源、API／DB 對照</div><div class="step"><b>4｜驗收</b><br/>權限／Bundle／CI／Ubuntu</div><div class="step"><b>5｜核准</b><br/>維持 Draft 至明確同意合併</div></div></div>
+<p><strong>特殊要求：</strong>Server App 的 Super 可進入完整 Atlas；Client App 僅 Super 能使用允許的 Atlas 功能；Admin／User 皆不可見、不可呼叫 API。Atlas 的頁碼應覆蓋實際業務頁，但「不顯示管理入口」不能靠隱藏按鈕代替後端權限檢查。</p>
+<h3>14.6｜不納入 Dev63 Lite P0 的研究功能</h3>
+<ul><li>深度 Call Graph、PHP helper chain、SQL lineage 自動推導</li><li>跨語言 IPC／CLI／FILE 全鏈分析</li><li>全站自動截圖、圖形依賴視覺化</li><li>強制建立 <code>ui_pages</code>／<code>ui_components</code>／<code>ui_links</code>／<code>ui_sources</code>／<code>ui_snapshots</code> 等新資料表（Lite 初版可使用受控 JSON 索引）</li></ul>
+<div class="call caution"><strong>驗收判準：</strong>以 Dev63 最終實際頁面為準，確認頁碼唯一、搜尋及導航正確、複製內容可信、Super-only、私有索引不洩漏、測試通過；PR #6 未完成前保持 Draft。Page Atlas 是 Dev63 新增 P0，不是已完成項目。</div>
+</section><section class="tab" data-t="附14 13｜詳細專案開發進" id="progress"><div class="card" style="border-left:5px solid #ad6b13"><b>原始 v1.3 規格保留（歷史參考）：</b>若與最新決策衝突，以上方「00 最新決策」及新專章為準。此附錄不代表全部內容已實作。</div><h2>13｜詳細專案開發進度與交接紀錄</h2><p class="dim">紀錄基準：2026-11-03。狀態區分「使用者回報」、「GitHub 靜態檢查」、「規格已定」、「尚未實作／尚未驗證」；不得把規格完成誤寫成程式完成。</p><div class="diagram" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px"><div class="panel"><strong>Dev61</strong><p>既有功能運行／使用者回報缺陷</p><p>更新 404、備份容量疑問、排程難理解、教材管理不足</p></div><div class="panel"><strong>Dev62</strong><p>需求整合與靜態審查</p><p>18→6 分類、App×角色、教材匯入、PDF 高亮等規格已定</p></div><div class="panel"><strong>Page Atlas PR #6</strong><p>Draft／暫停</p><p>與 Dev62 UI 工作分開；不得合併或自動 Merge</p></div></div><h3>Dev62 功能進度明細</h3><table><thead><tr><th>工作項</th><th>優先級</th><th>目前狀態</th><th>下一個實際驗收里程碑</th></tr></thead><tbody>
+<tr><td>Server App 18→6 分類、學習中心收合</td><td>P0</td><td>規格已定；未提交 UI 修改</td><td>路由映射、6 類可用、三角色截圖／測試</td></tr>
+<tr><td>Client「瀏覽｜學習」／會員與群組</td><td>P0</td><td>規格已定；未實作</td><td>兩 App 導覽一致、功能完整</td></tr>
+<tr><td>WOL Super-only（含 API）</td><td>P0</td><td><strong>已定位衝突</strong>：<code>adminItems()</code> 與 <code>manage.php</code> 仍容許 Admin；未修復</td><td>全路由拒絕測試；登入前喚醒回歸</td></tr>
+<tr><td>Server Admin 總覽／教材目錄授權</td><td>P0</td><td>已確認 <code>require_local_super()</code> 障礙；未建受限 API</td><td>Admin 唯讀總覽與教材操作可用，其他全部拒絕</td></tr>
+<tr><td>USB 大量匯入、DB 建檔、批次改名刪除</td><td>P0</td><td>需求／流程已定；未實作</td><td>測試 USB／大量檔案／中斷復原／DB 一致性</td></tr>
+<tr><td>總覽詳細診斷、ZFS、備份與 Client 記錄</td><td>P0</td><td>現有總覽程式已檢查；新 UI／API 未實作</td><td>資料真實、More 可用、UEM 警告正確歸位</td></tr>
+<tr><td>備份 2.3MB 內容分析與 SSD 空間保護</td><td>P0</td><td>使用者回報；尚未讀取實機備份</td><td>備份明細、空間門檻、清理與隔離還原驗證</td></tr>
+<tr><td>字幕自動響應、單一書籤、PDF 高亮</td><td>P1</td><td>需求已定；尚未整合與 UI 驗收</td><td>多視窗尺寸、文字高亮定位、無最愛殘留</td></tr>
+<tr><td>Log 清除與全部清除</td><td>P1</td><td>現有查詢與匯出已確認；清除功能未實作</td><td>Super-only、二次確認、稽核與清除結果</td></tr>
+<tr><td>Win10 <code>latest.yml</code> 404</td><td><strong>P1</strong></td><td>Dev61 曾回報；<strong>Dev62 是否已修復未知</strong></td><td>先核對 Dev62 發布與實機更新；復現才修</td></tr>
+<tr><td>排程設定白話化</td><td>P1</td><td>規格已定；尚未實作</td><td>UI 文案與排程執行一致</td></tr>
+<tr><td>PC Info 實體英吋</td><td>取消</td><td>使用者取消</td><td>不開發</td></tr>
+</tbody></table><h3>既有工程進度與範圍界線</h3><ul><li><strong>Dev61 既有基線：</strong>影片轉檔、ASR 字幕、Office 文件轉換、Client 版本回報、WOL、UEM、備份、Log 等頁面已有程式；這不代表 Dev62 新需求已完成。</li><li><strong>Page Atlas：</strong>PR #5 保留研究用途；PR #6 已建立 Draft 並有初版 Lite 程式提交，但目前暫停、不合併、不納入 Dev62 本輪工作。</li><li><strong>GitHub：</strong>本文件依 <code>ilifeup/istudy</code> 的 <code>main</code> 靜態檢查；尚未建立 Dev62 UI 修正 PR、未完成 CI 或實機驗收。</li><li><strong>實機未核對：</strong>Ubuntu SSD 備份檔實際內容、USB 掛載、Win10 更新發布檔、現場角色畫面、真實 DB 遷移與 API 執行結果。</li></ul><h3>建議批次／進度回報欄位</h3><p>每一批次固定紀錄：<strong>基線 commit SHA → 修改檔案 → API 權限測試 → UI／實機測試 → CI → PR → 驗收結果 → 未解問題</strong>。測試未執行不得填 PASS；PR 不自動合併，不操作正式資料庫及正式教材。</p><h3>2026-11-03 新增需求｜WOL 登入頁可見性</h3><p><b>狀態：需求確認／未實作（P0）。</b>Super 的 WOL「設備清單 → 編輯設備」新增登入頁顯示開關及專屬 PC 顯示名稱；新增 DB migration、後端設備 CRUD 與公開清單篩選、React 表單、權限／顯示真值表測試。不得與既有 enabled 欄位混用。詳見「WOL 登入顯示」Tab。</p><h3>Dev63｜Page Atlas Lite P0 追加進度</h3><div class="tbl"><table><thead><tr><th>模組</th><th>現況</th><th>下一階段</th></tr></thead><tbody><tr><td>Page Atlas Lite P0</td><td>PR #6 Draft，初版 UI、34 頁索引與 Super-only 私有 API 已推送；未合併、未完成 CI／Ubuntu 驗收</td><td>依 Dev63 六分類與學習中心更新頁碼／程式來源／API／DB，補齊測試，驗收後再由使用者決定合併</td></tr><tr><td>Page Atlas 深度研究</td><td>PR #5 Draft，過度開發，保留不合併</td><td>不列入 Dev63 Lite P0 必要條件</td></tr></tbody></table></div></section></main>
+<script>
+(function(){var nav=document.getElementById('tabs'),secs=[].slice.call(document.querySelectorAll('section.tab'));
+function show(i){secs.forEach(function(s,j){s.classList.toggle('on',i===j);nav.children[j].setAttribute('aria-selected',i===j)});try{localStorage.setItem('istudy63tab',i)}catch(e){}}
+secs.forEach(function(s,i){var b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.textContent=s.getAttribute('data-t');b.onclick=function(){show(i);window.scrollTo(0,0)};nav.appendChild(b)});
+var i=0;try{i=+localStorage.getItem('istudy63tab')||0}catch(e){}show(i<secs.length?i:0)})();
+</script>
+</body>
+</html>
