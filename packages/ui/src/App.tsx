@@ -22,6 +22,8 @@ import { WolPage } from './admin/Wol';
 import { TagPolicyPage } from './admin/TagPolicy';
 import { PcInfoPage } from './admin/PcInfo';
 import { EmailReportPage } from './admin/EmailReport';
+import {PageAtlas,AtlasBadge} from './page-atlas/PageAtlas';
+import {atlasForRoute} from './page-atlas/registry';
 
 export interface ServerExtension {
   /** 「Server 管理」分頁（Server App 才有） */
@@ -180,6 +182,8 @@ export function App(props: { info: AppInfo; server?: ServerExtension }): any {
   const pages = { ...CLIENT_PAGES, ...(server ? server.pages : {}) };
   const Page = pages[route.page] || CoursesPage;
   const admin = adminItems(account);
+  const canAtlas = account.role === 'super';
+  const atlasPage = atlasForRoute(route.page, !!server);
 
   return (
     <AppContext.Provider value={ctx}>
@@ -198,6 +202,7 @@ export function App(props: { info: AppInfo; server?: ServerExtension }): any {
             ) : null}
           </nav>
           <span className="grow" />
+          {canAtlas ? <button type="button" className="navbtn" onClick={() => go('page-atlas')}>Page Atlas</button> : null}
           <button type="button" className="navbtn" onClick={() => void logout()}>登出</button>
         </header>
         {admin.length ? (
@@ -212,7 +217,8 @@ export function App(props: { info: AppInfo; server?: ServerExtension }): any {
         {health.state === 'update_required' ? <div className="banner fail" role="alert">✗ App 需要更新，請洽管理員</div> : null}
         {notice ? <div className="banner info">ⓘ {notice} <button type="button" className="btn small" onClick={() => setNotice(null)}>知道了</button></div> : null}
         <main className="content">
-          <Page key={route.page + JSON.stringify(route.params || {})} params={route.params || {}} />
+          {route.page === 'page-atlas' ? (canAtlas ? <PageAtlas server={!!server} onGo={go}/> : <p role="alert">無權限存取 Page Atlas</p>) : <Page key={route.page + JSON.stringify(route.params || {})} params={route.params || {}} />}
+          {canAtlas && route.page !== 'page-atlas' && atlasPage ? <AtlasBadge id={atlasPage.id} onOpen={()=>go('page-atlas')}/> : null}
         </main>
         <footer className="statusbar">
           <span>{health.state === 'ok' ? '● Server 已連線' : health.state === 'checking' ? '… 檢查連線中' : '○ Server 無法連線'}</span>
