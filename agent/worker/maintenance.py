@@ -315,6 +315,16 @@ def backup(ctx: Ctx, job: dict) -> dict:
     except bc.Busy:
         raise Retry("主機正在驗證、上傳或清理備份，10 分鐘後重試", 600) from None
     try:
+        # 在 pg_dump／加密前驗證必要設定，避免無效工作產生暫存輸出。
+        # _plan_b_members 仍保留寫入前的二次檢查，防止 TOCTOU。
+        cfg_dir = ctx.env.get("ISTUDY_HOST_CONFIG_DIR", "/host-config")
+        missing = [os.path.join(cfg_dir, name) for name in ("compose.yaml", ".env", "VERSION.json")
+                   if not os.path.isfile(os.path.join(cfg_dir, name))]
+        if not ctx.config("install_id"):
+            missing.append("資料庫的安裝識別碼（install_id）")
+        if missing:
+            raise _backup_failed(ctx, kind, "缺少必要的系統設定，沒有建立備份：" + "、".join(missing)
+                                 + "（Agent 容器的 /host-config 掛載不正確？）")
         try:
             final, digest, files, after, migrations, version = _write_encrypted(ctx, dest, kind, recipient)
         except JobError as e:
