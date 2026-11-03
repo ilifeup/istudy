@@ -1,0 +1,52 @@
+# iSTUDY Dev63｜進度與決策中心（2026-11-03）
+
+> **主要規格**：[Dev63 完整詳細開發計畫書 v2.0](./DEV63_PLAN_v2.0.html)（HTML，離線可讀，含 Page Atlas Lite 與 Claude 本機審查）。本文用於工作狀態、驗收紀錄、下一步和決策索引；實作細節以 v2.0 為準。若 v2.0 歷史附錄與最新決策衝突，以本頁「已定案」及 v2.0 最新決策專章為準。
+
+## 一、開發邊界（已定案）
+- 現有基線：Dev62；目標 `1.0.0-dev.63`，完成驗收後才改版號。
+- **本輪在 Ubuntu 本機開發**；GitHub 只同步計畫、決策、驗收與進度，**不在 GitHub 上開發 Dev63 功能**。
+- 不自動合併 PR；本輪不建立 Dev63 開發 PR、不推送未驗收 Dev63 程式。
+- 不直接操作正式資料庫。開發與測試須使用隔離環境；資料庫破壞性變更先備份、預演、驗收。
+- 全新 Dev63 規格，不建立舊版相容層；舊資訊不能推翻已決策內容。
+
+## 二、重要決策（2026-11-03）
+| 類別 | 規則 |
+|---|---|
+| Client 登入前 | 登入頁公開喚醒，免登入；僅列 `enabled=true AND show_on_login=true` 設備，LAN 限制、冷卻、稽核 |
+| Client 登入後 | 完全移除 WOL 入口、管理、喚醒；不得殘留可繞過的登入後 WOL API |
+| WOL 設備 | `show_on_login` **全部預設 false**，包含既有設備；只有 Super 可逐台開啟。與 `enabled` 獨立；`login_display_name` 獨立可設 |
+| Server 登入 | **僅 Super／Admin**，User 禁止登入（包含 API 檢查） |
+| Client 文字 | 不顯示字面 `Super`；移除不必要說明，不要自動替換成「最高管理者」 |
+| PC 資訊 | Super、Admin 可用，實際欄位授權需審查 |
+| Log | Server error、Agent job、Host maintenance、Client upload 四類**各自**可按「全部清除」；清除需 Super、確認、稽核；不可混刪使用記錄與安全 audit |
+| Page Atlas Lite | P0；索引的頁面、API／DB 對應須查實、測試、Ubuntu 驗收，不把 `unverified` 當完成 |
+| USB | UDisks2 + 受控 `istudyctl media-import` 主機服務；USB 唯讀來源、白名單目標 /Media、分段複製及校驗，Agent 深度掃描建立教材索引；App Admin 不等於 Linux sudo |
+| 教材／閱讀 | Admin 授權教材操作；PDF 大小寫無關、全文命中高亮；字幕面板響應；刪最愛、保留書籤 |
+
+## 三、已完成（區分來源）
+- [x] Dev63 完整需求規格及 v2.0 計畫書完成；GitHub 同步文件。
+- [x] Claude 產出 Dev62 → Dev63 本機靜態審查 HTML。
+- [x] Claude 製作 **Dev62 main 0501715 + Page Atlas Lite** 的本機整合候選 ZIP，附 `docs/DEV63_PAGE_ATLAS_INTEGRATION.md`。
+- [x] Claude **回報**：typecheck、5 renderer build、Atlas 59/59、Preview 4/4、PHP syntax、私有索引 bundle 防洩漏通過。**以上僅是 Claude 本機紀錄；未經 Ubuntu 實機複驗。**
+
+## 四、尚未完成／不得誤標完成
+- [ ] Ubuntu 本機候選基線比對、檔案校驗、保留 Dev62 安全回退點。
+- [ ] 批次 A：登入／角色／WOL（含曾漏掉的 `POST /api/wol/wake`）、Server 18→6 分類、學習中心／會員與群組、Admin PC Info。
+- [ ] **P0 Page Atlas Lite**：按新導覽更新 34 頁及新增頁；逐一驗證 route/source/component/API/DB，標記來源與驗證證據；安全／索引一致性／Bundle／Ubuntu 驗收。
+- [ ] 批次 B：USB UDisks2 受控匯入、批次改名、批次刪除、目錄／DB／字幕／轉檔關聯一致性。
+- [ ] 批次 C：總覽、UEM、4 類 Log 獨立清除、備份容量、排程。
+- [ ] 批次 D：PDF 搜尋高亮、字幕、書籤、Client 文字與響應。
+- [ ] 批次 E：Win10 latest.yml 404 **先查是否未發布**；備份內容、容量及跨環境回歸。
+- [ ] Ubuntu 實機及安全驗收；尚未宣告 Dev63 完成。
+- [ ] PR #5 深度 Call Graph 研究版不合併；PR #6 Lite 僅供參考。本輪不操作 PR。
+
+## 五、驗收門檻
+1. WOL：公開清單只有 Super 手動開啟的設備；Client 登入後 WOL 全部消失；普通登入者無法呼叫登入後喚醒；未登入公開喚醒仍正常。
+2. Server App：只有 Super/Admin 可登入；Admin 的受限總覽、教材、PC資訊能使用；User 前後端均拒絕。
+3. Page Atlas：每個 API/DB 對應有實際程式證據；權限 401/403/200、私有索引不洩漏、路由／頁碼一致，Ubuntu 實機通過。
+4. USB：裝置掛載安全、來源唯讀、目的地限制、空間預檢、檔案校驗、中斷恢復、資料庫同步、稽核。
+5. Logs：四類各自清除、保留必要稽核，不破壞使用記錄。
+6. Dev63 全功能驗收前，不變更正式版、不把 Claude 靜態測試視作正式 PASS。
+
+## 六、最高工作規則
+**CI PASS ≠ 驗收 PASS**。問題須在同一追蹤中心記錄原因、修正、測試與回歸，不能因單次 CI／本機測試綠燈直接結案。權限與破壞性操作使用真實角色測試；不自動合併。下次更新計畫或進度，**同步更新**本頁、[Dev63 v2.0 HTML 計畫](./DEV63_PLAN_v2.0.html) 及對應追蹤 Issue；嚴禁已定案事項回退舊規格。
