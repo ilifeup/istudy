@@ -1,6 +1,6 @@
 # AGENTS.md｜iSTUDY AI 開發、打包與交付最高規範
 
-**適用** ChatGPT、Claude、Codex、GitHub Actions 與其他 AI 開發代理。請先讀 [README](README.md)、[Dev63 進度決策中心](docs/DEV63_STATUS_AND_DECISIONS.md)、[正式 C 混合方案打包規範](docs/ISTUDY_DEV_PACKAGING_POLICY_2026-11-04.md)。此文件不授權自行部署、合併或修改正式資料。
+**適用** ChatGPT、Claude、Codex、GitHub Actions 與其他 AI 開發代理。請先讀 [README](README.md)、[Dev63 進度決策中心](docs/DEV63_STATUS_AND_DECISIONS.md)、[正式 C 混合方案打包規範](docs/ISTUDY_DEV_PACKAGING_POLICY_2026-11-04.md)、[跨版本升級與回滾 SOP](docs/VERSION_UPGRADE_SOP.md)。此文件不授權自行部署、合併或修改正式資料。
 
 ## 0. 最高權限規則：未經許可不得開 PR（2026-11-04）
 
@@ -37,3 +37,10 @@
 5. 僅在正式發行階段建 `.deb`／Client installer，並完成目標 Ubuntu／Windows 驗收。
 
 **嚴禁把「原始碼 ZIP 排除 `.deb`」誤解成「正式系統無需 Server App」。** 詳細規則以 [C 混合方案](docs/ISTUDY_DEV_PACKAGING_POLICY_2026-11-04.md) 為準。
+
+## 4. 所有版本升級強制 SOP（2026-11-04）
+
+- **每次 Dev／正式版本升級前，必須先閱讀並逐關執行 [VERSION_UPGRADE_SOP.md](docs/VERSION_UPGRADE_SOP.md)**：G0 現況與來源 → G1 UEM Quick／Full／Doctor → G2 版本／Migration／Client 差異 → G3 舊版完整備份 → G4 隔離還原與回滾預演 → G5 核准後 apply → G6 Ubuntu／Client 驗收 → G7 失敗回滾 → G8 GitHub 去識別化結案紀錄。
+- **優先使用 iSTUDY 既有 UEM、Doctor、istudyctl 和對應版本部署腳本**，不要一開始就自製替代盤點；Quick PASS 不等於 Full／Doctor 新鮮 PASS，備份存在不等於可還原。
+- 使用者可核准**原地升級現有測試服務**，但不得因此跳過備份、回滾驗證；不能用舊版 patch 腳本直接升跨版本。Client 相容性須先驗證。
+- 未通過任何必要關卡不得聲稱已部署或可安全回滾；更新文件不等於授權 apply、PR、正式 DB 修改。
