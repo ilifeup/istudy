@@ -106,3 +106,30 @@
 - **Dev64 規劃**：以 [Upgrade Manager 自動化升級提案](UPGRADE_MANAGER_DEV64_PROPOSAL_2026-11-04.md) 取代每次人工準備隔離環境；**CI 自動隔離仍必須存在**，正式 Ubuntu 只做非破壞性 Smoke 與受控升級，保留 G0～G8 安全關卡。
 
 詳細紀錄：[Dev63 Ubuntu 驗收與 Dev64 防錯交接](DEV63_UBUNTU_ACCEPTANCE_2026-11-04.md)。本次只更新文件，**未建立 PR、未改正式 DB、未推送 Dev63 程式**。
+
+## 十三、2026-11-04｜Server App Dev63 實機 UI 驗收、視覺缺失與 Client 更新待查
+
+> 本節為第十二節之後的最新現場證據；僅更新文件，不表示 G6/G8 結案。
+
+### Ubuntu Server App 實際安裝與畫面
+- 現場起初安裝 `istudy-server-app 1.0.0~dev.61`，即使後端 `/api/health` 已回報 `1.0.0-dev.63`，GUI 仍是 Dev61；原因為**部署流程未同步更新桌面 .deb**，不能用後端健康檢查代表全套升級。
+- 使用者已驗證候選 `istudy-server-app_1.0.0-dev.63_amd64.deb`（SHA-256 `892bb36e44c9bd08d991b611c6e3d6f13503a9e004e540adbe36a94cfbd2f4b1`），安裝輸出 `SERVER_APP_DEV63_INSTALL_PASS`；dpkg 回報 `1.0.0~dev.63`，`build-info.json` 回報 `1.0.0-dev.63`／Electron `44.9.0`。
+- 安裝版 `resources/app/renderer/app.js` 與 Dev63 `dist/server/renderer/app.js` SHA-256 一致（`d5122882cc6bb44e82bd8cea931a97df2317d77b08672246f8aa52f8deabc0fc`），與 Dev61 編譯檔不同。
+- 使用者提供兩張**實際 Ubuntu GUI 截圖**：Super 已登入，左側顯示 Dev63 新增「USB 匯入紀錄」，頂部可見 Page Atlas，頁尾顯示 `Server V1.0.0-dev.63`；另一張為課程群組／個人覆寫頁。這證明新版 GUI 已載入，**不是舊版快取或未安裝**。
+- `apps/server/src/index.tsx` 已註冊 `srv-usb-imports`；`apps/server/src/srv.tsx` 已接入選單，並限制 `srv-usb-imports` 為 Super-only。此為 UI 可見證據，不等於 USB 真實匯入成功。
+- USB 頁實際顯示「USB 主機偵測工具尚未安裝」及「USB 異常核對工具尚未安裝」；**工具／部署缺口未解決，USB 實體 E2E 未通過**。不得按匯入、修復或重新部署來掩蓋缺口。
+
+### UI 設計驗收：未達原定美化預期
+- 使用者明確指出 Dev63 UI 仍大致沿用 Dev61 視覺，未達先前承諾的明顯美化／全面重設計。雖有功能與導航更新，**UI 視覺設計驗收不通過**；不可把「新功能已顯示」誤記成「UI 改版完成」。
+- 截圖可見：頂部主選單＋管理次選單＋側邊 Server 導覽三層並存；大量原生表單／按鈕／邊框、資訊層級及間距不一致；USB 頁大量留白；課程群組頁操作區分散；Page Atlas 頁碼未與版面一致整合。
+- **Dev64 待辦（規劃，未實作）**：先確認視覺稿及功能頁清單，再建立共用 design tokens／表單／卡片／表格／導覽；統一 Server App 與 Client 的設計語言、響應式排版與 Page Atlas 呈現。需有實機安裝後的新舊截圖比對、逐頁一致性、Super/Admin/User 權限及 E2E 驗收；不能只改 CSS 或宣稱 build PASS 即結案。
+- 使用者指示 Dev63 UI 討論暫停於此；**不要在本次文件更新自行重構 UI、開 PR 或改動程式**。
+
+### Client 自動更新：實作設計與實際發布分開驗證
+- GitHub main 的 `apps/client/electron/main.ts`／`updater.ts` 設計：Windows Client 啟動及每六小時檢查 `/updates/<channel>/`，`electron-updater` 下載後，在無人登入連續兩分鐘時自動安裝並重啟；Ubuntu Client 另依 root systemd 更新服務與狀態檔。
+- **此為程式設計，並非 Dev63 已發布或 Windows Client 已收到更新的證據**。需逐版核對 Windows 實際安裝版本、channel、Server `/updates/<channel>/latest.yml`／安裝包與 checksum、下載 HTTP 狀態、更新日誌、相容性及自動安裝行為。
+- Dev63 Windows Client 尚未實機升級／驗收；不得因 Server 已升級 Dev63 就宣稱 Client 會自動升級。若更新 feed 未發布或返回 404，應先完成正式發布及安全驗證，不能直接要求 Client 反覆重裝。
+
+### 發行流程防錯
+- Dev64+ G0/G6 增加**分別驗證** API、Agent、Server App .deb、Server App 實際 UI、各平台 Client 安裝版／更新 feed 的版本矩陣；部署完成前不得漏掉桌面套件。
+- 現場 Dev61 回滾 .deb 與備份仍須保留；G6 仍有 USB、WOL、真實權限 API、Win10 Client、隔離還原等未驗收事項。
