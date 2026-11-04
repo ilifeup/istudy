@@ -44,3 +44,29 @@
 - **優先使用 iSTUDY 既有 UEM、Doctor、istudyctl 和對應版本部署腳本**，不要一開始就自製替代盤點；Quick PASS 不等於 Full／Doctor 新鮮 PASS，備份存在不等於可還原。
 - 使用者可核准**原地升級現有測試服務**，但不得因此跳過備份、回滾驗證；不能用舊版 patch 腳本直接升跨版本。Client 相容性須先驗證。
 - 未通過任何必要關卡不得聲稱已部署或可安全回滾；更新文件不等於授權 apply、PR、正式 DB 修改。
+
+## 5. Ubuntu 終端機與 PostgreSQL 指令防錯最高規則（2026-11-04，強制）
+
+> **事故背景**：Dev61→Dev63 升級前，AI 提供的備份腳本用 `sudo install -m 600` 產生 root:root 的 `istudy-dev61.dump`，隨後以一般使用者 `pg_restore -l` 讀取，因權限不符而失敗；`set -euo pipefail` 在由執行完畢即關閉的終端機中使視窗消失，`restore-list.txt` 留下 0 bytes。後續臨時 DB 還原腳本又發生終端機關閉，**尚無執行結果，不得宣稱還原成功，也不得猜測此次關閉原因**。以上為 AI 指令設計缺陷，必須防止重犯。
+
+### 5.1 所有交付給使用者在 Ubuntu 執行的指令（不限本次專案）
+1. **不得假設終端機會在命令失敗或執行完成後保持開啟**。對多步驟、含 `sudo`、備份、還原、部署或任何可能失敗的命令，優先提供**先建立可重跑的 `.sh` 腳本、再從已開啟的互動式終端機執行**的方式；如從 Chrome、遠端 UI、桌面啟動器執行，應使用可持久化的 log、明確 exit code 與可重新查看結果的命令。不得僅靠最後 `read` 或 `pause` 防關閉（非互動式 stdin 可能 EOF）。
+2. 在腳本**第一個有風險的命令之前**建立獨立 log（例如使用者可寫的 `~/istudy-logs/`，目錄權限 0700、檔案 0600），以 `exec > >(tee -a "$LOG") 2>&1` 或等效方法保留 stdout、stderr；使用 `trap ... ERR` 和 `trap ... EXIT` 紀錄行號、錯誤碼、成功／失敗。若 process substitution、`tee`、Bash 或互動環境未確認，改用更簡單的 POSIX 相容方式；**不能把 log 機制本身當作已測成功**。
+3. 使用 `set -euo pipefail` 必須搭配清楚的失敗處理與持久化 log，說明 `set -e` 的例外語意；不能為了避免關閉就移除錯誤檢查，讓腳本最後輸出 `FINISHED` 卻中途失敗。**成功訊息只能在全部必要驗證完成後輸出**，不可無條件印 `PASS`。
+4. 執行前檢查路徑、必要工具、使用者、權限、空間、來源與目標；區分只讀、會寫檔、會寫 DB、會停止服務；敏感資訊不印在畫面或日誌，不把 `.env`、密碼、token、私鑰上傳公開 GitHub。
+5. 不要使用會隱藏錯誤的 `2>/dev/null`、`|| true`、`check=False` 或管線 `| head` 當作成功證據；若為搜尋或非必要檢查可容忍失敗，必須明確標註。遠端命令與非互動 shell 不能假定有 TTY 或可 `read`。
+6. 若終端機突然關閉，**先停止後續寫入，查 log、退出碼、已建立檔案、服務與 DB 狀態**；禁止未確認原因就重跑有破壞性或不具冪等性的步驟。沒有 log 時坦承無法判定原因。
+
+### 5.2 PostgreSQL／備份／還原專屬強制檢查
+1. 先查 `pg_isready`、DB 名稱／owner、連線數、現有資料表及角色；**既有 DB 一律視為有資料**，不因目前 0 連線或名稱含 `test` 就可刪除、覆寫或 FORCE disconnect。
+2. 區分作業系統執行者（`media`、`postgres`、`root`）與 PostgreSQL role（`istudy`、`postgres`）。`sudo -u postgres pg_dump`、`sudo install -m 600`、`pg_restore` 必須逐段確認檔案擁有者、目錄 traversal 權限、實際讀取者；**不得產生 root:root 0600 檔後，假設一般使用者能讀**。優先讓 dump 在明確可控、權限 0700 的暫存目錄內建立，再以經驗證的 owner／mode 交給還原程序；避免固定名稱 `/tmp/*.dump` 的競爭、殘留與 symlink 風險。
+3. `pg_restore -l` 僅證明自訂格式備份目錄可讀，**不等於完整還原成功**；`gzip -t` 僅驗證壓縮串流，`manifest counts_before=counts_after` 僅是備份時筆數一致性。必須另行隔離還原、比對資料表／資料筆數、必要索引／約束／序列、權限與應用連線。
+4. `istudyctl restore --target test` **固定操作 `istudy_restore_test`**；原始碼 `agent/istudyctl.py` 的 `_restore_to_test()` 會 `drop_aux_db(DB_TEST)` 再 `create_db(DB_TEST)`。**禁止在未取得該 DB 可覆寫授權前執行**。 `--target prod` 更會停止服務、切換正式 DB，需另行核准。
+5. 隔離還原應使用**全新、確認不存在**的獨立資料庫名稱；在建立前確認 owner、權限、模板、locale/encoding、PostgreSQL 版本、磁碟空間；執行 `pg_restore --exit-on-error`，明確檢查 exit code 與資料一致性。已存在則 STOP，不自動 `dropdb` 或 `--clean`；失敗時保留 log 與測試 DB 供查驗，未經同意不刪除。
+6. 不得以 `pg_restore --role=istudy` 就假設具備 `SET ROLE` 權限或物件 ownership 正確；先核對 OS／DB 角色與權限。測試 DB 不等於正式 DB：隔離還原 PASS 也不代表整套 Docker、.deb、設定、媒體、金鑰可回滾。
+7. 對已存在的備份、`.deb` 與回滾資源保留 SHA-256，先複製至非同一故障域的安全儲存再進行升級；不得清除舊 Docker 映像、刪除資料或自動 `prune`。**不得把 DB 備份完成當作 G3/G4 全部通過。**
+
+### 5.3 指令交付驗收標準
+- 每次提供會寫入的 Ubuntu 指令，至少交代：**作用範圍、會修改什麼、不能修改什麼、前置條件、可查看的 log 路徑、失敗時如何停止與回報、成功判據**。
+- 有不可逆操作時先提供只讀 preflight 與明確核准點；不能把多個未審核的寫入動作包成一大段要求直接貼上。
+- **任何終端機意外關閉都視為「執行結果未知」**，直到有持久化 log、實際 DB／檔案檢查等證據；禁止臆測已完成或直接升級。
