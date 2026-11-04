@@ -64,3 +64,11 @@
 - **下一步優先**：① 在獨立目錄確認 Dev63 ZIP、檔案完整性與 Node 依賴，執行 typecheck/build；② 確認 PHP 執行環境後，使用隔離 PostgreSQL 18 測試 DB 做 API／角色權限／交易 E2E；③ 再驗 USB／Agent、Page Atlas、備份還原與 Client 安裝。不得操作正式 DB、正式教材或服務。
 - 全部需求逐項盤點目前是**工作清單而非已逐條驗證的驗收矩陣**；不要將工程估計誤寫成正式驗收率。
 
+
+## 八、2026-11-04｜升級 SOP 與 Ubuntu Dev61 實機盤點
+
+- **跨版本強制規範**：[VERSION_UPGRADE_SOP.md](VERSION_UPGRADE_SOP.md)；每次升級按 G0～G8 執行並留存去識別化證據，先證明可回滾再 apply。
+- **本次部署模式已更新**：使用者指定將現有 Ubuntu **Dev61 原地升級至 Dev63**，不新增第二套常駐服務；Windows 10 Client 目前 **Dev61**，相容性待驗證。這是部署模式核准，**不是略過備份或立即執行 apply 的核准**。
+- **2026-11-04 12:26:56 UEM Quick**：29 PASS／0 WARN／0 FAIL／0 UNKNOWN；VERSION.json、API、Agent、PHP、.deb 均 dev.61；PostgreSQL 18/main、Docker、istudy.service、hostcheck.timer 正常；4080 LAN、4081/5432 localhost；/Media ZFS mirror ONLINE。
+- **尚有風險**：UEM Quick 內嵌 Doctor 來自 **11/02 15:49** 舊報告，當時 /Media/PurgeTest 有 sticky bit 權限警告；須重新 Full／Doctor 確認。DB 與 /srv/istudy/backup 同 SSD，需離線副本及隔離還原驗證。
+- **未完成**：Dev63 ZIP 來源與雜湊、Dev61→Dev63 migration／Client API 差異、舊 .deb／Docker image 可重建、備份／回滾預演、實機 apply 與 Win10 E2E。**目前不得宣稱已升級或具備回滾保證**。
