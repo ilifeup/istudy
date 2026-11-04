@@ -50,3 +50,17 @@
 
 ## 六、最高工作規則
 **CI PASS ≠ 驗收 PASS**。問題須在同一追蹤中心記錄原因、修正、測試與回歸，不能因單次 CI／本機測試綠燈直接結案。權限與破壞性操作使用真實角色測試；不自動合併。下次更新計畫或進度，**同步更新**本頁、[Dev63 v2.0 HTML 計畫](./DEV63_PLAN_v2.0.html) 及對應追蹤 Issue；嚴禁已定案事項回退舊規格。
+
+
+## 七、2026-11-04｜Dev63 候選版與 Ubuntu 隔離驗收進度
+
+> **狀態：候選原始碼尚未在 Ubuntu 完成整合驗收；GitHub main 仍為 Dev62。此處記錄工程估計，不是正式完成率。**
+
+- Dev63 沙盒候選 ZIP：最新已回報版本為 `iSTUDY_Dev63_Five_Modules_Offline_Validation_Full_Coverage_20261104.zip`（542 個 ZIP 項目）；**尚未推送候選原始碼至 GitHub**。
+- 五個核心工作群組之工程估計：Page Atlas Lite **77%**；PostgreSQL／Server API **71%**；Super／Admin 權限 **74%**；書籤／學習歷程 **84%**；USB 匯入／Agent **75%**。以上不是子功能逐項核定百分比。
+- Dev63 專項 Node.js 測試：**100 PASS**（沙盒）；較廣範圍測試紀錄：**221 PASS／2 FAIL／1 SKIP**，其中兩個失敗涉及缺少 `esbuild`。完整 TypeScript build、PostgreSQL 18 HTTP E2E、USB 實機與跨平台安裝**均未完成**。
+- Ubuntu 主機使用者回報：**Ubuntu 26.04.1 LTS**、Node **24.22.1**、npm **11.19.1**、PostgreSQL **18.6**、Docker **29.8.2**；**主機 PHP CLI 尚未安裝**（需確認容器 PHP／PDO PostgreSQL 驅動的實際配置）。
+- 使用者執行預檢時所在目錄是 `/home/media/GitDev/ShareModules-MVP-Test/Shared_Modules_V1/mobile`，**屬 Shared Modules Flutter 專案，不是 iSTUDY Dev63**；該目錄已有未提交修改，嚴禁對其執行 iSTUDY 安裝、Migration、reset 或清理。
+- **下一步優先**：① 在獨立目錄確認 Dev63 ZIP、檔案完整性與 Node 依賴，執行 typecheck/build；② 確認 PHP 執行環境後，使用隔離 PostgreSQL 18 測試 DB 做 API／角色權限／交易 E2E；③ 再驗 USB／Agent、Page Atlas、備份還原與 Client 安裝。不得操作正式 DB、正式教材或服務。
+- 全部需求逐項盤點目前是**工作清單而非已逐條驗證的驗收矩陣**；不要將工程估計誤寫成正式驗收率。
+
