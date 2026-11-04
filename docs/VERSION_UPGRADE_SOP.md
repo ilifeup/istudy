@@ -1,6 +1,6 @@
 # iSTUDY｜版本生命週期、發行治理、系統盤點、升級與災難復原最高 SOP
 
-**文件代碼**：ISTUDY-RELEASE-SOP｜**版本**：v2.0｜**修訂日期**：2026-11-04｜**適用**：每次開發版／正式版的部署、原地升級、跨版升級、Client 發行、回滾、災難復原與交接。
+**文件代碼**：ISTUDY-RELEASE-SOP｜**版本**：v2.1｜**修訂日期**：2026-11-04｜**適用**：每次開發版／正式版的部署、原地升級、跨版升級、Client 發行、回滾、災難復原與交接。
 
 > **總方針**：版本升級不是把 ZIP 覆蓋進主機，而是一次可審計、可驗證、可復原的**發行事件**。每次皆先確認目標與授權，再用 iSTUDY 原有工具取得真實基線，盤點跨版本變動，驗證發行產物與資料一致性，證明可以退回，才進行升級。升級完成也必須持續觀察、保留回滾點和結案證據。
 >
@@ -446,3 +446,35 @@ G8：結案狀態、未完成事項、問題與文件改善
 |---|---|---|
 | 2026-11-04 | v1.0 | 初版 G0～G8、Dev61 UEM 基線 |
 | 2026-11-04 | **v2.0** | 重構為發行生命週期治理；補齊既有 UEM／Doctor／Hostcheck 詳細操作、Quick 舊 Doctor 陷阱、報告保存與 history 僅 10 份、不可只看退出碼、Dev62 check/apply/rollback 限制、版本與相容矩陣、備份／金鑰／媒體一致性、回滾演練、例外與 Go/No-Go、實機驗收及知識沉澱 |
+
+---
+
+## 13. 2026-11-04 Ubuntu 終端機關閉與 DB 備份／還原事故復盤（強制適用所有未來版本）
+
+**適用規則**：先讀根目錄 [AGENTS.md 第 5 節](../AGENTS.md)；其終端機 log／錯誤退出／DB 安全規範為最高規則。
+
+### 13.1 已知事實與原因分級
+- Dev61 `istudy` 約 11 MB；`istudy_restore_test` 既有 29 張表、約 9.8 MiB，0 連線；不得擅自覆寫。
+- 首版備份指令 `sudo -u postgres pg_dump -Fc ... -f /tmp/istudy-upgrade-db.dump`，接著 `sudo install -m 600 /tmp/... "$BACKUP_DIR/istudy-dev61.dump"`，使目標檔變成 root:root 0600；一般使用者執行 `pg_restore -l` 權限不足，留下 0-byte `restore-list.txt`。搭配 `set -euo pipefail` 和自動關閉的終端機，使用者看不到失敗細節。**已證實的問題是權限設計；終端機自動關閉的環境原因未確定。**
+- 使用者後續手動 `chown media:media`、`chmod 600` 後，`pg_restore -l` PASS；DB dump 約 150 KB、`.deb` 約 89 MB、`VERSION.json` 均有 SHA256 驗證。這只完成**備份可讀與檔案完整性**，不是隔離還原。
+- 後續 AI 提供 `createdb` + `pg_restore --role=istudy` 的隔離還原腳本，使用者回報終端機再次自動關閉，**尚無 log、exit code、DB 建立或資料驗證結果**。不得宣稱已成功／失敗，也不得重跑前先確認新 DB 是否已存在。
+- 另須避免 `sudo -u postgres pg_restore --role=istudy` 在目標 DB 的 owner／SET ROLE 權限未核實時失敗；應以實際 PG18 role 與權限為準，不可假設。
+
+### 13.2 恢復作業的先後順序
+1. **停止寫入**：先從已開啟的終端機執行只讀 preflight：`command -v`、`pg_isready`、`pg_database`（含 `istudy_upgrade_verify_20261104`）、`pg_stat_activity`、測試 DB 表數、dump 檔與 log 存在性。已存在臨時 DB 不得自動刪除。
+2. 查先前腳本是否有執行到 `createdb`／`pg_restore`，使用資料庫實際物件、角色、表數、備份檔 SHA256 及錯誤輸出判斷。**沒有可用證據就標記 UNKNOWN**。
+3. 後續任何多步驟指令都使用**持久化 log、成功／失敗 trap、明確 exit code、不中斷使用者看結果的啟動方式**；不可只在最後加 `read`。避免固定 `/tmp` 檔名與 root-owned 0600 權限陷阱。
+4. 若新 DB 未存在且授權建立，先確認 PostgreSQL role、磁碟、名稱、owner、模板，才進行全新隔離還原；`pg_restore --exit-on-error` 的結果、schema、row counts、索引／序列與角色均需記錄。失敗保留現場，不自動 drop。
+5. 另行封存 Dev61 Agent/PHP/Nginx Docker 映像、Compose／環境設定、原版 `.deb`、媒體／模型與 DB；必要檔案做異故障域副本。G3/G4 未完全 PASS 不得 Dev63 apply。
+
+### 13.3 此次保留的檢查證據
+- Dev61 `.deb` SHA256：`18ccbb033e649ff47f8884d51e57f0423a04d4b3f235208e1d7659fe4598249f`
+- 2026-11-04 03:30 每日備份 `.tar.gz` SHA256：`cf20a1543bab26f79c5c4bcdd42dba00de27df00c8a086b9b9def7195484335e`
+- 備份目錄：`/home/media/istudy-dev61-rollback-20261104-125741`（**僅作為當次現場線索，非跨主機通用路徑**）
+- `istudyctl restore` 程式依據：`agent/istudyctl.py`，`_restore_to_test()` 會刪除並重建固定的 `istudy_restore_test`；`target=prod` 還涉及服務停止與 DB 切換。
+- G4：**UNKNOWN／未驗收**；禁止把前述檢查當作已升級 Dev63。
+
+### 13.4 修訂紀錄
+| 日期 | 版本 | 修訂 |
+|---|---|---|
+| 2026-11-04 | v2.1 | 追加 Ubuntu 終端機持久化 log 與失敗停止規則、root-owned 0600 DB dump 權限事故、固定測試 DB 覆寫風險、隔離還原結果 UNKNOWN 的處置與 Dev63 禁止提前 apply |
