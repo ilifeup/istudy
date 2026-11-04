@@ -50,3 +50,13 @@
 
 ## 六、最高工作規則
 **CI PASS ≠ 驗收 PASS**。問題須在同一追蹤中心記錄原因、修正、測試與回歸，不能因單次 CI／本機測試綠燈直接結案。權限與破壞性操作使用真實角色測試；不自動合併。下次更新計畫或進度，**同步更新**本頁、[Dev63 v2.0 HTML 計畫](./DEV63_PLAN_v2.0.html) 及對應追蹤 Issue；嚴禁已定案事項回退舊規格。
+
+## 七、2026-11-04｜原始碼 ZIP 與正式安裝包分離（C 混合方案）
+
+**開發交接改用精簡原始碼 ZIP**，禁止將可重建的 `dist/`、Electron `.deb`、Client 安裝包、`node_modules/` 混入 ZIP；但所有 Server App、Client、Agent、API、DB 及部署**原始碼**和必要的離線 `deploy/vendor/age` 仍必須保留。Dev63 本機候選 ZIP 約 8.99 MB；Dev62 含 `.deb` 約 102.05 MB。這是交付基線盤點，**不是 Dev63 功能驗收**。
+
+- [正式包裝規範](ISTUDY_DEV_PACKAGING_POLICY_2026-11-04.md)：日常雲端只交付精簡原始碼，Ubuntu 隔離實機優先負責最後編譯、`.deb` 與完整驗收；GitHub Actions 發行建置可作備援。
+- [Dev62／Dev63 ZIP 檔案差異](DEV62_DEV63_FILE_DIFF_AUDIT_2026-11-04.md)：197 相同、4 同路徑異動、14 僅 Dev62（均在 `dist/`）、36 僅 Dev63；不是用檔案容量推論完整性。
+- [Server App 功能及重建路徑](DEV63_SERVER_APP_PACKAGING_REVIEW_2026-11-04.md)：`.deb` 是 GUI，並非 PHP／Docker 後端；目前首次設定精靈、教材轉檔管理與部分 Log/UEM 視圖**仍依賴 Server App**。不准逕行取消或暴露 localhost 管理 API。
+- **部署前置條件**：更新腳本原本要求 `dist/` 中對應版本的 `.deb`，所以要先在 Ubuntu 建新版發行包再部署，不能拿 Dev62 舊包頂替。
+- **版本邊界**：GitHub main 此刻仍是 Dev62；本次只補文件規則，沒有提交 Dev63 程式、修改 CI、執行 Ubuntu 驗收或操作正式資料庫。
