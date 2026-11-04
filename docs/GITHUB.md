@@ -1,5 +1,7 @@
 # GitHub 開發流程（ilifeup/istudy）
 
+> **最高規則（2026-11-04）**：AI 未經使用者**明確授權建立 PR**，一律不得自行建立 PR（包括 Draft PR）。本頁下方「每項修改一個分支、一個非 Draft PR」僅適用於**已明確核准 PR 流程**的任務；一般「更新 GitHub／修改文件」不是開 PR 許可。若直接寫 main 不符合當次授權或保護規則，應停止詢問，不能擅自開 PR。完整規則見根目錄 [AGENTS.md](../AGENTS.md)。
+
 Repository 維持 Private。合併 main 不等於發布：不會部署正式 Ubuntu Server（10.3.3.100），也不會發布 Client 更新。
 
 ## 工作流程（.github/workflows）
