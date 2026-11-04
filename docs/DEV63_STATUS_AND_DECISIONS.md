@@ -72,3 +72,9 @@
 - **2026-11-04 12:26:56 UEM Quick**：29 PASS／0 WARN／0 FAIL／0 UNKNOWN；VERSION.json、API、Agent、PHP、.deb 均 dev.61；PostgreSQL 18/main、Docker、istudy.service、hostcheck.timer 正常；4080 LAN、4081/5432 localhost；/Media ZFS mirror ONLINE。
 - **尚有風險**：UEM Quick 內嵌 Doctor 來自 **11/02 15:49** 舊報告，當時 /Media/PurgeTest 有 sticky bit 權限警告；須重新 Full／Doctor 確認。DB 與 /srv/istudy/backup 同 SSD，需離線副本及隔離還原驗證。
 - **未完成**：Dev63 ZIP 來源與雜湊、Dev61→Dev63 migration／Client API 差異、舊 .deb／Docker image 可重建、備份／回滾預演、實機 apply 與 Win10 E2E。**目前不得宣稱已升級或具備回滾保證**。
+
+## 九、2026-11-04｜升級 SOP v2.0 納入 Dev63 HTML 計畫書與 Full 實測
+
+- 已將 [跨版本發行治理 SOP v2.0](VERSION_UPGRADE_SOP.md) 納入 [Dev63 HTML 計畫書](DEV63_PLAN_v2.0.html) 的新 Tab「20 升級SOP v2.0」，涵蓋 G-1/G0～G8、UEM／Doctor／Hostcheck、報告保存、回滾與 Win10 Client 相容。
+- **Full UEM 新實測**：使用者於 2026-11-04 執行 `sudo istudyctl uem --mode full`，耗時 **9.0 秒**；輸出一項 `教材權限（/Media，Agent uid 10001）` 警告，涉及 `/Media/PurgeTest` sticky bit；但最終彙總顯示 `注意 0`。**兩者矛盾，需讀取 `latest.json` 的 `doctor.items`、`issues`、`counts`、時間戳釐清，不能視為無警告 PASS。**
+- 下一步：`sudo istudyctl media-acl` 只讀檢查、保存 Full `latest.md`／`latest.json`；**未核准不得執行 `--fix`**。舊版 .deb／映像／DB／Media 回滾能力及 Dev63 Migration／Win10 Client 相容性仍待驗證，G5 apply 不放行。
