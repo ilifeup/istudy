@@ -85,3 +85,9 @@
 - 依使用者提供的 Full UEM `latest.json`／`latest.md`（2026-11-04 12:37:25，修復前）核對：版本來源均為 `1.0.0-dev.61`，PostgreSQL 18、三容器、ZFS mirror、4080/4081/5432 綁定位址、QSV/VA-API、Office、FunASR 均通過。
 - **UEM 報告統計缺陷待修**：`counts.PASS=29, WARN=0, INFO=1`，但 `doctor.items` 中 `media_acl.status=warn`，`issues` 有 1 筆 WARN，`overall=WARN`；彙總 counts 未涵蓋 Doctor 的警告，造成表頭「注意 0」誤導。需修改 UEM 統計與顯示規則，補回歸測試，區分主機項與 Doctor 項，避免雙重計數。
 - `/srv/istudy/backup` 與 PostgreSQL data 同位於 SSD；升級前需獨立備份、隔離還原驗證。**尚未核准 Dev63 apply。**
+
+## 十一、2026-11-04｜ACL 修復後 Full UEM 複驗
+
+- 使用者於 `sudo istudyctl media-acl --fix` 修復後重新執行 `sudo istudyctl uem --mode full`，終端顯示 **5.4 秒、異常 0、注意 0、不存在 0、未知 0**；另執行 `sudo istudyctl media-acl` 顯示 **「教材權限正常」**。
+- **G1 暫列通過**（依現場輸出）；修復後 `latest.md`／`latest.json` 尚待另行保存／核對，以形成可追溯的正式升級證據。
+- **G2～G4 尚未完成**：Dev61→Dev63 Migration／API／Win10 Client 相容矩陣、舊 .deb／Docker image／DB／Media 回滾包、獨立備份及隔離還原預演。G5 apply 仍未放行。
