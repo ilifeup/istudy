@@ -91,3 +91,18 @@
 - 使用者於 `sudo istudyctl media-acl --fix` 修復後重新執行 `sudo istudyctl uem --mode full`，終端顯示 **5.4 秒、異常 0、注意 0、不存在 0、未知 0**；另執行 `sudo istudyctl media-acl` 顯示 **「教材權限正常」**。
 - **G1 暫列通過**（依現場輸出）；修復後 `latest.md`／`latest.json` 尚待另行保存／核對，以形成可追溯的正式升級證據。
 - **G2～G4 尚未完成**：Dev61→Dev63 Migration／API／Win10 Client 相容矩陣、舊 .deb／Docker image／DB／Media 回滾包、獨立備份及隔離還原預演。G5 apply 仍未放行。
+
+
+## 十二、2026-11-04 15:26｜Ubuntu Dev63 已部署與最終非破壞性驗收（更新，取代前述「尚未 apply」的歷史狀態）
+
+> **最新狀態優先**：本頁第七～十一節為當日較早的歷史快照；當時的「尚未升級／禁止 apply」不再是目前部署事實。**Ubuntu 現場已原地部署 Dev63**；GitHub `main` 仍是 Dev62 程式。這是部署與非破壞性測試進度，**不是 G6/G8 全面結案**。
+
+- 現場 `/api/health`：`ok=true`、`db=ok`、`version=1.0.0-dev.63`；PHP/Agent/Nginx 容器版本／運作檢查 PASS；PostgreSQL 18.6，0011～0014 migration 已有前期唯讀核對證據。
+- **2026-11-04 15:24:34 最終整合驗收**：`PASS=27 FAIL=0 INFRA=0 SKIP=3 TOTAL=30`，`NON_DESTRUCTIVE_CHECKS_PASS_PHYSICAL_E2E_PENDING`。其中 B19 **15 支 PHP 測試 PASS**，B22 **6 組、52 個 USB 單元案例 PASS**；不要將 52 個案例加到 30 個檢查項目重複計數。
+- 早期 B19/B22 腳本 v1/v2 的大量 FAIL 為測試基礎設施問題；v3 剩 2 項 PHP 測試契約問題，已在 Ubuntu 候選來源修正後 PASS：群組批次權限 `FOR UPDATE` 斷言，以及撤銷權限歷史紀錄不回傳 `tags`（另修正 Mock `pg_bool` 初始化）。**這兩個修正尚未同步到 GitHub 的 Dev63 程式來源。**
+- **2026-11-04 15:26:23 Readiness**：只完成環境盤點，**沒有**建立隔離 DB、執行 E2E 寫入、USB 匯入或 WOL 封包。
+- **3 項 SKIP**：WOL 實體喚醒與登入顯示、USB 真實匯入及回復、角色認證 API 寫入 E2E。Win10 Client、UEM Full/Doctor 最新驗證、完整回滾與 G8 仍待另行確認，**不宣稱 Dev63 全面驗收完成**。
+- 已將 **11 支本輪 Bash 腳本**彙整為本機 ZIP（目前參考版／歷史失敗版／歷史升級版，附 SHA-256），避免 Dev64 重複犯錯；公開 GitHub 只記錄去識別化摘要，不上傳本機原始日誌、密碼或備份。
+- **Dev64 規劃**：以 [Upgrade Manager 自動化升級提案](UPGRADE_MANAGER_DEV64_PROPOSAL_2026-11-04.md) 取代每次人工準備隔離環境；**CI 自動隔離仍必須存在**，正式 Ubuntu 只做非破壞性 Smoke 與受控升級，保留 G0～G8 安全關卡。
+
+詳細紀錄：[Dev63 Ubuntu 驗收與 Dev64 防錯交接](DEV63_UBUNTU_ACCEPTANCE_2026-11-04.md)。本次只更新文件，**未建立 PR、未改正式 DB、未推送 Dev63 程式**。
