@@ -1,8 +1,19 @@
 <!DOCTYPE html>
 
-<html lang="zh-Hant"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="noindex,nofollow,noarchive" name="robots"/><title>iSTUDY ZERO-OPS v7｜完整整合計畫書・Dev62 WOL 原圖・Page Atlas・架構流程圖</title><style> :root{--ink:#17263c;--muted:#56677f;--blue:#1c5da5;--line:#dce4ef;--bg:#f5f7fb}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.75 system-ui,'Noto Sans TC',sans-serif}header{background:#163c66;color:white;padding:25px max(22px,calc((100vw - 1150px)/2))}header h1{margin:0;font-size:27px}header p{opacity:.85;margin:5px 0}.layout{max-width:1320px;margin:auto;display:grid;grid-template-columns:260px minmax(0,1fr);gap:22px;padding:22px}nav{position:sticky;top:12px;align-self:start;max-height:95vh;overflow:auto;background:white;border:1px solid var(--line);border-radius:13px;padding:10px}.tab{display:block;width:100%;text-align:left;background:transparent;border:0;border-radius:8px;padding:10px;color:var(--ink);cursor:pointer;font:inherit;font-size:13px;line-height:1.4}.tab:hover,.tab.active{background:#e9f1fb;color:#114e95}.pane{display:none;background:white;border:1px solid var(--line);border-radius:13px;padding:26px;min-width:0}.pane.active{display:block}h1{font-size:24px;margin:0 0 17px}h2{font-size:20px;margin:24px 0 10px;border-bottom:1px solid var(--line);padding-bottom:6px}h3{font-size:17px;margin:20px 0 8px}p{margin:10px 0}table{border-collapse:collapse;width:100%;margin:12px 0 18px;font-size:13px}th,td{border:1px solid var(--line);padding:10px;vertical-align:top;text-align:left;overflow-wrap:anywhere}th{background:#eef4fa}code{background:#edf1f6;padding:2px 4px;border-radius:4px;overflow-wrap:anywhere}.rule{border-left:4px solid var(--blue);background:#eef5fc;padding:14px;margin:16px 0}.diagram{border:1px solid var(--line);border-radius:12px;padding:18px;background:#f8fbff;text-align:center}.node{border:1px solid #abc6e5;border-radius:10px;background:white;padding:17px;margin:auto;max-width:650px;font-weight:700}.node small{font-weight:400}.arrow{color:var(--blue);padding:10px}a{color:var(--blue)}@media(max-width:820px){.layout{display:block;padding:12px}nav{position:static;max-height:200px;margin-bottom:12px}header{padding:20px}.pane{padding:16px}table{display:block;overflow-x:auto}header h1{font-size:22px}}@media print{nav{display:none}.layout{display:block}.pane{display:block;break-before:page;border:0}header{color:black;background:white}}
-pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f0f5fb;padding:14px;border-radius:8px;border:1px solid #dce4ef}code{overflow-wrap:anywhere}.note{padding:12px 14px;background:#eef4fb;border-left:4px solid #1c5da5;border-radius:5px}</style><style>
-.ref-shot{max-width:100%;height:auto;border:1px solid #cbd6df;border-radius:8px;display:block;margin:12px auto;box-shadow:0 2px 9px #17263c16}.figcaption{font-size:12px;color:#526273;margin:4px 0 18px}.mock{background:#f4f6f5;border:1px solid #bac8c3;border-radius:9px;padding:14px;margin:15px 0}.mock-head{background:#1d2e2b;color:white;padding:11px 16px;border-radius:6px;font-weight:bold}.mock-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}.mock-tabs span{padding:6px 12px;border:1px solid #b8c9c2;background:white;border-radius:5px}.mock-tabs .selected{border-color:#25624d;background:#dcefe6;font-weight:700}.two-col{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:12px}.diagram-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}.diagram-grid .node{width:100%;max-width:none}.diagram .node{overflow-wrap:anywhere}.diagram .arrow{font-weight:700}.mini{font-size:12px;color:#64748b}.legend{padding:10px;background:#f0f5fb;border-left:3px solid #3b79aa;margin:12px 0}figure{margin:15px 0}details{margin:10px 0}summary{cursor:pointer;font-weight:700;color:#194d79}</style></head><body><header><h1>iSTUDY ZERO-OPS v7｜完整整合計畫書</h1><p>2026-11-04｜保留 v6 全部 18 章；新增 Dev62 WOL 原始畫面、Dev63 Page Atlas 參考圖、v2 架構與更新流程圖（已按新決策修正）｜設計文件，尚未實作</p></header><div class="layout"><nav><button class="tab" data-target="overview">00｜最高規則與決策</button><button class="tab" data-target="stack">01｜Client 技術選型與版本矩陣</button><button class="tab" data-target="diagram">02｜完整 Client／Server 架構與責任</button><button class="tab" data-target="api">03｜極小 API 邊界（核心規格）</button><button class="tab" data-target="updates">04｜雙層更新：GitHub／Reddit 調研與決策</button><button class="tab" data-target="verify">05｜背景下載與檔案驗證：避免預先過度定義</button><button class="tab" data-target="cache">06｜重點 KPI：七台影片預讀與有限快取</button><button class="tab" data-target="win10">07｜2026-11-04 Win10 PowerShell／CMD 實測與教訓</button><button class="tab" data-target="uem">08｜UEM／維護 UI／驗收硬限制</button><button class="tab" data-target="safety">09｜安全設計上限：Super 指定、禁止擴張</button><button class="tab" data-target="roadmap">10｜一次重建、驗收與舊結構退場</button><button class="tab" data-target="sources">11｜參考來源、實測證據與待確認</button><button class="tab" data-target="baseline">12｜完整技術基線與禁用清單</button><button class="tab" data-target="pageatlas">13｜Page Atlas × PostgreSQL × Tab 角色</button><button class="tab" data-target="dbclean">14｜PostgreSQL 全新 DB／資料表清理</button><button class="tab" data-target="mediaflow">15｜FFmpeg／FunASR／LibreOffice／WOL 端到端</button><button class="tab" data-target="guardrails">16｜不可偏離的開發與驗收禁令</button><button class="tab" data-target="wol">17｜Dev62 WOL 三子 Tab 與登入前喚醒</button><button data-target="dev63inventory">18｜Dev63 實機盤點與進度</button></nav><main><section class="pane" id="overview"><h1>00｜最高規則與決策（v7 完整整合）</h1><p class="note"><b>v5 新增：</b>第 12–16 章補齊 FFmpeg/VA-API/FunASR/LibreOffice、Jellyfin 禁用、Page Atlas 兩表與角色勾選、PostgreSQL 全新 DB、媒體端到端、禁止過度設計。第 00–11 章保留 v4 Client 自動更新、七台影片快取與 Win10 CMD/PowerShell 實測。</p><h2>目標：七台 Client 零人工維護</h2><p>此文件為 ZERO-OPS v4 Client 架構補強版，沿用 v3 的 Ubuntu 原生 Nginx＋PHP-FPM＋PostgreSQL＋Python Worker、Docker 退場、乾淨重建與 UEM 精簡。<b>Windows Client Electron 不取消；Server App Electron 外殼保留，管理 UI 改由 Ubuntu 本機 Web 提供。</b></p><div class="rule"><b>最高禁止事項：</b>不得為單人 Super、封閉 LAN、小規模專案引入 Kubernetes、Redis、RabbitMQ、微服務、OAuth 伺服器、PKI 管理平台、專門簽章服務、完整契約測試平台、過量 E2E、長期雙版本相容層；不得把安全議題當成無限擴張理由。基礎安全防護維持少量必要設定。</div><p>本機 Git、GitHub PR、CI 不作為日常操作必要條件；更新使用可回復的版本快照與明確版本紀錄。未經許可不修改 GitHub，不開 PR。Page Atlas 僅保留頁碼、頁名、來源定位與最簡導航；若須大量相依則取消。UEM 保留核心自檢、故障診斷、日誌、更新與恢復能力。</p><h3>驗收優先順序</h3><ol><li>七台播放流暢、可預讀與有限快取</li><li>Super／Admin UI 完整、Admin USB 匯入</li><li>Web UI 一次更新，所有 Client 自然生效</li><li>Electron 外殼無人值守更新（實機確認後才標 PASS）</li><li>日常維護零終端機，簡短診斷與恢復</li></ol><div class="rule"><b>v7 更新：</b>使用者提供 Dev62 WOL 三子 Tab 與 Dev63 Page Atlas 實際截圖；本版內嵌原圖及 HTML 操作表格，補回 v2 舊架構、目標架構、更新流程與責任圖。保留 v6 原有 18 個章節內容；新圖以 ZERO-OPS 乾淨重建與雙層 Client 更新為準。</div></section><section class="pane" id="stack"><h1>01｜Client 技術選型與版本矩陣</h1><h2>固定選型（不因重構任意更換）</h2><table><tr><th>層</th><th>選型</th><th>用途與邊界</th><th>禁止替換／注意</th></tr><tr><td>桌面外殼</td><td>Electron</td><td>視窗、開機啟動、系統匣、PC 資訊、心跳、更新</td><td>不改 Tauri／PWA／Qt</td></tr><tr><td>UI</td><td>React＋TypeScript＋Vite</td><td>課程樹、登入、播放器、PDF、字幕、搜尋、書籤、管理頁</td><td>不重寫 Vue/Angular</td></tr><tr><td>樣式</td><td>沿用現有 CSS 與 UI 元件</td><td>保留既有 80 分 UI</td><td>不換 UI 框架</td></tr><tr><td>影片</td><td>HTML5 video＋自製 controls</td><td>H.264/AAC MP4、Range、拖曳、預讀</td><td>不導入 Jellyfin/HLS/DASH/播放器大框架（除非測試證明必要）</td></tr><tr><td>字幕</td><td>VTT＋既有字幕面板</td><td>字幕同步、匯入與切換；字幕生成留 Server Worker</td><td>不在 Client 裝 ASR</td></tr><tr><td>PDF</td><td>PDF.js</td><td>搜尋、縮放、頁碼、閱讀紀錄</td><td>不換原生 PDF 引擎</td></tr><tr><td>本機橋接</td><td>Electron preload＋contextBridge＋IPC</td><td>只暴露既有必要 PC 功能</td><td>不暴露任意 shell／Node API</td></tr><tr><td>Windows 安裝</td><td>electron-builder NSIS</td><td>首次安裝與外殼更新</td><td>不改 MSI/Squirrel/自寫安裝器</td></tr><tr><td>更新器</td><td>electron-updater（先做版本相容確認）</td><td>Win10/11 自動檢查、下載、安裝</td><td>不重造更新協定</td></tr><tr><td>Server UI 發布</td><td>Nginx 靜態 React bundle</td><td>所有 Client 取得同一個 UI 發布版本</td><td>不要求七台重裝 EXE</td></tr><tr><td>後端</td><td>PHP-FPM＋PostgreSQL＋Python Worker</td><td>授權、課程、影片、任務、WOL</td><td>不加新佇列服務</td></tr></table><h3>OS 版別與相容策略</h3><table><tr><th>平台</th><th>Electron／編譯</th><th>安裝</th><th>更新策略</th></tr><tr><td>Win7 SP1 x64</td><td>Electron 22.3.27；Web JS/CSS 必須維持 Chromium 108 相容</td><td>獨立 NSIS</td><td>獨立 feed；先確認舊 updater 能否端到端安裝，不直接套新版 updater</td></tr><tr><td>Win10 x64</td><td>沿用已測 Dev63 Electron 44.9.0 為參考基線，重建時固定相容版本</td><td>NSIS per-user 優先</td><td>electron-updater；閒置時更新</td></tr><tr><td>Win11 x64</td><td>與 Win10 共用程式，依需求可共用二進位</td><td>NSIS</td><td>同上，版別可獨立 feed</td></tr><tr><td>Ubuntu Client x64</td><td>支援版 Electron</td><td>.deb</td><td>預設 UI 自動更新；外殼 .deb 是否可無密碼安裝需另驗證，不宣稱自動成功</td></tr></table><p><b>Win7 既有經驗：</b>過去已選 Electron 22.3.27 並做過 Ubuntu 打包／測試相關工作；本次不得把 Win7 視為新發明或直接刪除。Electron 官方確認 23 起不支援 Win7。新版 Web UI 必須以 Win7 的 Chromium 108 功能為相容下限，或按能力做小幅降級；不得要求 Win7 升級 Electron。</p></section><section class="pane" id="diagram"><h1>02｜完整 Client／Server 架構與責任</h1><div class="diagram"><div class="node">Ubuntu Nginx : LAN<br/><small>/app/ 靜態 React UI　/api/ PHP　/media/ Range　/updates/ 安裝包</small></div><div class="arrow">↓ HTTP（固定 LAN 來源）</div><div class="node">7 台 Electron Client<br/><small>Main：視窗／更新／心跳／本機資訊　Preload：小型橋接　Renderer：React Web UI</small></div><div class="arrow">↓ video Range／API／必要 IPC</div><div class="node">播放器與受限預讀緩衝<br/><small>PC 硬體解碼；影片不在 Server 轉成每台專屬串流</small></div></div><p class="mini">此圖從 v2 整合並依 v7 決策校正；舊圖中與 v7 衝突的保留 Dev63 相容／禁止預讀等敘述不再適用。</p><div class="diagram"><div class="node">7 台 PC<br/><small>Electron Client／React UI／播放器／字幕／心跳</small></div><div class="arrow">⇅ LAN :4080</div><div class="node">Ubuntu Server App（Electron）<br/><small>本機管理 API :4081／另有 UI 打包與 .deb 更新</small></div><div class="arrow">⇅</div><div class="node dark">Docker Compose<br/><small>Nginx → PHP-FPM → PostgreSQL（容器資料卷）<br/>Python Agent／媒體掛載／socket／映像與環境檔</small></div><div class="arrow">⇅</div><div class="node">/Media（ZFS）＋主機既有 PostgreSQL<br/><small>既有主機 DB 與 iSTUDY DB 關係需實機確認</small></div></div><h2>Dev63 舊架構：需清理的複雜層</h2><p class="mini">此圖從 v2 整合並依 v7 決策校正；舊圖中與 v7 衝突的保留 Dev63 相容／禁止預讀等敘述不再適用。</p><div class="diagram"><div class="node">7 台 PC：現有 Electron Client<br/><small>Electron 薄殼 + Server 提供 React Web UI；MP4、字幕、PDF、心跳、系統匣、開機啟動全部保留</small></div><div class="arrow">⇅ LAN HTTP(S) :4080</div><div class="node dark">Ubuntu 原生 Nginx + PHP-FPM<br/><small>課程 API／權限驗證／X-Accel-Redirect 影片串流／React 管理 Web</small></div><div class="split"><div class="node">PostgreSQL<br/><small>一套 iSTUDY 正式 DB；資料／任務／版本紀錄</small></div><div class="node">Python Worker（systemd）<br/><small>FFmpeg／ASR／字幕／USB 匯入／WOL／任務處理</small></div></div><div class="arrow">⇅ localhost-only 管理介面</div><div class="node">Ubuntu Electron Server App（薄殼）<br/><small>開啟 localhost Web；原功能與導覽保留；不重複打包 React</small></div><div class="arrow">↓ Super／Admin 角色授權</div><div class="node">受控維護工作（systemd）<br/><small>更新／備份／恢復／重啟／USB 掛載；不接受任意 Shell</small></div><div class="node">/Media：12TB×2 ZFS Mirror<br/><small>原始影片永久保存；Nginx 直接送檔；不預下載到 PC</small></div></div><h2>目標架構：Ubuntu Native + Electron Web Core</h2><h3>程序分工</h3><table><tr><th>位置</th><th>負責</th><th>不負責</th></tr><tr><td>Electron Main</td><td>安裝版號、更新、視窗、托盤、啟動、PC 資訊、heartbeat</td><td>課程 UI、SQL、影片轉碼</td></tr><tr><td>Preload</td><td>少量 getDeviceInfo/getAppVersion/getUpdateState 等固定方法</td><td>任意 shell/SQL/路徑讀取</td></tr><tr><td>React Renderer</td><td>所有課程與播放器操作；Server 提供 UI bundle</td><td>管理系統權限或 DB</td></tr><tr><td>PHP API</td><td>登入、權限、課程、學習紀錄、心跳資料接收、更新狀態</td><td>長時間影音處理</td></tr><tr><td>Python Worker</td><td>ASR、轉檔、WOL、USB 任務、必要 UEM 診斷</td><td>直接對七台 Client 發送 UI</td></tr></table><h3>Web UI 更新行為</h3><p>UI 發布以一個不可變版本資料夾為單位，Nginx 以原子切換指向新版；index.html 不長期快取，雜湊資產可長快取。Client 在啟動／回到首頁／停止播放後載入新 UI；播放中不得強制刷新。新 UI 若要求新版 bridge 或 API，先顯示相容提示，避免功能突然失效。</p><h2>責任邊界：最短資料路徑</h2></section><section class="pane" id="api"><h1>03｜極小 API 邊界（核心規格）</h1><h2>不改既有功能語意，先做端點對照</h2><p>下表是新架構的<b>功能契約草案</b>，不是聲稱 Dev63 目前就有這些精確路徑。開發前以現有路由盤點對照，能保留的保留，避免全 Client 重新修改。</p><table><tr><th>功能</th><th>示意 API</th><th>輸入／輸出最小要求</th></tr><tr><td>登入</td><td>POST /api/auth/login</td><td>帳號憑證→登入狀態／角色／錯誤碼</td></tr><tr><td>目前使用者</td><td>GET /api/me</td><td>id、角色、有效權限</td></tr><tr><td>課程／分類</td><td>GET /api/courses</td><td>課程、權限、媒體 ID、頁碼</td></tr><tr><td>影片授權與播放</td><td>GET /api/media/{id}</td><td>授權後支援 HTTP Range，206/416，正確 Content-Range</td></tr><tr><td>字幕</td><td>GET /api/media/{id}/subtitles</td><td>VTT 清單／語言／版本</td></tr><tr><td>進度</td><td>POST /api/progress</td><td>課程／秒數／更新時間，重試不可重複破壞</td></tr><tr><td>裝置心跳</td><td>POST /api/devices/heartbeat</td><td>裝置 ID、殼版號、Web UI 版號、狀態、最後在線</td></tr><tr><td>能力協商</td><td>GET /api/client/config</td><td>uiVersion、apiLevel、minShell、功能旗標</td></tr><tr><td>更新來源</td><td>GET /updates/{channel}/latest.yml</td><td>electron-updater 原生 metadata（不要另寫一套 updater API）</td></tr></table><h3>只有三個版本欄位</h3><p><code>shellVersion</code>（安裝程式）、<code>uiVersion</code>（React）、<code>apiLevel</code>（PHP）。必要時另設 <code>minShellVersion</code>；不建立完整 API schema registry、SDK generator、相容矩陣服務。</p><h3>兼容與失敗規則</h3><ul><li>預設先更新後端，使舊 UI 仍可運作，再切換新 UI；破壞性變更在同一維護窗口一次完成。</li><li>API 回應有固定簡單結構：成功資料或錯誤碼＋簡短訊息；錯誤不洩露堆疊。</li><li>401 登入失效、403 權限不足、404 不存在、409 狀態衝突、5xx 服務異常；影片 HTTP Range 另依標準。</li><li>Client 斷線顯示可理解的訊息，不因心跳失敗就停止本地已緩衝影片。</li><li>正式切換後不保留舊 Docker API 轉接層或雙套永久路由。</li></ul><h2>PHP → PostgreSQL tasks → Python Worker 單一路徑（v2 圖整合）</h2></section><section class="pane" id="updates"><h1>04｜雙層更新：GitHub／Reddit 調研與決策</h1><p class="mini">此圖從 v2 整合並依 v7 決策校正；舊圖中與 v7 衝突的保留 Dev63 相容／禁止預讀等敘述不再適用。</p><div class="diagram"><div class="node">AI 完成開發＋受影響範圍測試<br/><small>只產生一份版本包；不要求 Git／PR</small></div><div class="arrow">↓</div><div class="node">Super UI：檢查新版本 → 顯示變更清單</div><div class="arrow">↓</div><div class="node">預檢：發布來源與 hash（依實際採用的更新器能力）、版本、磁碟、DB 可用、無重複更新</div><div class="arrow">↓</div><div class="node">備份（DB／設定／上一版程式）</div><div class="arrow">↓</div><div class="node">停止接新任務 → 必要 Migration → 原子切換程式 → 重啟受影響服務</div><div class="arrow">↓</div><div class="node">快速健康檢查：登入／DB／API／影片 Range／Worker／管理 UI</div><div class="split"><div class="node ok">成功：標記版本、恢復任務、UI 顯示完成</div><div class="node bad">失敗：停止發布、恢復舊程式；DB 依相容性處置並顯示警示</div></div></div><h2>Ubuntu 一鍵更新流程：v2 圖調整版</h2><h2>更新路線：Web UI 頻繁更新，Electron 殼極少更新</h2><table><tr><th>層</th><th>發布物</th><th>Client 行為</th><th>回復</th></tr><tr><td>Web UI</td><td>dist/assets + index.html + ui-version</td><td>啟動／閒置／下次進頁更新；不打斷影片</td><td>Server 切回前版靜態目錄</td></tr><tr><td>Electron 殼</td><td>NSIS exe + latest.yml + 必要 blockmap</td><td>啟動與低頻檢查→背景下載→驗證→閒置／下次啟動安裝</td><td>保留上版安裝包；失敗後不連續重試</td></tr></table><h3>上游專案證據</h3><ul><li><a href="https://github.com/electron-userland/electron-builder/blob/master/website/docs/features/auto-update.md">electron-builder 官方 Auto Update</a>：generic provider 可用，但必須自行將檔案與 metadata 發布到 Server；NSIS 是 Windows 標準自動更新路線。</li><li><a href="https://github.com/electron-userland/electron-builder/blob/master/website/docs/targets.md">Targets 指南</a>：per-user NSIS 不一定需要管理員；portable 不提供同等內建自動更新。</li><li><a href="https://github.com/electron-userland/electron-builder/blob/master/website/docs/troubleshooting.md">Troubleshooting</a>：latest.yml 404、sha512 不符、差異更新失敗與防毒影響均有已知排查路徑。</li><li><a href="https://github.com/electron-userland/electron-builder/blob/master/website/docs/features/auto-update.md">上游更新安裝時機</a>：在登出／關機期間觸發 onQuit 安裝可能被 OS 中斷；新版提供 next-launch 安裝控制。<b>不得直接套用新版 updater 到 Win7 Electron 22。</b></li></ul><h3>Reddit 調研界線</h3><p>已針對 Reddit 的 electronjs／selfhosted 自動更新與串流議題搜尋，但這次未取得足以逐條驗證的具體 Reddit 討論內容，因此不杜撰網友共識或引用假心得。更新決策優先以 electron-builder 官方程式、文件與本機 Dev63 實測為依據；Reddit 只列為後續補充經驗來源。</p><h3>簡化原則</h3><p>只維持四個必要更新頻道：win7、win10、win11、ubuntu（Win10/11 若實測同檔可再合併）；不用 GitHub Releases 當 LAN Client 更新伺服器；不用 CI、自建發布中心、簽章微服務或額外下載代理。</p><h2>v6｜Client 更新事件與伺服器集中回報（P0）</h2>
+<html lang="zh-Hant"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="noindex,nofollow,noarchive" name="robots"/><title>iSTUDY ZERO-OPS v7.2｜完整修復版（23 Tab 內容與導覽）</title><style> :root{--ink:#17263c;--muted:#56677f;--blue:#1c5da5;--line:#dce4ef;--bg:#f5f7fb}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.75 system-ui,'Noto Sans TC',sans-serif}header{background:#163c66;color:white;padding:25px max(22px,calc((100vw - 1150px)/2))}header h1{margin:0;font-size:27px}header p{opacity:.85;margin:5px 0}.layout{max-width:1320px;margin:auto;display:grid;grid-template-columns:260px minmax(0,1fr);gap:22px;padding:22px}nav{position:sticky;top:12px;align-self:start;max-height:95vh;overflow:auto;background:white;border:1px solid var(--line);border-radius:13px;padding:10px}.tab{display:block;width:100%;text-align:left;background:transparent;border:0;border-radius:8px;padding:10px;color:var(--ink);cursor:pointer;font:inherit;font-size:13px;line-height:1.4}.tab:hover,.tab.active{background:#e9f1fb;color:#114e95}.pane{display:none;background:white;border:1px solid var(--line);border-radius:13px;padding:26px;min-width:0}.pane.active{display:block}h1{font-size:24px;margin:0 0 17px}h2{font-size:20px;margin:24px 0 10px;border-bottom:1px solid var(--line);padding-bottom:6px}h3{font-size:17px;margin:20px 0 8px}p{margin:10px 0}table{border-collapse:collapse;width:100%;margin:12px 0 18px;font-size:13px}th,td{border:1px solid var(--line);padding:10px;vertical-align:top;text-align:left;overflow-wrap:anywhere}th{background:#eef4fa}code{background:#edf1f6;padding:2px 4px;border-radius:4px;overflow-wrap:anywhere}.rule{border-left:4px solid var(--blue);background:#eef5fc;padding:14px;margin:16px 0}.diagram{border:1px solid var(--line);border-radius:12px;padding:18px;background:#f8fbff;text-align:center}.node{border:1px solid #abc6e5;border-radius:10px;background:white;padding:17px;margin:auto;max-width:650px;font-weight:700}.node small{font-weight:400}.arrow{color:var(--blue);padding:10px}a{color:var(--blue)}@media(max-width:820px){.layout{display:block;padding:12px}nav{position:static;max-height:200px;margin-bottom:12px}header{padding:20px}.pane{padding:16px}table{display:block;overflow-x:auto}header h1{font-size:22px}}@media print{nav{display:none}.layout{display:block}.pane{display:block;break-before:page;border:0}header{color:black;background:white}}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f0f5fb;padding:14px;border-radius:8px;border:1px solid #dce4ef}code{overflow-wrap:anywhere}.note{padding:12px 14px;background:#eef4fb;border-left:4px solid #1c5da5;border-radius:5px}
+.matrix-scroll{overflow:auto;max-height:65vh;border:1px solid #64748b55;border-radius:10px}.matrix-scroll table{min-width:1450px;border-collapse:collapse;font-size:12px}.matrix-scroll th{position:sticky;top:0;background:#24364c;color:#fff;z-index:2}.matrix-scroll td,.matrix-scroll th{padding:8px;vertical-align:top;border-bottom:1px solid #64748b44}.matrix-scroll tr:nth-child(even){background:#64748b0b}.doc-integrated h2,.doc-integrated h3{scroll-margin-top:20px}.doc-integrated blockquote{border-left:3px solid #789;padding-left:14px}.doc-integrated pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#64748b18;padding:12px}.matrix-search{width:100%;padding:10px;border-radius:8px;margin:10px 0;color:inherit;background:transparent;border:1px solid #64748b}.note-v72{padding:12px;border-left:4px solid #64748b;background:#64748b12;margin:12px 0}.doc-integrated table{display:block;overflow-x:auto}.doc-integrated td{vertical-align:top}.doc-integrated{line-height:1.65}
+/* v7.2 layout repair: all content panes must be direct children of the grid's main column. */
+.layout>main{min-width:0;width:100%}
+.layout>main>.pane{min-width:0;max-width:100%;box-sizing:border-box}
+.layout>main>.pane.active{display:block}
+.matrix-scroll{max-width:100%;overflow-x:auto}
+.matrix-scroll table{width:max-content;min-width:1450px}
+.doc-integrated table{max-width:100%}
+.doc-integrated pre{max-width:100%;overflow-x:auto}
+@media(max-width:820px){.layout>main{width:100%}}
+</style><style>
+.ref-shot{max-width:100%;height:auto;border:1px solid #cbd6df;border-radius:8px;display:block;margin:12px auto;box-shadow:0 2px 9px #17263c16}.figcaption{font-size:12px;color:#526273;margin:4px 0 18px}.mock{background:#f4f6f5;border:1px solid #bac8c3;border-radius:9px;padding:14px;margin:15px 0}.mock-head{background:#1d2e2b;color:white;padding:11px 16px;border-radius:6px;font-weight:bold}.mock-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}.mock-tabs span{padding:6px 12px;border:1px solid #b8c9c2;background:white;border-radius:5px}.mock-tabs .selected{border-color:#25624d;background:#dcefe6;font-weight:700}.two-col{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:12px}.diagram-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}.diagram-grid .node{width:100%;max-width:none}.diagram .node{overflow-wrap:anywhere}.diagram .arrow{font-weight:700}.mini{font-size:12px;color:#64748b}.legend{padding:10px;background:#f0f5fb;border-left:3px solid #3b79aa;margin:12px 0}figure{margin:15px 0}details{margin:10px 0}summary{cursor:pointer;font-weight:700;color:#194d79}</style><meta content="noindex,nofollow,noarchive" name="robots"/></head><body><header><h1>iSTUDY ZERO-OPS v7.2｜Dev63 交叉審查整合完整計畫書</h1><p>2026-11-04｜保留 v6 全部 18 章；新增 Dev62 WOL 原始畫面、Dev63 Page Atlas 參考圖、v2 架構與更新流程圖（已按新決策修正）｜設計文件，尚未實作</p></header><div class="layout"><nav><button class="tab" data-target="overview">00｜最高規則與決策</button><button class="tab" data-target="stack">01｜Client 技術選型與版本矩陣</button><button class="tab" data-target="diagram">02｜完整 Client／Server 架構與責任</button><button class="tab" data-target="api">03｜極小 API 邊界（核心規格）</button><button class="tab" data-target="updates">04｜雙層更新：GitHub／Reddit 調研與決策</button><button class="tab" data-target="verify">05｜背景下載與檔案驗證：避免預先過度定義</button><button class="tab" data-target="cache">06｜重點 KPI：七台影片預讀與有限快取</button><button class="tab" data-target="win10">07｜2026-11-04 Win10 PowerShell／CMD 實測與教訓</button><button class="tab" data-target="uem">08｜UEM／維護 UI／驗收硬限制</button><button class="tab" data-target="safety">09｜安全設計上限：Super 指定、禁止擴張</button><button class="tab" data-target="roadmap">10｜一次重建、驗收與舊結構退場</button><button class="tab" data-target="sources">11｜參考來源、實測證據與待確認</button><button class="tab" data-target="baseline">12｜完整技術基線與禁用清單</button><button class="tab" data-target="pageatlas">13｜Page Atlas × PostgreSQL × Tab 角色</button><button class="tab" data-target="dbclean">14｜PostgreSQL 全新 DB／資料表清理</button><button class="tab" data-target="mediaflow">15｜FFmpeg／FunASR／LibreOffice／WOL 端到端</button><button class="tab" data-target="guardrails">16｜不可偏離的開發與驗收禁令</button><button class="tab" data-target="wol">17｜Dev62 WOL 三子 Tab 與登入前喚醒</button><button class="tab" data-target="dev63inventory">18｜Dev63 實機盤點與進度</button><button class="tab" data-target="v71decisions">19｜v7.1 交叉審查修正與重構路線</button><button class="tab" data-target="v72matrix">20｜Dev63 API 角色矩陣（120 條）</button><button class="tab" data-target="v72shell">21｜ShellBridge 安全驗證方案</button><button class="tab" data-target="v72analysis">22｜重構分析與決策追蹤</button></nav><main><section class="pane" id="overview"><h1>00｜最高規則與決策（v7 完整整合）</h1><p class="note"><b>v5 新增：</b>第 12–16 章補齊 FFmpeg/VA-API/FunASR/LibreOffice、Jellyfin 禁用、Page Atlas 兩表與角色勾選、PostgreSQL 全新 DB、媒體端到端、禁止過度設計。第 00–11 章保留 v4 Client 自動更新、七台影片快取與 Win10 CMD/PowerShell 實測。</p><h2>目標：七台 Client 零人工維護</h2><p>此文件為 ZERO-OPS v4 Client 架構補強版，沿用 v3 的 Ubuntu 原生 Nginx＋PHP-FPM＋PostgreSQL＋Python Worker、Docker 退場、乾淨重建與 UEM 精簡。<b>Windows Client Electron 不取消；Server App Electron 外殼保留，管理 UI 改由 Ubuntu 本機 Web 提供。</b></p><div class="rule"><b>最高禁止事項：</b>不得為單人 Super、封閉 LAN、小規模專案引入 Kubernetes、Redis、RabbitMQ、微服務、OAuth 伺服器、PKI 管理平台、專門簽章服務、完整契約測試平台、過量 E2E、長期雙版本相容層；不得把安全議題當成無限擴張理由。基礎安全防護維持少量必要設定。</div><p>本機 Git、GitHub PR、CI 不作為日常操作必要條件；更新使用可回復的版本快照與明確版本紀錄。未經許可不修改 GitHub，不開 PR。Page Atlas 僅保留頁碼、頁名、來源定位與最簡導航；若須大量相依則取消。UEM 保留核心自檢、故障診斷、日誌、更新與恢復能力。</p><h3>驗收優先順序</h3><ol><li>七台播放流暢、可預讀與有限快取</li><li>Super／Admin UI 完整、Admin USB 匯入</li><li>Web UI 一次更新，所有 Client 自然生效</li><li>Electron 外殼無人值守更新（實機確認後才標 PASS）</li><li>日常維護零終端機，簡短診斷與恢復</li></ol><div class="rule"><b>v7 更新：</b>使用者提供 Dev62 WOL 三子 Tab 與 Dev63 Page Atlas 實際截圖；本版內嵌原圖及 HTML 操作表格，補回 v2 舊架構、目標架構、更新流程與責任圖。保留 v6 原有 18 個章節內容；新圖以 ZERO-OPS 乾淨重建與雙層 Client 更新為準。</div></section><section class="pane" id="stack"><h1>01｜Client 技術選型與版本矩陣</h1><h2>固定選型（不因重構任意更換）</h2><table><tr><th>層</th><th>選型</th><th>用途與邊界</th><th>禁止替換／注意</th></tr><tr><td>桌面外殼</td><td>Electron</td><td>視窗、開機啟動、系統匣、PC 資訊、心跳、更新</td><td>不改 Tauri／PWA／Qt</td></tr><tr><td>UI</td><td>React＋TypeScript＋Vite</td><td>課程樹、登入、播放器、PDF、字幕、搜尋、書籤、管理頁</td><td>不重寫 Vue/Angular</td></tr><tr><td>樣式</td><td>沿用現有 CSS 與 UI 元件</td><td>保留既有 80 分 UI</td><td>不換 UI 框架</td></tr><tr><td>影片</td><td>HTML5 video＋自製 controls</td><td>H.264/AAC MP4、Range、拖曳、預讀</td><td>不導入 Jellyfin/HLS/DASH/播放器大框架（除非測試證明必要）</td></tr><tr><td>字幕</td><td>VTT＋既有字幕面板</td><td>字幕同步、匯入與切換；字幕生成留 Server Worker</td><td>不在 Client 裝 ASR</td></tr><tr><td>PDF</td><td>PDF.js</td><td>搜尋、縮放、頁碼、閱讀紀錄</td><td>不換原生 PDF 引擎</td></tr><tr><td>本機橋接</td><td>Electron preload＋contextBridge＋IPC</td><td>只暴露既有必要 PC 功能</td><td>不暴露任意 shell／Node API</td></tr><tr><td>Windows 安裝</td><td>electron-builder NSIS</td><td>首次安裝與外殼更新</td><td>不改 MSI/Squirrel/自寫安裝器</td></tr><tr><td>更新器</td><td>electron-updater（先做版本相容確認）</td><td>Win10/11 自動檢查、下載、安裝</td><td>不重造更新協定</td></tr><tr><td>Server UI 發布</td><td>Nginx 靜態 React bundle</td><td>所有 Client 取得同一個 UI 發布版本</td><td>不要求七台重裝 EXE</td></tr><tr><td>後端</td><td>PHP-FPM＋PostgreSQL＋Python Worker</td><td>授權、課程、影片、任務、WOL</td><td>不加新佇列服務</td></tr></table><h3>OS 版別與相容策略</h3><table><tr><th>平台</th><th>Electron／編譯</th><th>安裝</th><th>更新策略</th></tr><tr><td>Win7 SP1 x64</td><td>Electron 22.3.27；Web JS/CSS 必須維持 Chromium 108 相容</td><td>獨立 NSIS</td><td>獨立 feed；先確認舊 updater 能否端到端安裝，不直接套新版 updater</td></tr><tr><td>Win10 x64</td><td>沿用已測 Dev63 Electron 44.9.0 為參考基線，重建時固定相容版本</td><td>NSIS per-user 優先</td><td>electron-updater；閒置時更新</td></tr><tr><td>Win11 x64</td><td>與 Win10 共用程式，依需求可共用二進位</td><td>NSIS</td><td>同上，版別可獨立 feed</td></tr><tr><td>Ubuntu Client x64</td><td>支援版 Electron</td><td>.deb</td><td>預設 UI 自動更新；外殼 .deb 是否可無密碼安裝需另驗證，不宣稱自動成功</td></tr></table><p><b>Win7 既有經驗：</b>過去已選 Electron 22.3.27 並做過 Ubuntu 打包／測試相關工作；本次不得把 Win7 視為新發明或直接刪除。Electron 官方確認 23 起不支援 Win7。新版 Web UI 必須以 Win7 的 Chromium 108 功能為相容下限，或按能力做小幅降級；不得要求 Win7 升級 Electron。</p></section><section class="pane" id="diagram"><h1>02｜完整 Client／Server 架構與責任</h1><div class="diagram"><div class="node">Ubuntu Nginx : LAN<br/><small>/app/ 靜態 React UI　/api/ PHP　/media/ Range　/updates/ 安裝包</small></div><div class="arrow">↓ HTTP（固定 LAN 來源）</div><div class="node">7 台 Electron Client<br/><small>Main：視窗／更新／心跳／本機資訊　Preload：小型橋接　Renderer：React Web UI</small></div><div class="arrow">↓ video Range／API／必要 IPC</div><div class="node">播放器與受限預讀緩衝<br/><small>PC 硬體解碼；影片不在 Server 轉成每台專屬串流</small></div></div><p class="mini">此圖從 v2 整合並依 v7 決策校正；舊圖中與 v7 衝突的保留 Dev63 相容／禁止預讀等敘述不再適用。</p><div class="diagram"><div class="node">7 台 PC<br/><small>Electron Client／React UI／播放器／字幕／心跳</small></div><div class="arrow">⇅ LAN :4080</div><div class="node">Ubuntu Server App（Electron）<br/><small>本機管理 API :4081／另有 UI 打包與 .deb 更新</small></div><div class="arrow">⇅</div><div class="node dark">Docker Compose<br/><small>Nginx → PHP-FPM → PostgreSQL（容器資料卷）<br/>Python Agent／媒體掛載／socket／映像與環境檔</small></div><div class="arrow">⇅</div><div class="node">/Media（ZFS）＋主機既有 PostgreSQL<br/><small>既有主機 DB 與 iSTUDY DB 關係需實機確認</small></div></div><h2>Dev63 舊架構：需清理的複雜層</h2><p class="mini">此圖從 v2 整合並依 v7 決策校正；舊圖中與 v7 衝突的保留 Dev63 相容／禁止預讀等敘述不再適用。</p><div class="diagram"><div class="node">7 台 PC：現有 Electron Client<br/><small>Electron 薄殼 + Server 提供 React Web UI；MP4、字幕、PDF、心跳、系統匣、開機啟動全部保留</small></div><div class="arrow">⇅ LAN HTTP(S) :4080</div><div class="node dark">Ubuntu 原生 Nginx + PHP-FPM<br/><small>課程 API／權限驗證／X-Accel-Redirect 影片串流／React 管理 Web</small></div><div class="split"><div class="node">PostgreSQL<br/><small>一套 iSTUDY 正式 DB；資料／任務／版本紀錄</small></div><div class="node">Python Worker（systemd）<br/><small>FFmpeg／ASR／字幕／USB 匯入／WOL／任務處理</small></div></div><div class="arrow">⇅ localhost-only 管理介面</div><div class="node">Ubuntu Electron Server App（薄殼）<br/><small>開啟 localhost Web；原功能與導覽保留；不重複打包 React</small></div><div class="arrow">↓ Super／Admin 角色授權</div><div class="node">受控維護工作（systemd）<br/><small>更新／備份／恢復／重啟／USB 掛載；不接受任意 Shell</small></div><div class="node">/Media：12TB×2 ZFS Mirror<br/><small>原始影片永久保存；Nginx 直接送檔；不預下載到 PC</small></div></div><h2>目標架構：Ubuntu Native + Electron Web Core</h2><h3>程序分工</h3><table><tr><th>位置</th><th>負責</th><th>不負責</th></tr><tr><td>Electron Main</td><td>安裝版號、更新、視窗、托盤、啟動、PC 資訊、heartbeat</td><td>課程 UI、SQL、影片轉碼</td></tr><tr><td>Preload</td><td>少量 getDeviceInfo/getAppVersion/getUpdateState 等固定方法</td><td>任意 shell/SQL/路徑讀取</td></tr><tr><td>React Renderer</td><td>所有課程與播放器操作；Server 提供 UI bundle</td><td>管理系統權限或 DB</td></tr><tr><td>PHP API</td><td>登入、權限、課程、學習紀錄、心跳資料接收、更新狀態</td><td>長時間影音處理</td></tr><tr><td>Python Worker</td><td>ASR、轉檔、WOL、USB 任務、必要 UEM 診斷</td><td>直接對七台 Client 發送 UI</td></tr></table><h3>Web UI 更新行為</h3><p>UI 發布以一個不可變版本資料夾為單位，Nginx 以原子切換指向新版；index.html 不長期快取，雜湊資產可長快取。Client 在啟動／回到首頁／停止播放後載入新 UI；播放中不得強制刷新。新 UI 若要求新版 bridge 或 API，先顯示相容提示，避免功能突然失效。</p><h2>責任邊界：最短資料路徑</h2></section><section class="pane" id="api"><h1>03｜極小 API 邊界（核心規格）</h1><h2>不改既有功能語意，先做端點對照</h2><p>下表是新架構的<b>功能契約草案</b>，不是聲稱 Dev63 目前就有這些精確路徑。開發前以現有路由盤點對照，能保留的保留，避免全 Client 重新修改。</p><table><tr><th>功能</th><th>示意 API</th><th>輸入／輸出最小要求</th></tr><tr><td>登入</td><td>POST /api/auth/login</td><td>帳號憑證→登入狀態／角色／錯誤碼</td></tr><tr><td>目前使用者</td><td>GET /api/me</td><td>id、角色、有效權限</td></tr><tr><td>課程／分類</td><td>GET /api/courses</td><td>課程、權限、媒體 ID、頁碼</td></tr><tr><td>影片授權與播放</td><td>GET /api/media/{id}</td><td>授權後支援 HTTP Range，206/416，正確 Content-Range</td></tr><tr><td>字幕</td><td>GET /api/media/{id}/subtitles</td><td>VTT 清單／語言／版本</td></tr><tr><td>進度</td><td>POST /api/progress</td><td>課程／秒數／更新時間，重試不可重複破壞</td></tr><tr><td>裝置心跳</td><td>POST /api/devices/heartbeat</td><td>裝置 ID、殼版號、Web UI 版號、狀態、最後在線</td></tr><tr><td>能力協商</td><td>GET /api/client/config</td><td>uiVersion、apiLevel、minShell、功能旗標</td></tr><tr><td>更新來源</td><td>GET /updates/{channel}/latest.yml</td><td>electron-updater 原生 metadata（不要另寫一套 updater API）</td></tr></table><h3>只有三個版本欄位</h3><p><code>shellVersion</code>（安裝程式）、<code>uiVersion</code>（React）、<code>apiLevel</code>（PHP）。必要時另設 <code>minShellVersion</code>；不建立完整 API schema registry、SDK generator、相容矩陣服務。</p><h3>兼容與失敗規則</h3><ul><li>預設先更新後端，使舊 UI 仍可運作，再切換新 UI；破壞性變更在同一維護窗口一次完成。</li><li>API 回應有固定簡單結構：成功資料或錯誤碼＋簡短訊息；錯誤不洩露堆疊。</li><li>401 登入失效、403 權限不足、404 不存在、409 狀態衝突、5xx 服務異常；影片 HTTP Range 另依標準。</li><li>Client 斷線顯示可理解的訊息，不因心跳失敗就停止本地已緩衝影片。</li><li>正式切換後不保留舊 Docker API 轉接層或雙套永久路由。</li></ul><h2>PHP → PostgreSQL tasks → Python Worker 單一路徑（v2 圖整合）</h2></section><section class="pane" id="updates"><h1>04｜雙層更新：GitHub／Reddit 調研與決策</h1><p class="mini">此圖從 v2 整合並依 v7 決策校正；舊圖中與 v7 衝突的保留 Dev63 相容／禁止預讀等敘述不再適用。</p><div class="diagram"><div class="node">AI 完成開發＋受影響範圍測試<br/><small>只產生一份版本包；不要求 Git／PR</small></div><div class="arrow">↓</div><div class="node">Super UI：檢查新版本 → 顯示變更清單</div><div class="arrow">↓</div><div class="node">預檢：發布來源與 hash（依實際採用的更新器能力）、版本、磁碟、DB 可用、無重複更新</div><div class="arrow">↓</div><div class="node">備份（DB／設定／上一版程式）</div><div class="arrow">↓</div><div class="node">停止接新任務 → 必要 Migration → 原子切換程式 → 重啟受影響服務</div><div class="arrow">↓</div><div class="node">快速健康檢查：登入／DB／API／影片 Range／Worker／管理 UI</div><div class="split"><div class="node ok">成功：標記版本、恢復任務、UI 顯示完成</div><div class="node bad">失敗：停止發布、恢復舊程式；DB 依相容性處置並顯示警示</div></div></div><h2>Ubuntu 一鍵更新流程：v2 圖調整版</h2><h2>更新路線：Web UI 頻繁更新，Electron 殼極少更新</h2><table><tr><th>層</th><th>發布物</th><th>Client 行為</th><th>回復</th></tr><tr><td>Web UI</td><td>dist/assets + index.html + ui-version</td><td>啟動／閒置／下次進頁更新；不打斷影片</td><td>Server 切回前版靜態目錄</td></tr><tr><td>Electron 殼</td><td>NSIS exe + latest.yml + 必要 blockmap</td><td>啟動與低頻檢查→背景下載→驗證→閒置／下次啟動安裝</td><td>保留上版安裝包；失敗後不連續重試</td></tr></table><h3>上游專案證據</h3><ul><li><a href="https://github.com/electron-userland/electron-builder/blob/master/website/docs/features/auto-update.md">electron-builder 官方 Auto Update</a>：generic provider 可用，但必須自行將檔案與 metadata 發布到 Server；NSIS 是 Windows 標準自動更新路線。</li><li><a href="https://github.com/electron-userland/electron-builder/blob/master/website/docs/targets.md">Targets 指南</a>：per-user NSIS 不一定需要管理員；portable 不提供同等內建自動更新。</li><li><a href="https://github.com/electron-userland/electron-builder/blob/master/website/docs/troubleshooting.md">Troubleshooting</a>：latest.yml 404、sha512 不符、差異更新失敗與防毒影響均有已知排查路徑。</li><li><a href="https://github.com/electron-userland/electron-builder/blob/master/website/docs/features/auto-update.md">上游更新安裝時機</a>：在登出／關機期間觸發 onQuit 安裝可能被 OS 中斷；新版提供 next-launch 安裝控制。<b>不得直接套用新版 updater 到 Win7 Electron 22。</b></li></ul><h3>Reddit 調研界線</h3><p>已針對 Reddit 的 electronjs／selfhosted 自動更新與串流議題搜尋，但這次未取得足以逐條驗證的具體 Reddit 討論內容，因此不杜撰網友共識或引用假心得。更新決策優先以 electron-builder 官方程式、文件與本機 Dev63 實測為依據；Reddit 只列為後續補充經驗來源。</p><h3>簡化原則</h3><p>只維持四個必要更新頻道：win7、win10、win11、ubuntu（Win10/11 若實測同檔可再合併）；不用 GitHub Releases 當 LAN Client 更新伺服器；不用 CI、自建發布中心、簽章微服務或額外下載代理。</p><h2>v6｜Client 更新事件與伺服器集中回報（P0）</h2>
 <p><b>目的：</b>Super 在 Ubuntu 後台一次看清楚每台 PC 更新到哪一步、耗時、失敗原因、檔案驗證、安裝後是否真的成功啟動；不必逐台遠端查看。</p>
 <table><tr><th>Client 本機產物</th><th>用途</th><th>回傳策略</th></tr>
 <tr><td><code>update-events.jsonl</code></td><td>逐事件結構化：每行 JSON，便於重送、排序、診斷</td><td>每個階段完成即送，失敗本機暫存</td></tr>
@@ -99,7 +110,7 @@ USB 匯入 → PHP 建立 jobs → Python Worker → ffprobe → (必要才轉�
 <h2>Client App 登入前｜只顯示「喚醒電腦」</h2><div class="diagram"><div class="diagram-title">Dev62 登入前 UI 結構重繪</div><div class="grid"><div class="tile"><b>登入帳號／密碼</b><small>一般登入區</small></div><div class="tile"><b>喚醒電腦</b><small>教室 PC-A　［喚醒］<br/>教室 PC-B　［喚醒］<br/>只列已啟用＋允許公開顯示的設備；不顯示管理、待登記與設定</small></div></div></div>
 <p>Dev62 要求移除 Client 可見文案中不必要的「Super」字樣；Admin／User 登入後不顯示 WOL 管理。<b>Super 在 Client App 登入後也可使用完整三個子 Tab</b>；Server App Super 同樣完整可用。WOL 執行由 Ubuntu Python Worker 發送封包。</p>
 <h3>API／DB 最小實作</h3><p>DB 以 <code>devices</code>／<code>wol_devices</code>（按實際正規化決定是否合併）保存 MAC、IP、狀態、公開開關與名稱；待登記裝置只保留必要資料。管理 API 僅 Super；公開 API 只讀可喚醒裝置清單並以設備 ID 發送喚醒請求，不暴露編輯能力。Page Atlas 登錄 <code>ADM-WOL-01/02/03</code>；三個子 Tab 不對 Admin/User 開放。</p>
-<p>來源依據：<code>iSTUDY_Dev62_完整需求規格計畫書_v1.2_20261103.html</code> 的「WOL 三入口分流」與「登入頁喚醒清單顯示控制」。</p><h2>三個子 Tab：新版 HTML UI 規格（沿用 Dev62 操作）</h2><div class="mock"><div class="mock-head">裝置管理 → WOL 管理（僅 Super）</div><div class="mock-tabs"><span>喚醒與狀態</span><span class="selected">▶ 設備清單</span><span>待登記設備（1）</span></div><table><tr><th>名稱／代號</th><th>OS</th><th>MAC／LAN IP</th><th>WOL 設定</th><th>啟用</th><th>登入頁可見</th><th>公開名稱</th><th>操作</th></tr><tr><td>教室 A-01／A01</td><td>Win10</td><td>00:11:22:33:44:01<br/>IP 依實際填寫</td><td>廣播／Port／重試／冷卻</td><td>☑</td><td>☑</td><td>教室 A-01</td><td>編輯／刪除</td></tr></table><p class="mini">保留：掃描 LAN 裝置、新增設備。WOL 啟用與登入頁顯示分開設定；停用 WOL 的設備不可公開喚醒。</p></div><h2>Client 登入前喚醒清單（唯一公開入口）</h2><p>登入前只顯示已啟用且已設定公開顯示的設備，不提供設備清單、掃描、登記、管理等功能；介面不顯示不必要的「Super」說明文字。後端以設備 ID 觸發喚醒，使用簡單冷卻避免重複點擊。</p></section></main></div><section class="pane" id="dev63inventory"><h2>18｜2026-11-05 Dev63 Ubuntu 實機盤點、原始碼封存與 ZERO-OPS 進度</h2>
+<p>來源依據：<code>iSTUDY_Dev62_完整需求規格計畫書_v1.2_20261103.html</code> 的「WOL 三入口分流」與「登入頁喚醒清單顯示控制」。</p><h2>三個子 Tab：新版 HTML UI 規格（沿用 Dev62 操作）</h2><div class="mock"><div class="mock-head">裝置管理 → WOL 管理（僅 Super）</div><div class="mock-tabs"><span>喚醒與狀態</span><span class="selected">▶ 設備清單</span><span>待登記設備（1）</span></div><table><tr><th>名稱／代號</th><th>OS</th><th>MAC／LAN IP</th><th>WOL 設定</th><th>啟用</th><th>登入頁可見</th><th>公開名稱</th><th>操作</th></tr><tr><td>教室 A-01／A01</td><td>Win10</td><td>00:11:22:33:44:01<br/>IP 依實際填寫</td><td>廣播／Port／重試／冷卻</td><td>☑</td><td>☑</td><td>教室 A-01</td><td>編輯／刪除</td></tr></table><p class="mini">保留：掃描 LAN 裝置、新增設備。WOL 啟用與登入頁顯示分開設定；停用 WOL 的設備不可公開喚醒。</p></div><h2>Client 登入前喚醒清單（唯一公開入口）</h2><p>登入前只顯示已啟用且已設定公開顯示的設備，不提供設備清單、掃描、登記、管理等功能；介面不顯示不必要的「Super」說明文字。後端以設備 ID 觸發喚醒，使用簡單冷卻避免重複點擊。</p></section><section class="pane" id="dev63inventory"><h2>18｜2026-11-05 Dev63 Ubuntu 實機盤點、原始碼封存與 ZERO-OPS 進度</h2><p><strong>版本優先規則：</strong> 本計畫書第 19 章 v7.1 決策覆蓋舊章節相衝突條款；舊章節保留供完整功能與設計追溯。</p>
 <p><strong>狀態：三輪 Ubuntu 基礎盤點已完成；Dev63 原始碼封存已取得並核對版本；尚未完成逐模組程式審查、重建、測試與上線。</strong> 本章是實際證據，不代表功能驗收通過。</p>
 <h3>一、已核准且固定的架構決策</h3><ul><li>以 Ubuntu 實際執行中的 Dev63 為最新程式基準；GitHub 既有原始碼可能落後，不得直接視為最新。</li><li>iSTUDY 乾淨重建為原生 Nginx + PHP-FPM + PostgreSQL 18 + Python Worker + systemd；取消 iSTUDY Docker Compose 依賴與舊相容層。</li><li><strong>不得移除 Ubuntu Docker Engine，也不得影響 EachCore 專案的 PHP/MySQL 容器。</strong></li><li>新 iSTUDY DB 乾淨建立，不遷移舊測試資料庫；任何刪除均須待備份、相依確認、新版驗收及明確核准後執行。</li><li>保留 Electron Client、Win7/10/11/Ubuntu 支援、Server App、WOL 三子 Tab、Page Atlas、UEM 有用功能、影音播放 KPI、雙層更新與既定權限規則；避免重新設計過度複雜的框架。</li></ul>
 <h3>二、Ubuntu 三輪盤點事實</h3><table><tr><th>領域</th><th>實際發現</th><th>新架構判斷</th></tr><tr><td>OS</td><td>Ubuntu 26.04.1；Kernel 7.0.0-38</td><td>維持原生部署</td></tr><tr><td>Docker</td><td>iSTUDY php / agent / nginx 三容器；EachCore php / mysql 兩容器</td><td>僅 iSTUDY 退場；EachCore 不動</td></tr><tr><td>DB</td><td>PostgreSQL 18 native；postgres、istudy、istudy_restore_test、istudy_upgrade_verify_20261104、istudy_dev61_rollback_rehearsal、istudy_dev63_full_migration_test</td><td>保留 PostgreSQL cluster；清理候選非刪除授權；盤點時 istudy 有 4 條連線</td></tr><tr><td>PHP</td><td>Host PHP 8.5.4 CLI；PDO、pdo_pgsql、pgsql 存在；未發現 PHP-FPM unit</td><td>需建立/驗證原生 FPM</td></tr><tr><td>Python</td><td>Python 3.14.4；未找到既有 venv</td><td>單一 iSTUDY 專用 venv</td></tr><tr><td>媒體</td><td>FFmpeg 8.0.1；/dev/dri/renderD128、vainfo；/Media 存在</td><td>硬體轉檔、ZFS 掛載與 7 Client 播放仍需實測；主機 LibreOffice 指令未找到</td></tr><tr><td>systemd</td><td>istudy.service 執行 /opt/istudy/compose.yaml；istudy-hostcheck.timer 啟用，透過 /usr/local/sbin/istudyctl hostcheck</td><td>移植健康檢查後取代 Docker 啟動服務</td></tr><tr><td>設定</td><td>/opt/istudy/server/nginx/default.conf、istudy_fastcgi.conf、istudy_protected.conf</td><td>保留權限、Range、FastCGI 設計，改原生設定</td></tr><tr><td>更新檔</td><td>/srv/istudy/updates/win7、win10、win11、ubuntu</td><td>盤點發行成品，不納入原始碼包</td></tr></table>
@@ -107,4 +118,1123 @@ USB 匯入 → PHP 建立 jobs → Python Worker → ffprobe → (必要才轉�
 <table><tr><th>來源</th><th>VERSION.json 證據</th><th>用途</th></tr><tr><td>runtime/VERSION.json</td><td>1.0.0-dev.63</td><td>部署版本依據</td></tr><tr><td>source/dev63-test</td><td>1.0.0-dev.63</td><td>主要原始碼候選，須與 Runtime 逐檔比對</td></tr><tr><td>source/projects-istudy</td><td>1.0.0-dev.62</td><td>舊版參考</td></tr><tr><td>source/home-istudy</td><td>1.0.0-dev.53</td><td>舊版參考</td></tr></table>
 <p>實際 PHP Runtime 封存包含 schema.sql 與 13 份 Migration；尚未確認所有 SQL 與現行 PostgreSQL Schema 一致。<code>istudyctl.py</code> 已在部署目錄定位，約 138 KB；應逐項抽取 UEM 功能，避免漏移植。</p>
 <h3>四、進度與下一步</h3><table><tr><th>工作</th><th>狀態</th><th>完成定義</th></tr><tr><td>ZERO-OPS v7 規格及架構決策</td><td>已核准</td><td>以本計畫書為準</td></tr><tr><td>Ubuntu 三輪環境盤點</td><td>完成</td><td>不再重複一般環境查詢</td></tr><tr><td>Dev63 實際原始碼封存</td><td>完成</td><td>封存已取得；敏感資訊仍待複核</td></tr><tr><td>Runtime 與 Dev63 Source 差異分析</td><td>待進行</td><td>逐模組產出沿用／移植／刪除／待開發矩陣</td></tr><tr><td>PHP API、資料庫、Worker、Client、UEM、更新器深入審查</td><td>待進行</td><td>完整呼叫鏈與 DB/API 契約對照</td></tr><tr><td>ZERO-OPS 原生程式重建</td><td>未開始</td><td>實作與版本產出</td></tr><tr><td>Ubuntu 實機驗收與舊結構退場</td><td>未開始</td><td>實機通過、備份/回復確認、獲准後清理</td></tr></table>
-<p><strong>保護原則：</strong>目前不刪除任何 DB、容器、更新檔、媒體或其他專案；不得把封存的原始碼與可能含敏感資訊的盤點內容上傳公開儲存庫。本章僅紀錄盤點摘要與工作進度。</p></section><script>const tabs=[...document.querySelectorAll('.tab')],panes=[...document.querySelectorAll('.pane')];function show(id){tabs.forEach(x=>x.classList.toggle('active',x.dataset.target===id));panes.forEach(x=>x.classList.toggle('active',x.id===id));history.replaceState(null,'','#'+id);window.scrollTo(0,0)}tabs.forEach(x=>x.addEventListener('click',()=>show(x.dataset.target)));show(document.getElementById(location.hash.slice(1))?.id||'overview');</script><footer style="padding:18px;text-align:center">iSTUDY ZERO-OPS v7｜規格／架構設計文件；非已完成程式與實機驗收證明</footer></body></html>
+<p><strong>保護原則：</strong>目前不刪除任何 DB、容器、更新檔、媒體或其他專案；不得把封存的原始碼與可能含敏感資訊的盤點內容上傳公開儲存庫。本章僅紀錄盤點摘要與工作進度。</p></section><section class="pane" id="v71decisions">
+<h2>19｜ZERO-OPS v7.1：Dev63 × Claude 交叉審查修正與可執行重構計畫</h2>
+<p><strong>文件版本 v7.1｜2026-11-05｜性質：決策與實作計畫，不是完成驗收證明。</strong> 本章優先於本文件舊章節中任何相衝突的 jobs/tasks、資料遷移、UI 授權、版本基線、測試順序與重構階段描述；其餘 v7 原功能需求繼續有效。</p>
+<h3>19.1｜證據與可信度</h3>
+<table><tr><th>證據</th><th>已確認</th><th>限制</th></tr>
+<tr><td>Ubuntu 三輪盤點</td><td>26.04.1、PostgreSQL 18、PHP CLI 8.5.4、Python 3.14.4、FFmpeg 8.0.1；iSTUDY Docker 三容器，EachCore 二容器</td><td>主機安裝版本不等於應用相容測試通過；LibreOffice 原生指令未找到</td></tr>
+<tr><td>Dev63 封存</td><td>PHP 120 路由宣告、32 個 SQL 建表定義、13 migration、42 TSX、18 Worker handler、33 Page Atlas 頁面、121 測試檔；50 個對應部署檔 SHA 相符</td><td>靜態數量，非 120 個 API 逐一通過測試；SQL 定義不等於實際 DB 最終結構</td></tr>
+<tr><td>語法檢查</td><td>PHP 36/36、Python 66/66 通過語法解析</td><td>不代表執行期、權限、交易、UI、硬體或七機播放驗收</td></tr>
+<tr><td>Claude 二次審查</td><td>指出授權矩陣缺口、Retry 無限循環、Electron Token 注入、Win7 bundle、fallback 與多項文件矛盾</td><td>部分為程式靜態推論；須在隔離環境針對風險驗證</td></tr>
+</table>
+<h3>19.2｜五項衝突正式修正（取代舊章節衝突條款）</h3>
+<table><tr><th>ID</th><th>v7.1 決策</th><th>明確不做</th><th>驗收條件</th></tr>
+<tr><td>D01 工作表</td><td><strong>沿用 jobs 名稱及現有 FOR UPDATE SKIP LOCKED、recover()；只補必要的心跳、timeout 與有界重試。</strong> jobs 為唯一工作佇列；任務狀態必須可追蹤。</td><td>不改名 tasks、不另設佇列、不預設 lease/fencing/idempotency 七欄組合</td><td>重啟恢復、卡死終止、Retry 有上限且無重複副作用</td></tr>
+<tr><td>D02 權限</td><td><strong>有效權限＝UI 可見設定 ∩ 後端 API 授權。</strong> ui_page_roles 僅可縮限，不能擴權；混合權限頁按動作分拆／隱藏。</td><td>不得靠隱藏按鈕代替後端授權；不得讓 Admin 勾出 Super 權限</td><td>每頁的依賴 API 均通過角色矩陣；403 不能成為正常頁面操作流程</td></tr>
+<tr><td>D03 資料</td><td><strong>全新 DB Schema，不沿用舊 migration 鏈；但重要既有資料是否選擇性遷入，須以資料清查決定。</strong> 優先帳號／群組／權限、課程與媒體 ID 對照、字幕／人工編修、必要學習紀錄。</td><td>不整庫還原、不搬測試垃圾資料、不在未備份及未核准前刪舊 DB</td><td>新 DB 乾淨安裝；選擇遷移者具映射、數量核對、可重跑與回復程序</td></tr>
+<tr><td>D04 版本</td><td>以 Ubuntu 實機 PHP 8.5.4、Python 3.14.4、FFmpeg 8.0.1 為候選；原生 PHP-FPM、LibreOffice、ASR、VA-API 需實測後凍結版本。</td><td>不直接把容器舊版 6.1.1／24.2.7.2 當作主機版本；不為版本號盲目降級</td><td>擴充、套件、編碼、字幕、Office 轉換功能通過代表性測試</td></tr>
+<tr><td>D05 優先序</td><td>先 ShellBridge 安全原型、Win7 相容、Dev63 七台播放基準，再開始原生化。</td><td>不把核心安全／效能風險留到最終整合測試才發現</td><td>形成明確通過／阻擋紀錄與基準值，才能進入下一階段</td></tr>
+</table>
+<h3>19.3｜API 逐項授權修正規範</h3>
+<p>原先 120 條路由 CSV 的「需追查」不能視為權限已通過。必須合併 <code>docs/DEV63_FIX11_ADMIN_API_MATRIX.csv</code> 與 <code>docs/DEV63_PAGE_ATLAS_API_ROUTE_AUDIT.csv</code>（以實際封存檔存在與內容為準），建立每條路由「方法／路徑／實際守門函式／最低角色／本機限制／被哪個 UI 呼叫／拒絕行為／測試證據」。Claude 回報僅 health、login-config、login 三條完全公開、另有登入或選擇性登入路由，此為待逐條核實的靜態分類，不直接作正式權限宣告。</p>
+<p><strong>角色規則：</strong>Super 專屬 API 永遠不得由 Admin/User UI 配置開放；本機 Super 條件不得因遠端 Web UI 或代理標頭被繞過；WOL 管理三 Tab 僅 Super，登入前公開喚醒只允許後端明確核准的設備；所有 Page Atlas 深連結與 API 直接請求須再驗證。</p>
+<h3>19.4｜Worker 最小修補規格</h3>
+<ul><li>沿用原子 claim、既有重試與啟動時 recover()，保留單 Worker 策略及既有 18 類 handler。</li><li>已確認風險：claim 將 <code>attempts + 1</code>，Retry 分支將 <code>attempts - 1</code>，若 handler 無限 Retry，可能永不達失敗上限。將「等待依賴」與「真正失敗」區分，兩者均需截止條件／最長等待時間。</li><li>執行中工作需 <code>heartbeat_at</code> 或等效存活證據，另設每類合理 timeout；FFmpeg／Office／ASR 子程序超時須終止整個程序群並記錄 exit code、stderr 摘要。</li><li>recover() 不得將仍存活的工作重複執行；對輸出檔案、付款／寄信／更新等有副作用操作採必要的重入防護，而不是一律導入複雜 fencing 系統。</li><li>驗收：正常完成、可重試失敗、永久失敗、等待超時、Worker 當機、子程序卡死六類代表情境；不要重跑無關模組的全套測試。</li></ul>
+<h3>19.5｜ShellBridge：最高優先安全原型</h3>
+<p><strong>現況：</strong>Dev63 Electron 使用本機 <code>app://istudy</code>、主程序記憶體持有 Token，透過 <code>onBeforeSendHeaders</code> 向 Server 匹配請求注入 Authorization；影片 <code>&lt;video src&gt;</code> 依賴該機制。現有 <code>ctx.server + '/*'</code> 範圍過廣；導航白名單原本只信任本機 app://istudy。直接改為載入 HTTP Server UI 會同時改變來源信任、CSP、CORS、IPC、授權與播放模型。</p>
+<table><tr><th>控制點</th><th>v7.1 必要設計</th><th>驗證</th></tr>
+<tr><td>UI 來源</td><td>優先評估保留本機可信 ShellBridge + 經完整性驗證的版本化 Web UI 快取；若直接遠端載入，須有可驗證來源與安全傳輸，LAN 明文 HTTP 不得視為可信程式碼來源。</td><td>篡改 UI／不可信網頁不得取得 IPC 或 Token</td></tr>
+<tr><td>Token</td><td>維持 Token 僅主程序持有；以明確主機、視窗與路徑白名單注入，API、受保護影片／Range 路徑分別列出；避免向任意 Server 路徑注入。</td><td>非白名單 URL／外部連結不帶 Authorization；影片正常播放</td></tr>
+<tr><td>IPC</td><td>preload 僅暴露最小能力，逐項驗證 sender URL／frame、參數、角色；禁止任意命令執行與任意檔案讀寫。</td><td>不可信 iframe／跳轉後不能呼叫高權限 API</td></tr>
+<tr><td>導航與 CSP</td><td>重寫 will-navigate、setWindowOpenHandler、CSP 與 CORS；拒絕未知 origin、混合內容與未授權跳轉。</td><td>合法 UI 可開啟、惡意導覽被攔截</td></tr>
+<tr><td>離線 fallback</td><td>Electron 內建極小本機錯誤頁，顯示連線失敗、重試、Server 位址與版本；不可讓 Server 故障時整個 Client 白畫面。</td><td>斷線／重啟時可辨識狀態並恢復</td></tr>
+<tr><td>相容契約</td><td>定義 <code>apiLevel</code>、<code>minShell</code>、Web UI 版本、更新回退；播放中不強制刷新。</td><td>新舊 Shell／UI 不相容時安全提示，不執行錯誤 IPC</td></tr></table>
+<h3>19.6｜Win7 與跨平台相容矩陣</h3>
+<p>Win7 Electron 22.3.27 與舊 Chromium 需獨立驗證；<code>chrome108</code> 編譯 target 不代表所有瀏覽器 API 可用。React 19.2.8、pdfjs-dist 6.2.108、PDF.js legacy build 與 polyfill 均需用實機測試。electron-updater 6.3.9 在 Win7 的自動更新尚未證明可用，不能標 PASS。</p>
+<table><tr><th>平台</th><th>最低驗證</th><th>更新策略</th></tr><tr><td>Win7</td><td>啟動、登入、課程樹、PDF、影片、字幕、WOL、fallback</td><td>舊版專屬 bundle／legacy PDF.js；自動更新實測前保留手動安裝退路</td></tr><tr><td>Win10/11</td><td>同功能與硬體解碼、休眠喚醒</td><td>Web UI 與 Shell 分層更新</td></tr><tr><td>Ubuntu Client</td><td>同功能、GPU／X11、檔案操作、tray</td><td>安裝包簽章／SHA-256 與可回退</td></tr><tr><td>Ubuntu Server App</td><td>本機 Super UI、維護、WOL、Page Atlas</td><td>薄 Shell；限制本機管理 API</td></tr></table>
+<h3>19.7｜七台 Client 播放：重構前建立基準</h3>
+<ul><li>Dev63 先使用同一批影片、網路、七台實際 Client，記錄啟播耗時、stall 次數與時長、buffer 水位、掉幀、Server CPU／I/O／網路、Range 請求。</li><li>現有 <code>preload=auto</code> 不等於有界快取或可量測 QoE；先採最小非侵入式量測，避免為測試而大改舊版。</li><li>新版本須在相同條件與同素材下比較，不能只以「播放成功」宣稱七機流暢；設定可接受門檻時，以 Dev63 基準與使用者實際需求為準，不虛構數字。</li><li>測試必須包含 Server 重啟／斷線恢復與長時間播放，但故障注入不需無限擴充。</li></ul>
+<h3>19.8｜資料庫重建與選擇性資料遷移</h3>
+<table><tr><th>資料類別</th><th>策略</th><th>先決條件</th></tr><tr><td>帳號／群組／權限</td><td>若為有效正式資料，按新 Schema 匯入並核對關聯</td><td>去重、角色映射、密碼雜湊相容與重設流程</td></tr><tr><td>課程／媒體與路徑</td><td>必要時只搬中繼資料及穩定 ID 映射，原始媒體留在 /Media</td><td>權限、路徑安全、檔案存在性</td></tr><tr><td>字幕／人工編修</td><td>優先保留，不重跑已完成且正確的 ASR</td><td>媒體 ID、語言、cue 時序、編修來源核對</td></tr><tr><td>學習歷程／書籤</td><td>視實際有價值的資料決定</td><td>會員與媒體關聯完整</td></tr><tr><td>測試帳號／測試 DB／暫存 jobs</td><td>原則不遷移</td><td>先確認沒有正式依賴，清除需另行核准</td></tr></table>
+<p>資料流程：唯讀盤點 → 備份 → 映射清單 → 新 DB staging 匯入 → 計數與關聯核對 → 功能抽驗 → 切換核准。<strong>未確認正式資料存在前，不先開發大型 ETL 框架。</strong></p>
+<h3>19.9｜重構三階段與明確關卡</h3>
+<table><tr><th>階段</th><th>工作</th><th>不得同時改動</th><th>交付／放行</th></tr>
+<tr><td>P0 風險前置</td><td>ShellBridge 安全 spike、Win7 代表功能、Dev63 七機播放基準；API 角色矩陣與 Retry 風險確認</td><td>不改正式服務、不刪 DB、不換整套 UI</td><td>安全／相容／效能基準記錄；未通過即停在 P0</td></tr>
+<tr><td>P1 原生化</td><td>隔離建立 Nginx + PHP-FPM + PostgreSQL 新 Schema + Python venv/systemd；沿用 jobs、API、現有本機 UI/Shell；移植 UEM 核心</td><td>不改 jobs 名稱、不做遠端 UI、不同時重寫 Page Atlas</td><td>功能抽驗、代表性 API/DB/Worker、備份回復 PASS</td></tr>
+<tr><td>P2 Web/Shell 分離與收斂</td><td>在 P0 ShellBridge 設計驗證後集中 Web UI、版本化回退、雙層更新；Page Atlas 簡化 DB；Super 一鍵維護；播放 KPI 補齊</td><td>不新增第二套維護平台、不無故改 API 權限</td><td>跨平台、七機播放、更新回復、權限、UEM 最終驗收；切換後才清理舊 iSTUDY</td></tr></table>
+<h3>19.10｜測試策略與避免重複驗收</h3>
+<ul><li>日常變更只跑影響範圍測試；基礎安全、API 授權、資料完整性列為必要回歸。</li><li>故障注入重點限定「一鍵更新／回退」與「備份／還原」兩條高風險流程；Worker 卡死採定向測試，不做全模組斷電演習。</li><li>已有 Dev63 測試與證據優先沿用；不能把「測試檔存在」誤寫成「測試已 PASS」。</li><li>每階段只保留一份決策、缺陷與驗收對照表，禁止無意義地重複產出大量相同報告。</li></ul>
+<h3>19.11｜工作清單、優先順序與目前進度</h3>
+<table><tr><th>編號</th><th>優先</th><th>工作</th><th>狀態</th></tr>
+<tr><td>R00</td><td>P0</td><td>三輪 Ubuntu 盤點、Dev63 實機封存、靜態 API/DB/UI/Worker/更新器清單</td><td>已完成靜態盤點</td></tr>
+<tr><td>R01</td><td>P0</td><td>合併 120 API 角色矩陣與 Page Atlas API 對照，核實本機 Super 守門</td><td>待逐條核對</td></tr>
+<tr><td>R02</td><td>P0</td><td>ShellBridge 安全 spike：來源、Token、IPC、Range、fallback、版本協定</td><td>待開發驗證</td></tr>
+<tr><td>R03</td><td>P0</td><td>Win7 Electron 22／PDF.js legacy／Web bundle 相容性</td><td>待實機驗證</td></tr>
+<tr><td>R04</td><td>P0</td><td>Dev63 七機播放基準量測</td><td>待實機量測</td></tr>
+<tr><td>R05</td><td>P1</td><td>原生後端與新 Schema 隔離建置；保留 jobs 與既有 API 契約</td><td>尚未開發</td></tr>
+<tr><td>R06</td><td>P1</td><td>Retry 上限、Worker heartbeat／timeout、UEM 原生化</td><td>尚未開發</td></tr>
+<tr><td>R07</td><td>P2</td><td>Web/Shell 分離、Win7 相容 bundle、離線 fallback、雙層更新</td><td>尚未開發</td></tr>
+<tr><td>R08</td><td>P2</td><td>Page Atlas 權限交集、Super UI、七機 QoE、更新／備份回復驗收</td><td>尚未開發</td></tr>
+<tr><td>R09</td><td>切換</td><td>備份、正式切換、確認 EachCore 無影響、獲核准後移除舊 iSTUDY 容器／測試 DB</td><td>未執行</td></tr></table>
+<h3>19.12｜硬性保護與交付規則</h3>
+<p><strong>不停止或刪除 EachCore 容器；不移除 Docker Engine；不動其他專案；不操作正式 DB 或 /Media 原始素材；不在未授權下建立 PR；不把含密鑰的封存上傳公開 GitHub。</strong> ZERO-OPS v7.1 的目標是降低維護複雜度，而非將原本能工作的系統全部重寫。每次重大切換均須具備可驗證回退路徑。</p>
+</section><section class="pane doc-integrated" id="v72matrix"><h2>20｜Dev63 API 角色對照矩陣（Claude 靜態審查整合）</h2><div class="note-v72"><b>證據性質：</b>120 條路由取自上傳的 Excel；角色分類、第二層判斷與 UI 引用是靜態解析結果，尚未做實機權限與撤權驗證。此表不取代後端授權。Page Atlas 有效權限＝UI 設定 ∩ API 後端角色；任何管理頁的可勾選角色不得高於其所有必要 API 的授權上限。</div><p>下方提供 120 條完整路由的可搜尋表格，包含路徑、方法、第一層守門、最低角色、可達範圍、內嵌判斷、資源層限縮、UI 引用與 Admin 勾選建議。</p><input aria-label="搜尋 API 角色矩陣" class="matrix-search" id="matrixFilterV72" placeholder="搜尋路徑、角色、守門函式、UI 檔案…" type="search"/><p id="matrixCountV72">顯示 120 / 120 條路由</p><div class="matrix-scroll"><table id="apiMatrixV72"><thead><tr><th>No</th><th>方法</th><th>路徑</th><th>來源（檔:行）</th><th>第一層守門</th><th>最低角色</th><th>可達範圍</th><th>內嵌角色／帳號判斷</th><th>資源層限縮</th><th>UI 引用檔（推得）</th><th>可開放給 Admin 勾選？</th></tr></thead><tbody><tr><td>1</td><td>GET</td><td>/api/admin/host-authorize</td><td>admin.php:5</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td></td><td>N（Super 專屬）</td></tr><tr><td>2</td><td>GET</td><td>/api/admin/client-updates</td><td>admin.php:56</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>Clients.tsx</td><td>N（Super 專屬）</td></tr><tr><td>3</td><td>GET</td><td>/api/admin/overview</td><td>admin.php:93</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>Overview.tsx、SetupWizard.tsx</td><td>N（Super 專屬）</td></tr><tr><td>4</td><td>GET</td><td>/api/admin/client-versions</td><td>admin.php:128</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td></td><td>N（Super 專屬）</td></tr><tr><td>5</td><td>GET</td><td>/api/admin/usb-import/batches</td><td>admin.php:135</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>UsbImports.tsx</td><td>N（Super 專屬）</td></tr><tr><td>6</td><td>GET</td><td>/api/admin/usb-import/batch-files</td><td>admin.php:156</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>UsbImports.tsx</td><td>N（Super 專屬）</td></tr><tr><td>7</td><td>GET</td><td>/api/admin/media</td><td>admin.php:183</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>MediaList.tsx</td><td>N（Super 專屬）</td></tr><tr><td>8</td><td>PATCH</td><td>/api/media/{id}</td><td>admin.php:224</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td>以登入者id限縮</td><td>Bookmarks.tsx、Courses.tsx、DocViewer.tsx、History.tsx</td><td>N（Super 專屬）</td></tr><tr><td>9</td><td>DELETE</td><td>/api/media/{id}</td><td>admin.php:266</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>Bookmarks.tsx、Courses.tsx、DocViewer.tsx、History.tsx</td><td>N（Super 專屬）</td></tr><tr><td>10</td><td>GET</td><td>/api/admin/media/{id}/purge-preview</td><td>admin.php:295</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td></td><td>N（Super 專屬）</td></tr><tr><td>11</td><td>POST</td><td>/api/admin/media/{id}/purge</td><td>admin.php:340</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td>以登入者id限縮</td><td></td><td>N（Super 專屬）</td></tr><tr><td>12</td><td>GET</td><td>/api/admin/folders</td><td>admin.php:359</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>Folders.tsx、MediaList.tsx</td><td>N（Super 專屬）</td></tr><tr><td>13</td><td>GET</td><td>/api/admin/tree</td><td>admin.php:372</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>Folders.tsx</td><td>N（Super 專屬）</td></tr><tr><td>14</td><td>PATCH</td><td>/api/admin/folders/{id}</td><td>admin.php:408</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>Folders.tsx、MediaList.tsx</td><td>N（Super 專屬）</td></tr><tr><td>15</td><td>GET</td><td>/api/admin/clip-groups</td><td>admin.php:456</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>MediaList.tsx</td><td>N（Super 專屬）</td></tr><tr><td>16</td><td>POST</td><td>/api/admin/clip-groups</td><td>admin.php:465</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>MediaList.tsx</td><td>N（Super 專屬）</td></tr><tr><td>17</td><td>PATCH|DELETE</td><td>/api/admin/clip-groups/{id}</td><td>admin.php:489</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>MediaList.tsx</td><td>N（Super 專屬）</td></tr><tr><td>18</td><td>POST</td><td>/api/admin/scan</td><td>admin.php:525</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td>以登入者id限縮</td><td>Folders.tsx、SetupWizard.tsx</td><td>N（Super 專屬）</td></tr><tr><td>19</td><td>GET</td><td>/api/admin/scan-runs</td><td>admin.php:543</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>Folders.tsx、SetupWizard.tsx</td><td>N（Super 專屬）</td></tr><tr><td>20</td><td>GET</td><td>/api/admin/scan-runs/{id}</td><td>admin.php:548</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>Folders.tsx、SetupWizard.tsx</td><td>N（Super 專屬）</td></tr><tr><td>21</td><td>GET</td><td>/api/admin/conversions</td><td>admin.php:555</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>Conversions.tsx、SetupWizard.tsx</td><td>N（Super 專屬）</td></tr><tr><td>22</td><td>POST</td><td>/api/admin/conversions/{id}/retry</td><td>admin.php:590</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td>以登入者id限縮</td><td></td><td>N（Super 專屬）</td></tr><tr><td>23</td><td>POST</td><td>/api/admin/conversions/{id}/run-now</td><td>admin.php:601</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td>以登入者id限縮</td><td></td><td>N（Super 專屬）</td></tr><tr><td>24</td><td>POST</td><td>/api/admin/conversions/pause</td><td>admin.php:612</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td>以登入者id限縮</td><td>Conversions.tsx、SetupWizard.tsx</td><td>N（Super 專屬）</td></tr><tr><td>25</td><td>GET</td><td>/api/admin/originals/due</td><td>admin.php:626</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td></td><td>N（Super 專屬）</td></tr><tr><td>26</td><td>GET</td><td>/api/admin/originals</td><td>admin.php:643</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>Originals.tsx</td><td>N（Super 專屬）</td></tr><tr><td>27</td><td>POST</td><td>/api/admin/originals/delete</td><td>admin.php:675</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td>以登入者id限縮</td><td>Originals.tsx</td><td>N（Super 專屬）</td></tr><tr><td>28</td><td>GET</td><td>/api/admin/config</td><td>admin.php:699</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>Queues.tsx、Settings.tsx、SetupWizard.tsx</td><td>N（Super 專屬）</td></tr><tr><td>29</td><td>PUT</td><td>/api/admin/config</td><td>admin.php:713</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td>以登入者id限縮</td><td>Queues.tsx、Settings.tsx、SetupWizard.tsx</td><td>N（Super 專屬）</td></tr><tr><td>30</td><td>GET</td><td>/api/admin/subtitles</td><td>admin.php:883</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>Conversions.tsx、Queues.tsx、SetupWizard.tsx、SubtitlePanel.tsx</td><td>N（Super 專屬）</td></tr><tr><td>31</td><td>POST</td><td>/api/admin/subtitles/{id}/run</td><td>admin.php:918</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td>以登入者id限縮</td><td></td><td>N（Super 專屬）</td></tr><tr><td>32</td><td>GET</td><td>/api/admin/documents</td><td>admin.php:948</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>Queues.tsx、SetupWizard.tsx</td><td>N（Super 專屬）</td></tr><tr><td>33</td><td>POST</td><td>/api/admin/documents/{id}/retry</td><td>admin.php:966</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td>以登入者id限縮</td><td></td><td>N（Super 專屬）</td></tr><tr><td>34</td><td>GET</td><td>/api/admin/checklist</td><td>admin.php:987</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>SystemCheck.tsx</td><td>N（Super 專屬）</td></tr><tr><td>35</td><td>POST</td><td>/api/admin/checklist</td><td>admin.php:996</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td>以登入者id限縮</td><td>SystemCheck.tsx</td><td>N（Super 專屬）</td></tr><tr><td>36</td><td>PATCH|DELETE</td><td>/api/admin/checklist/{id}</td><td>admin.php:1010</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td>以登入者id限縮</td><td>SystemCheck.tsx</td><td>N（Super 專屬）</td></tr><tr><td>37</td><td>POST</td><td>/api/admin/diagnostics</td><td>admin.php:1037</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td>以登入者id限縮</td><td>Overview.tsx、SetupWizard.tsx、SystemCheck.tsx、index.tsx</td><td>N（Super 專屬）</td></tr><tr><td>38</td><td>GET</td><td>/api/admin/diagnostics</td><td>admin.php:1043</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>Overview.tsx、SetupWizard.tsx、SystemCheck.tsx、index.tsx</td><td>N（Super 專屬）</td></tr><tr><td>39</td><td>GET</td><td>/api/admin/backups</td><td>admin.php:1119</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>BackupsLogs.tsx、SetupWizard.tsx</td><td>N（Super 專屬）</td></tr><tr><td>40</td><td>PUT</td><td>/api/admin/backups/settings</td><td>admin.php:1145</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td>以登入者id限縮</td><td>BackupsLogs.tsx</td><td>N（Super 專屬）</td></tr><tr><td>41</td><td>POST</td><td>/api/admin/backups</td><td>admin.php:1156</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td>以登入者id限縮</td><td>BackupsLogs.tsx、SetupWizard.tsx</td><td>N（Super 專屬）</td></tr><tr><td>42</td><td>POST</td><td>/api/admin/backups/{id}/check</td><td>admin.php:1167</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td>以登入者id限縮</td><td></td><td>N（Super 專屬）</td></tr><tr><td>43</td><td>GET</td><td>/api/admin/setup</td><td>admin.php:1178</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>SetupWizard.tsx、index.tsx、srv.tsx</td><td>N（Super 專屬）</td></tr><tr><td>44</td><td>PUT</td><td>/api/admin/setup</td><td>admin.php:1183</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td>以登入者id限縮</td><td>SetupWizard.tsx、index.tsx、srv.tsx</td><td>N（Super 專屬）</td></tr><tr><td>45</td><td>GET</td><td>/api/admin/jobs</td><td>admin.php:1207</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>BackupsLogs.tsx、MediaList.tsx、Queues.tsx</td><td>N（Super 專屬）</td></tr><tr><td>46</td><td>GET</td><td>/api/admin/jobs/{id}</td><td>admin.php:1232</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>BackupsLogs.tsx、MediaList.tsx、Queues.tsx</td><td>N（Super 專屬）</td></tr><tr><td>47</td><td>POST</td><td>/api/admin/jobs/{id}/cancel</td><td>admin.php:1240</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td></td><td>N（Super 專屬）</td></tr><tr><td>48</td><td>GET</td><td>/api/admin/logs</td><td>admin.php:1248</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>BackupsLogs.tsx</td><td>N（Super 專屬）</td></tr><tr><td>49</td><td>POST</td><td>/api/admin/logs</td><td>admin.php:1277</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>BackupsLogs.tsx</td><td>N（Super 專屬）</td></tr><tr><td>50</td><td>GET</td><td>/api/tree</td><td>catalog.php:31</td><td>actor</td><td>User（登入即可）</td><td>LAN :4080 可達</td><td></td><td></td><td>Courses.tsx</td><td>Y（所有登入角色）</td></tr><tr><td>51</td><td>GET</td><td>/api/folders/{id}/items</td><td>catalog.php:54</td><td>actor</td><td>User（登入即可）</td><td>LAN :4080 可達</td><td></td><td>folder_for_actor</td><td></td><td>Y（所有登入角色）</td></tr><tr><td>52</td><td>GET</td><td>/api/media/{id}</td><td>catalog.php:78</td><td>actor</td><td>User（登入即可）</td><td>LAN :4080 可達</td><td>role_at_least()</td><td>media_for_actor</td><td>Bookmarks.tsx、Courses.tsx、DocViewer.tsx、History.tsx</td><td>Y（所有登入角色）</td></tr><tr><td>53</td><td>GET</td><td>/api/media/{id}/stream</td><td>catalog.php:134</td><td>actor</td><td>User（登入即可）</td><td>LAN :4080 可達</td><td></td><td>media_for_actor</td><td></td><td>Y（所有登入角色）</td></tr><tr><td>54</td><td>GET</td><td>/api/media/{id}/subtitle</td><td>catalog.php:224</td><td>actor</td><td>User（登入即可）</td><td>LAN :4080 可達</td><td></td><td>media_for_actor</td><td></td><td>Y（所有登入角色）</td></tr><tr><td>55</td><td>GET</td><td>/api/media/{id}/subtitle/segments</td><td>catalog.php:236</td><td>actor</td><td>User（登入即可）</td><td>LAN :4080 可達</td><td></td><td>media_for_actor</td><td></td><td>Y（所有登入角色）</td></tr><tr><td>56</td><td>POST</td><td>/api/media/{id}/subtitle/import</td><td>catalog.php:250</td><td>require_import_export</td><td>Admin（需 Super 授權）或 Super</td><td>LAN :4080 可達</td><td></td><td>media_for_actor、以登入者id限縮</td><td></td><td>Y（受 Super 授權名單限制）</td></tr><tr><td>57</td><td>GET</td><td>/api/media/{id}/subtitle/export</td><td>catalog.php:268</td><td>require_import_export</td><td>Admin（需 Super 授權）或 Super</td><td>LAN :4080 可達</td><td></td><td>media_for_actor</td><td></td><td>Y（受 Super 授權名單限制）</td></tr><tr><td>58</td><td>GET</td><td>/api/search</td><td>catalog.php:287</td><td>actor</td><td>User（登入即可）</td><td>LAN :4080 可達</td><td></td><td></td><td>Search.tsx</td><td>Y（所有登入角色）</td></tr><tr><td>59</td><td>GET</td><td>/api/admin/email</td><td>email.php:102</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>EmailReport.tsx</td><td>N（Super 專屬）</td></tr><tr><td>60</td><td>PUT</td><td>/api/admin/email</td><td>email.php:107</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td>以登入者id限縮</td><td>EmailReport.tsx</td><td>N（Super 專屬）</td></tr><tr><td>61</td><td>POST</td><td>/api/admin/email/test</td><td>email.php:176</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>EmailReport.tsx</td><td>N（Super 專屬）</td></tr><tr><td>62</td><td>GET</td><td>/api/email</td><td>email.php:184</td><td>require_role(super)</td><td>Super</td><td>LAN :4080 可達</td><td></td><td></td><td>EmailReport.tsx</td><td>N（Super 專屬）</td></tr><tr><td>63</td><td>POST</td><td>/api/email/send</td><td>email.php:213</td><td>require_role(super)</td><td>Super</td><td>LAN :4080 可達</td><td></td><td></td><td>EmailReport.tsx</td><td>N（Super 專屬）</td></tr><tr><td>64</td><td>POST</td><td>/api/feedback</td><td>email.php:243</td><td>actor</td><td>User（登入即可）</td><td>LAN :4080 可達</td><td>讀取role</td><td>以登入者id限縮</td><td>Feedback.tsx</td><td>Y（所有登入角色）</td></tr><tr><td>65</td><td>GET</td><td>/api/feedback/mine</td><td>email.php:270</td><td>actor</td><td>User（登入即可）</td><td>LAN :4080 可達</td><td></td><td>以登入者id限縮</td><td>Feedback.tsx</td><td>Y（所有登入角色）</td></tr><tr><td>66</td><td>GET</td><td>/api/accounts</td><td>manage.php:95</td><td>require_role(admin)</td><td>Admin</td><td>LAN :4080 可達</td><td></td><td></td><td>Accounts.tsx、Audit.tsx、Groups.tsx、SetupWizard.tsx</td><td>Y（後端允許 Admin）</td></tr><tr><td>67</td><td>POST</td><td>/api/accounts</td><td>manage.php:113</td><td>require_role(admin)</td><td>Admin</td><td>LAN :4080 可達</td><td>role_at_least()</td><td></td><td>Accounts.tsx、Audit.tsx、Groups.tsx、SetupWizard.tsx</td><td>Y（後端允許 Admin）</td></tr><tr><td>68</td><td>PATCH</td><td>/api/accounts/{id}</td><td>manage.php:134</td><td>require_role(admin)</td><td>Admin</td><td>LAN :4080 可達</td><td>讀取role</td><td></td><td>Accounts.tsx、Audit.tsx、Groups.tsx、SetupWizard.tsx</td><td>Y（後端允許 Admin）</td></tr><tr><td>69</td><td>DELETE</td><td>/api/accounts/{id}</td><td>manage.php:161</td><td>require_role(admin)</td><td>Admin</td><td>LAN :4080 可達</td><td></td><td></td><td>Accounts.tsx、Audit.tsx、Groups.tsx、SetupWizard.tsx</td><td>Y（後端允許 Admin）</td></tr><tr><td>70</td><td>POST</td><td>/api/accounts/{id}/password</td><td>manage.php:176</td><td>require_role(admin)</td><td>Admin</td><td>LAN :4080 可達</td><td></td><td></td><td></td><td>Y（後端允許 Admin）</td></tr><tr><td>71</td><td>GET</td><td>/api/accounts/{id}/notes</td><td>manage.php:199</td><td>require_role(admin)</td><td>Admin</td><td>LAN :4080 可達</td><td></td><td></td><td></td><td>Y（後端允許 Admin）</td></tr><tr><td>72</td><td>POST</td><td>/api/accounts/{id}/notes</td><td>manage.php:206</td><td>require_role(admin)</td><td>Admin</td><td>LAN :4080 可達</td><td>require_editable_account()</td><td>以登入者id限縮</td><td></td><td>Y（後端允許 Admin）</td></tr><tr><td>73</td><td>PATCH|DELETE</td><td>/api/accounts/{id}/notes/{nid}</td><td>manage.php:218</td><td>require_role(admin)</td><td>Admin</td><td>LAN :4080 可達</td><td>require_editable_account()</td><td>以登入者id限縮</td><td></td><td>Y（後端允許 Admin）</td></tr><tr><td>74</td><td>GET</td><td>/api/courses</td><td>manage.php:246</td><td>require_role(admin)</td><td>Admin</td><td>LAN :4080 可達</td><td></td><td></td><td></td><td>Y（後端允許 Admin）</td></tr><tr><td>75</td><td>GET</td><td>/api/groups</td><td>manage.php:260</td><td>require_role(admin)</td><td>Admin</td><td>LAN :4080 可達</td><td></td><td></td><td>Accounts.tsx、Groups.tsx、SetupWizard.tsx</td><td>Y（後端允許 Admin）</td></tr><tr><td>76</td><td>POST</td><td>/api/groups</td><td>manage.php:267</td><td>require_role(admin)</td><td>Admin</td><td>LAN :4080 可達</td><td></td><td></td><td>Accounts.tsx、Groups.tsx、SetupWizard.tsx</td><td>Y（後端允許 Admin）</td></tr><tr><td>77</td><td>PATCH|DELETE</td><td>/api/groups/{id}</td><td>manage.php:279</td><td>require_role(admin)</td><td>Admin</td><td>LAN :4080 可達</td><td></td><td></td><td>Accounts.tsx、Groups.tsx、SetupWizard.tsx</td><td>Y（後端允許 Admin）</td></tr><tr><td>78</td><td>PUT</td><td>/api/groups/{id}/courses</td><td>manage.php:302</td><td>require_role(admin)</td><td>Admin</td><td>LAN :4080 可達</td><td></td><td></td><td></td><td>Y（後端允許 Admin）</td></tr><tr><td>79</td><td>POST</td><td>/api/groups/{id}/members</td><td>manage.php:320</td><td>require_role(admin)</td><td>Admin</td><td>LAN :4080 可達</td><td>require_editable_account()</td><td></td><td></td><td>Y（後端允許 Admin）</td></tr><tr><td>80</td><td>DELETE</td><td>/api/groups/{id}/members/{aid}</td><td>manage.php:337</td><td>require_role(admin)</td><td>Admin</td><td>LAN :4080 可達</td><td>require_editable_account()</td><td></td><td></td><td>Y（後端允許 Admin）</td></tr><tr><td>81</td><td>GET</td><td>/api/accounts/{id}/overrides</td><td>manage.php:366</td><td>require_role(admin)</td><td>Admin</td><td>LAN :4080 可達</td><td></td><td></td><td></td><td>Y（後端允許 Admin）</td></tr><tr><td>82</td><td>PUT</td><td>/api/accounts/{id}/overrides</td><td>manage.php:372</td><td>require_role(admin)</td><td>Admin</td><td>LAN :4080 可達</td><td>require_editable_account()</td><td></td><td></td><td>Y（後端允許 Admin）</td></tr><tr><td>83</td><td>GET</td><td>/api/audit</td><td>manage.php:446</td><td>require_role(admin)</td><td>Admin</td><td>LAN :4080 可達</td><td>is_super()</td><td></td><td>Audit.tsx</td><td>Y（後端允許 Admin）</td></tr><tr><td>84</td><td>GET</td><td>/api/audit/export</td><td>manage.php:452</td><td>require_import_export</td><td>Admin（需 Super 授權）或 Super</td><td>LAN :4080 可達</td><td></td><td></td><td>Audit.tsx</td><td>Y（受 Super 授權名單限制）</td></tr><tr><td>85</td><td>DELETE</td><td>/api/audit</td><td>manage.php:473</td><td>require_role(super)</td><td>Super</td><td>LAN :4080 可達</td><td></td><td></td><td>Audit.tsx</td><td>N（Super 專屬）</td></tr><tr><td>86</td><td>GET</td><td>/api/wol/devices</td><td>manage.php:585</td><td>require_role(super)</td><td>Super</td><td>LAN :4080 可達</td><td></td><td></td><td>SetupWizard.tsx</td><td>N（Super 專屬）</td></tr><tr><td>87</td><td>POST</td><td>/api/wol/probe</td><td>manage.php:601</td><td>require_wol_editor</td><td>Super</td><td>LAN :4080 可達</td><td></td><td>以登入者id限縮</td><td></td><td>N（Super 專屬）</td></tr><tr><td>88</td><td>POST</td><td>/api/wol/scan</td><td>manage.php:610</td><td>require_wol_editor</td><td>Super</td><td>LAN :4080 可達</td><td></td><td>以登入者id限縮</td><td></td><td>N（Super 專屬）</td></tr><tr><td>89</td><td>GET</td><td>/api/wol/scan/{id}</td><td>manage.php:623</td><td>require_role(super)</td><td>Super</td><td>LAN :4080 可達</td><td></td><td></td><td></td><td>N（Super 專屬）</td></tr><tr><td>90</td><td>POST</td><td>/api/wol/devices</td><td>manage.php:629</td><td>require_wol_editor</td><td>Super</td><td>LAN :4080 可達</td><td></td><td></td><td>SetupWizard.tsx</td><td>N（Super 專屬）</td></tr><tr><td>91</td><td>PATCH|DELETE</td><td>/api/wol/devices/{id}</td><td>manage.php:639</td><td>require_wol_editor</td><td>Super</td><td>LAN :4080 可達</td><td></td><td></td><td>SetupWizard.tsx</td><td>N（Super 專屬）</td></tr><tr><td>92</td><td>GET</td><td>/api/devices/pending</td><td>manage.php:656</td><td>require_role(admin)</td><td>Admin</td><td>LAN :4080 可達</td><td></td><td></td><td>SetupWizard.tsx</td><td>Y（後端允許 Admin）</td></tr><tr><td>93</td><td>POST</td><td>/api/devices/{id}/register</td><td>manage.php:661</td><td>require_wol_editor</td><td>Super</td><td>LAN :4080 可達</td><td></td><td></td><td></td><td>N（Super 專屬）</td></tr><tr><td>94</td><td>POST</td><td>/api/client/info</td><td>manage.php:676</td><td>require_role(super)</td><td>Super</td><td>LAN :4080 可達</td><td></td><td></td><td></td><td>N（Super 專屬）</td></tr><tr><td>95</td><td>GET</td><td>/api/me</td><td>me.php:68</td><td>actor</td><td>User（登入即可）</td><td>LAN :4080 可達</td><td></td><td></td><td>App.tsx、Bookmarks.tsx、Courses.tsx、DocViewer.tsx</td><td>Y（所有登入角色）</td></tr><tr><td>96</td><td>PATCH</td><td>/api/me</td><td>me.php:72</td><td>actor</td><td>User（登入即可）</td><td>LAN :4080 可達</td><td></td><td>以登入者id限縮</td><td>App.tsx、Bookmarks.tsx、Courses.tsx、DocViewer.tsx</td><td>Y（所有登入角色）</td></tr><tr><td>97</td><td>POST</td><td>/api/me/password</td><td>me.php:85</td><td>actor</td><td>User（登入即可）</td><td>LAN :4080 可達</td><td></td><td>以登入者id限縮</td><td>Profile.tsx</td><td>Y（所有登入角色）</td></tr><tr><td>98</td><td>GET</td><td>/api/admin/outgo</td><td>outgo.php:76</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>Outgo.tsx</td><td>N（Super 專屬）</td></tr><tr><td>99</td><td>POST</td><td>/api/admin/outgo/asr</td><td>outgo.php:118</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td>以登入者id限縮</td><td>Outgo.tsx</td><td>N（Super 專屬）</td></tr><tr><td>100</td><td>GET</td><td>/api/admin/outgo/result</td><td>outgo.php:132</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>Outgo.tsx</td><td>N（Super 專屬）</td></tr><tr><td>101</td><td>GET</td><td>/api/page-atlas</td><td>page_atlas.php:4</td><td>require_role(super)</td><td>Super</td><td>LAN :4080 可達</td><td></td><td></td><td>PageAtlas.tsx</td><td>N（Super 專屬）</td></tr><tr><td>102</td><td>GET</td><td>/api/media/{id}/tags</td><td>personal.php:6</td><td>actor</td><td>User（登入即可）</td><td>LAN :4080 可達</td><td></td><td>media_for_actor</td><td></td><td>Y（所有登入角色）</td></tr><tr><td>103</td><td>POST|PATCH|DELETE</td><td>/api/media/{id}/tags</td><td>personal.php:12</td><td>actor</td><td>User（登入即可）</td><td>LAN :4080 可達</td><td></td><td>media_for_actor</td><td></td><td>Y（所有登入角色）</td></tr><tr><td>104</td><td>GET</td><td>/api/tag-policy</td><td>personal.php:41</td><td>actor</td><td>User（登入即可）</td><td>LAN :4080 可達</td><td>讀取role</td><td></td><td>TagPolicy.tsx</td><td>Y（所有登入角色）</td></tr><tr><td>105</td><td>PUT</td><td>/api/tag-policy</td><td>personal.php:47</td><td>require_role(super)</td><td>Super</td><td>LAN :4080 可達</td><td>讀取role</td><td></td><td>TagPolicy.tsx</td><td>N（Super 專屬）</td></tr><tr><td>106</td><td>GET</td><td>/api/bookmarks</td><td>personal.php:78</td><td>actor</td><td>User（登入即可）</td><td>LAN :4080 可達</td><td></td><td>以登入者id限縮</td><td>Bookmarks.tsx</td><td>Y（所有登入角色）</td></tr><tr><td>107</td><td>PUT</td><td>/api/media/{id}/bookmark</td><td>personal.php:135</td><td>actor</td><td>User（登入即可）</td><td>LAN :4080 可達</td><td></td><td>media_for_actor、以登入者id限縮</td><td></td><td>Y（所有登入角色）</td></tr><tr><td>108</td><td>GET</td><td>/api/history</td><td>personal.php:157</td><td>actor</td><td>User（登入即可）</td><td>LAN :4080 可達</td><td></td><td>以登入者id限縮</td><td>History.tsx</td><td>Y（所有登入角色）</td></tr><tr><td>109</td><td>DELETE</td><td>/api/history/{id}</td><td>personal.php:191</td><td>actor</td><td>User（登入即可）</td><td>LAN :4080 可達</td><td></td><td>以登入者id限縮</td><td>History.tsx</td><td>Y（所有登入角色）</td></tr><tr><td>110</td><td>PUT</td><td>/api/media/{id}/progress</td><td>personal.php:207</td><td>actor</td><td>User（登入即可）</td><td>LAN :4080 可達</td><td></td><td>media_for_actor、以登入者id限縮</td><td></td><td>Y（所有登入角色）</td></tr><tr><td>111</td><td>PUT</td><td>/api/media/{id}/status</td><td>personal.php:236</td><td>actor</td><td>User（登入即可）</td><td>LAN :4080 可達</td><td></td><td>media_for_actor、以登入者id限縮</td><td></td><td>Y（所有登入角色）</td></tr><tr><td>112</td><td>GET</td><td>/api/health</td><td>public.php:6</td><td>無</td><td>公開（免登入）</td><td>LAN :4080 可達</td><td></td><td></td><td></td><td>N/A（登入前功能）</td></tr><tr><td>113</td><td>GET</td><td>/api/public/login-config</td><td>public.php:23</td><td>無</td><td>公開（免登入）</td><td>LAN :4080 可達</td><td></td><td></td><td></td><td>N/A（登入前功能）</td></tr><tr><td>114</td><td>POST</td><td>/api/login</td><td>public.php:31</td><td>無</td><td>公開（免登入）</td><td>LAN :4080 可達</td><td>讀取role</td><td></td><td></td><td>N/A（登入前功能）</td></tr><tr><td>115</td><td>POST</td><td>/api/logout</td><td>public.php:73</td><td>actor</td><td>User（登入即可）</td><td>LAN :4080 可達</td><td></td><td></td><td></td><td>Y（所有登入角色）</td></tr><tr><td>116</td><td>POST</td><td>/api/client/heartbeat</td><td>public.php:82</td><td>optional_actor</td><td>公開／選擇性登入</td><td>LAN :4080 可達（登入前可用）；限區網IP</td><td></td><td>以登入者id限縮</td><td></td><td>N/A（登入前功能）</td></tr><tr><td>117</td><td>GET</td><td>/api/wol/public/devices</td><td>public.php:158</td><td>無</td><td>公開（免登入）</td><td>LAN :4080 可達；限區網IP</td><td></td><td></td><td>Login.tsx</td><td>N/A（登入前功能）</td></tr><tr><td>118</td><td>POST</td><td>/api/wol/public/wake</td><td>public.php:251</td><td>optional_actor</td><td>公開／選擇性登入</td><td>LAN :4080 可達（登入前可用）；限區網IP、限來源Origin</td><td></td><td></td><td>Login.tsx</td><td>N/A（登入前功能）</td></tr><tr><td>119</td><td>POST</td><td>/api/client/logs</td><td>public.php:261</td><td>optional_actor</td><td>公開／選擇性登入</td><td>LAN :4080 可達（登入前可用）；限區網IP</td><td></td><td>以登入者id限縮</td><td></td><td>N/A（登入前功能）</td></tr><tr><td>120</td><td>GET</td><td>/api/admin/asr-log</td><td>reports.php:29</td><td>require_local_super</td><td>Super</td><td>僅本機:4081＋Server App 登入</td><td></td><td></td><td>Reports.tsx</td><td>N（Super 專屬）</td></tr></tbody></table></div><h3>20.1｜Excel 原始摘要（含公式原文）</h3><h3>摘要</h3><table><tr><td>統計（公式，來源：API角色矩陣）</td><td></td></tr><tr><td></td><td></td></tr><tr><td>Super 專屬（合計）</td><td>=COUNTIF(API角色矩陣!F2:F121,"Super")</td></tr><tr><td>　其中僅本機 :4081（require_local_super）</td><td>=COUNTIF(API角色矩陣!E2:E121,"*require_local_super*")</td></tr><tr><td>　其中 LAN 可達的 Super 路由</td><td>=B3-B4</td></tr><tr><td>Admin 可用</td><td>=COUNTIF(API角色矩陣!F2:F121,"Admin")</td></tr><tr><td>Admin（需 Super 授權）或 Super</td><td>=COUNTIF(API角色矩陣!F2:F121,"Admin（需*")</td></tr><tr><td>User（登入即可）</td><td>=COUNTIF(API角色矩陣!F2:F121,"User*")</td></tr><tr><td>公開（免登入）</td><td>=COUNTIF(API角色矩陣!F2:F121,"公開（*")</td></tr><tr><td>公開／選擇性登入</td><td>=COUNTIF(API角色矩陣!F2:F121,"公開／*")</td></tr><tr><td>合計（應等於 120）</td><td>=B3+B6+B7+B8+B9+B10</td></tr><tr><td>第二層有內嵌角色判斷的路由</td><td>=COUNTIF(API角色矩陣!H2:H121,"?*")</td></tr><tr><td>偵測到資源層限縮的路由</td><td>=COUNTIF(API角色矩陣!I2:I121,"?*")</td></tr><tr><td></td><td></td></tr><tr><td>備註：「合計」若不等於 120，代表有路由未被分類，請檢查矩陣。</td><td></td></tr></table><h3>待釐清事項</h3><table><tr><td>編號</td><td>項目</td><td>說明（含來源）</td><td>建議處理</td><td>優先級</td></tr><tr><td>A1</td><td>WOL 註解與程式不一致</td><td>manage.php:578 註解寫「管理員可查看狀態、主動檢測與喚醒」，但 GET /api/wol/devices、POST /api/wol/probe、GET /api/wol/scan/{id} 實際都是 Super；public.php 註明「登入後喚醒端點已移除」。結果：Admin 在 API 層沒有任何 WOL 能力。</td><td>先決定 Admin 是否該看 WOL 狀態；以程式或註解其一為準並補測試。</td><td>高</td></tr><tr><td>A2</td><td>PATCH/DELETE /api/media/{id} 不在 /api/admin/ 路徑</td><td>admin.php:224、266。Nginx :4080 只擋 /api/admin/，這兩條靠 require_local_super() 內的 ISTUDY_LOCAL_ADMIN 參數保護。目前有效，但路徑前綴不能代表保護。</td><td>改為 /api/admin/media/{id}，或在 Nginx 對這兩條路徑加規則；補一條「LAN :4080 呼叫必須 404」的測試。</td><td>中</td></tr><tr><td>A3</td><td>User 級路由內含第二層角色判斷</td><td>GET /api/media/{id}（role_at_least）、POST /api/feedback、GET /api/tag-policy 於函式內再判斷角色。Page Atlas 若只看第一層守門會誤判。</td><td>逐條確認第二層規則後，才開放對應頁面的角色勾選。</td><td>中</td></tr><tr><td>A4</td><td>GET /api/audit 依角色回傳不同範圍</td><td>路由要求 Admin，函式內用 is_super() 分流。</td><td>Page Atlas 勾選 Admin 可見「使用記錄」時，需確認 Admin 看到的範圍符合預期。</td><td>中</td></tr><tr><td>A5</td><td>公開 WOL 端點的來源判斷</td><td>GET /api/wol/public/devices、POST /api/wol/public/wake 以 is_lan_ip(Req::ip()) 與 Origin 檢查限制。</td><td>原生 Nginx 重建後，確認 REMOTE_ADDR 取值正確（沒有多一層代理或 NAT），並測 WAN／跨網段來源被拒。</td><td>中</td></tr><tr><td>A6</td><td>v7「Admin 只看 USB 匯入」與現況不符</td><td>現況 Admin 有 19 條路由：帳號、群組、稽核、課程等；USB 匯入屬 require_import_export（需 Super 授權名單）。</td><td>決定 v7 是否縮減 Admin 能力；縮減要同步改後端守門，不能只隱藏 Tab。</td><td>高</td></tr><tr><td>A7</td><td>Page Atlas 編號缺 IS-C-012</td><td>審查報告 Page Atlas 33 頁清單中 IS-C-011 之後直接是 IS-C-013。</td><td>確認是刻意保留或遺漏。</td><td>低</td></tr><tr><td>A8</td><td>「登入即可」路由的資源層授權需逐條測</td><td>22 條 User 級路由多數涉及課程／媒體授權（media_for_actor、folder_for_actor）。本表只偵測到呼叫，未驗證邏輯。</td><td>撤權後立即不可讀的測試（書籤、歷史、標籤、串流、字幕）。</td><td>高</td></tr></table><h3>20.2｜權限決策與待驗證條件</h3><ul><li><b>Admin 19 條：</b>暫時保留現況；若日後決定僅允許 USB 匯入，必須同步修改後端與回歸測試，不只隱藏 Tab。</li><li><b>WOL：</b>現況程式限制 Super；註解提及 Admin 權限的差異列為待決策，不自行放權。</li><li><b>媒體 PATCH／DELETE：</b>雖不在 /api/admin/ 路徑，仍需驗證 LAN :4080 無法執行；Nginx 與 PHP 雙重限制應以實測確認。</li><li><b>資源層授權：</b>表內「有呼叫檢查函式」不能證明檢查正確；須以跨帳號、撤權後、直接網址請求驗證。</li><li><b>既有矩陣：</b>尚未與 docs/DEV63_FIX11_ADMIN_API_MATRIX.csv 和 docs/DEV63_PAGE_ATLAS_API_ROUTE_AUDIT.csv 逐列對照。</li></ul></section><section class="pane doc-integrated" id="v72shell"><h2>21｜ShellBridge 驗證方案（原文完整整合）</h2><div class="note-v72">以下完整保留 Claude 上傳文件的主張、表格、待決策項目及未驗證標記。屬於靜態審查，不表示原型、Win7、七台播放或實機權限測試已通過。</div><h1>iSTUDY ShellBridge 驗證方案（v7.1 前置 Spike）</h1>
+<p>版本：草案 1｜日期：2026-11-05｜基準：Dev63 <code>source/dev63-test</code> 靜態讀取
+性質：只在隔離環境做原型驗證，<strong>不修改正式服務、不占用 4080/4081、不碰現有 <code>istudy</code> DB 與 EachCore</strong>。</p>
+<hr/>
+<h2>1. 要回答的問題</h2>
+<p>v7 想把 React UI 放到 Server 的 Nginx 集中更新，Electron 只當外殼。要先確認：</p>
+<ol>
+<li>這樣做能不能<strong>不讓畫面取得 Token</strong>、<strong>不讓不可信頁面使用原生 IPC</strong>？</li>
+<li>登入、API、影片 Range 播放、PDF、字幕在新模型下是否照常？</li>
+<li>Server 離線或重開機時，Client 還能顯示「連不上」並自動恢復嗎？</li>
+<li>Win7（Electron 22／Chromium 108）能否跑同一份 Web 內容？</li>
+<li>有沒有比「直接載入遠端 HTTP 頁面」更小的替代做法？</li>
+</ol>
+<p>結果決定 v7 的 Web/Shell 分離走方案 A 還是方案 B（見 §4）。</p>
+<hr/>
+<h2>2. Dev63 現況（已由原始碼確認）</h2>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>現況</th>
+<th>來源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>畫面來源</td>
+<td>本機打包，<code>app://istudy/index.html</code></td>
+<td><code>packages/shell/src/security.ts</code>、<code>apps/client/electron/main.ts:67</code></td>
+</tr>
+<tr>
+<td>導航限制</td>
+<td><code>will-navigate</code> 只允許 <code>app://istudy/</code> 開頭，<code>setWindowOpenHandler</code> 一律 deny</td>
+<td><code>security.ts</code> <code>hardenContents</code></td>
+</tr>
+<tr>
+<td>Token</td>
+<td>只放主程序記憶體；<code>onBeforeSendHeaders</code> 對 <code>ctx.server + '/*'</code> 的<strong>所有</strong>請求加 <code>Authorization</code></td>
+<td><code>packages/shell/src/bridge.ts</code> <code>installHeaderInjection</code></td>
+</tr>
+<tr>
+<td>影片授權</td>
+<td><code>&lt;video src=/api/media/{id}/stream&gt;</code> 無法自帶 Header，完全依賴上述注入</td>
+<td><code>Player.tsx</code>、<code>catalog.php</code></td>
+</tr>
+<tr>
+<td>串流路徑</td>
+<td>影片串流在 <code>/api/</code> 底下；<code>/_protected/*</code> 是 Nginx internal，不直接對外</td>
+<td><code>istudy_protected.conf</code></td>
+</tr>
+<tr>
+<td>CSP</td>
+<td>由主程序 protocol handler 回應標頭附上，<code>script-src 'self'</code></td>
+<td><code>security.ts</code> <code>csp()</code></td>
+</tr>
+<tr>
+<td>CORS</td>
+<td>後端只允許 <code>app://istudy</code>（<code>ISTUDY_CORS_ORIGINS</code>）</td>
+<td><code>core.php</code> <code>cors_origin()</code></td>
+</tr>
+<tr>
+<td>webPreferences</td>
+<td><code>contextIsolation:true</code>、<code>nodeIntegration:false</code>、<code>sandbox:true</code>、<code>webSecurity:true</code></td>
+<td><code>security.ts</code> <code>secureWebPreferences</code></td>
+</tr>
+<tr>
+<td>IPC 通道</td>
+<td>15 個：<code>login</code>、<code>logout</code>、<code>clear-session</code>、<code>save-file</code>、<code>open-text-file</code>、<code>copy</code>、<code>pc-info</code>、<code>upload-pc-info</code>、<code>set-fullscreen</code>、<code>log</code>、<code>info</code>、<code>health</code>、<code>health-retry</code>、<code>login-config</code>、<code>close-done</code></td>
+<td><code>preload.ts</code>、<code>bridge.ts</code></td>
+</tr>
+<tr>
+<td>IPC 來源驗證</td>
+<td><strong>沒有</strong>。搜尋 <code>senderFrame</code>、<code>getURL</code>、<code>event.sender</code> 無結果</td>
+<td>全部 shell 程式</td>
+</tr>
+<tr>
+<td>下載／權限</td>
+<td><code>will-download</code> 一律阻擋；有 <code>setPermissionRequestHandler</code></td>
+<td><code>security.ts</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>判讀：</strong> 現在不做 IPC 來源驗證是可以接受的，因為載入的只有自己打包的本機頁面。一旦載入遠端頁面，<strong>這個前提就消失</strong>，<code>save-file</code>、<code>open-text-file</code>、<code>upload-pc-info</code>、<code>login</code> 都變成遠端內容可呼叫的原生能力。</p>
+<blockquote>
+<p>補充：Server App 另有只在 Server 端註冊的 handler（<code>pkexec</code> 呼叫白名單 <code>istudyctl</code> 等），本文件未逐一列出，驗證時需另行盤點。</p>
+</blockquote>
+<hr/>
+<h2>3. 威脅模型（刻意收斂，不擴張）</h2>
+<p>封閉 LAN、單一 Super、七台 PC。只考慮下列情境，不引入 PKI、零信任或新平台：</p>
+<table>
+<thead>
+<tr>
+<th>編號</th>
+<th>情境</th>
+<th>為什麼值得考慮</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T1</td>
+<td>LAN 內有人冒充 Server（ARP／hosts／DHCP），回應惡意頁面</td>
+<td>若載入 <code>http://</code> 遠端頁，頁面取得 preload 的 IPC 能力</td>
+</tr>
+<tr>
+<td>T2</td>
+<td>合法 Server 頁面出現 XSS（例如字幕、備註、檔名顯示）</td>
+<td>同來源腳本可呼叫 API；Token 雖不可讀，但可「借用」</td>
+</tr>
+<tr>
+<td>T3</td>
+<td>教材中的 HTML／SVG／PDF 被當作頁面載入</td>
+<td>PDF.js、文件預覽路徑</td>
+</tr>
+<tr>
+<td>T4</td>
+<td>Client 在 Server 離線或更新中被開啟</td>
+<td>空白畫面、無法登入、無法重試</td>
+</tr>
+<tr>
+<td>T5</td>
+<td>舊 Web 資源與新 API／新 Shell 不相容</td>
+<td>Web 單獨更新後出錯</td>
+</tr>
+</tbody>
+</table>
+<p><strong>不在範圍：</strong> 對 Server 本身的滲透、HTTPS 憑證管理、簽章基礎建設。若所選 electron-builder／updater 版本強制要求簽章，依 v7 §05 先記錄再由 Super 決定。</p>
+<hr/>
+<h2>4. 候選方案</h2>
+<h3>方案 A：Electron 直接載入 <code>http://server/app/</code>（v7 計畫書原意）</h3>
+<ul>
+<li>新增 Nginx 靜態站台 <code>/app/</code>，Electron <code>loadURL(server + '/app/index.html')</code>。</li>
+<li>需要新增：導航白名單改為 Server origin、IPC 來源驗證、CSP 改由 Nginx 送、CORS 同來源可省略、離線 fallback 頁。</li>
+<li>優點：真正「一次更新全部 Client」，不需要 Client 端管理 bundle。</li>
+<li>風險：T1 最嚴重（明文 HTTP 遠端內容 + preload 能力）；T4 需另做本機 fallback。</li>
+</ul>
+<h3>方案 B：本機殼保留 <code>app://istudy</code>，Web bundle 由 Server 發布、Client 下載校驗後本機載入（建議納入比較）</h3>
+<ul>
+<li>Server 發布 <code>ui/&lt;version&gt;/</code> 與 <code>manifest.json</code>（檔案 SHA-256、版本、<code>minShell</code>、<code>apiLevel</code>）。</li>
+<li>Client 主程序在閒置／登入畫面下載到本機版本資料夾、校驗、原子切換；<code>app://istudy</code> 改從該資料夾供應。</li>
+<li>保留的東西：Token 注入模型、CORS 白名單、CSP 由主程序送、導航白名單、Server 離線仍可顯示畫面。</li>
+<li>優點：安全模型幾乎不變；離線可開；播放中不換版（下次啟動／回首頁才切）；Win7 可獨立 bundle 版本。</li>
+<li>代價：Client 端多一個小型 bundle 下載器；manifest 與 bundle 同源，只防損毀不防冒充（與 electron-updater 的 SHA-512 同等級，v7 §09 已接受此界線）。</li>
+</ul>
+<h3>判準</h3>
+<table>
+<thead>
+<tr>
+<th>比較項</th>
+<th>A</th>
+<th>B</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>改動 security.ts／bridge.ts</td>
+<td>大</td>
+<td>小</td>
+</tr>
+<tr>
+<td>需新增 IPC 來源驗證</td>
+<td>必須</td>
+<td>建議（深度防禦）</td>
+</tr>
+<tr>
+<td>Server 離線時畫面</td>
+<td>需另做 fallback</td>
+<td>原本就可顯示</td>
+</tr>
+<tr>
+<td>「Web 更新不重裝」</td>
+<td>是</td>
+<td>是（下載 bundle）</td>
+</tr>
+<tr>
+<td>播放中不刷新</td>
+<td>需自行控制</td>
+<td>天然（只在切換點換）</td>
+</tr>
+<tr>
+<td>T1 冒充 Server 風險</td>
+<td>高</td>
+<td>低（bundle 內容不由當次連線決定）</td>
+</tr>
+<tr>
+<td>Win7／新版共用 bundle</td>
+<td>同一份</td>
+<td>可分 channel</td>
+</tr>
+</tbody>
+</table>
+<p><strong>預設假設：</strong> B 較可能勝出，但以 §6 的實測結果為準，不先下結論。</p>
+<hr/>
+<h2>5. 驗證矩陣</h2>
+<p>每項記錄：步驟、預期、實際、PASS／FAIL、證據（截圖或日誌）。</p>
+<h3>5.1 安全邊界</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>測試</th>
+<th>預期</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SB-01</td>
+<td>載入頁面中以腳本或連結導向 <code>https://example.com</code>、<code>file:///</code>、其他 LAN IP</td>
+<td>全部被阻擋；<code>window.open</code> 被拒</td>
+</tr>
+<tr>
+<td>SB-02</td>
+<td>在<strong>非信任來源</strong>的頁面（本機另開測試頁，或 hosts 把 server 名稱指向測試機）呼叫 <code>window.istudy.saveFile</code>、<code>login</code>、<code>uploadPcInfo</code></td>
+<td>主程序以來源驗證拒絕，且寫入 clientlog</td>
+</tr>
+<tr>
+<td>SB-03</td>
+<td>抓封包／DevTools（以 <code>ISTUDY_DEVTOOLS=1</code> 僅限測試）檢查渲染程序是否能讀到 Token、<code>localStorage</code>、Cookie</td>
+<td>讀不到 Token；API 使用 <code>credentials:'omit'</code></td>
+</tr>
+<tr>
+<td>SB-04</td>
+<td>注入範圍：對 <code>/api/*</code>、<code>/app/*</code>、<code>/updates/*</code>、<code>/_protected/*</code>、其他主機各發請求，觀察 <code>Authorization</code></td>
+<td>只有 <code>/api/*</code> 帶 Token（A 方案）；B 方案同樣只對 API</td>
+</tr>
+<tr>
+<td>SB-05</td>
+<td>對 <code>/api/login</code>、<code>/api/health</code>、<code>/api/public/login-config</code> 請求</td>
+<td>不帶舊 Token（避免登入前殘留）</td>
+</tr>
+<tr>
+<td>SB-06</td>
+<td>登出、<code>clear-session</code>、關閉視窗後再發 API</td>
+<td>Token 已清除，回 401</td>
+</tr>
+<tr>
+<td>SB-07</td>
+<td>CSP 實測：嘗試載入外部腳本、內嵌 <code>&lt;script&gt;</code>、<code>eval</code></td>
+<td>被阻擋；回報 CSP violation 到日誌</td>
+</tr>
+<tr>
+<td>SB-08</td>
+<td>下載、列印、F12、Ctrl+S/P/U/O、右鍵</td>
+<td>維持 Dev63 的阻擋行為</td>
+</tr>
+<tr>
+<td>SB-09</td>
+<td>權限請求（攝影機、麥克風、通知、剪貼簿讀取）</td>
+<td>預設拒絕</td>
+</tr>
+</tbody>
+</table>
+<h3>5.2 功能</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>測試</th>
+<th>預期</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SB-10</td>
+<td>登入 → 課程樹 → 播放 MP4 → 拖曳 → 暫停恢復</td>
+<td>正常；<code>Range</code> 回 206；超界回 416</td>
+</tr>
+<tr>
+<td>SB-11</td>
+<td>無權限課程的影片網址直接開啟</td>
+<td>403，畫面顯示「無權限」</td>
+</tr>
+<tr>
+<td>SB-12</td>
+<td>PDF.js 開啟、搜尋、縮放；字幕 VTT 載入</td>
+<td>正常</td>
+</tr>
+<tr>
+<td>SB-13</td>
+<td>書籤、歷史、搜尋、個人資料</td>
+<td>正常</td>
+</tr>
+<tr>
+<td>SB-14</td>
+<td>心跳、<code>client/logs</code> 上傳</td>
+<td>Server 收到，<code>X-iStudy-PC</code>／<code>Channel</code> 標頭正確</td>
+</tr>
+</tbody>
+</table>
+<h3>5.3 可用性與相容</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>測試</th>
+<th>預期</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SB-20</td>
+<td>啟動時 Server 關閉</td>
+<td>顯示本機「連不上 Server」畫面，自動重試；Server 恢復後無需重開</td>
+</tr>
+<tr>
+<td>SB-21</td>
+<td>使用中 Server 中斷 30 秒再恢復</td>
+<td>已緩衝影片可繼續；恢復後 API 自動恢復，不強制登出</td>
+</tr>
+<tr>
+<td>SB-22</td>
+<td>播放中發布新 Web 版本</td>
+<td><strong>不刷新</strong>；離開播放器或下次啟動才切換</td>
+</tr>
+<tr>
+<td>SB-23</td>
+<td>新 Web 要求高於 Shell 的 <code>minShell</code> 或 <code>apiLevel</code></td>
+<td>顯示相容提示，不白屏</td>
+</tr>
+<tr>
+<td>SB-24</td>
+<td>Web 發布失敗／bundle 損毀（人為改一個檔案）</td>
+<td>校驗失敗，維持舊版，回報事件</td>
+</tr>
+<tr>
+<td>SB-25</td>
+<td>舊 Web 資源在更新後仍被舊會話使用</td>
+<td>舊版資源保留到會話結束（A 方案）／本機舊版資料夾保留（B 方案）</td>
+</tr>
+</tbody>
+</table>
+<h3>5.4 平台</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>平台</th>
+<th>測試</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SB-30</td>
+<td>Win7 SP1 x64、Electron 22.3.27</td>
+<td>同一份 bundle 載入；React 19.2.8、pdfjs-dist 6.2.108 是否可用；若 pdf.js 失敗，改用 legacy build 再測</td>
+</tr>
+<tr>
+<td>SB-31</td>
+<td>Win10／11、Electron 44.9.0</td>
+<td>SB-01～SB-25 全跑一輪</td>
+</tr>
+<tr>
+<td>SB-32</td>
+<td>Ubuntu Client</td>
+<td>SB-01～SB-14</td>
+</tr>
+<tr>
+<td>SB-33</td>
+<td>Server App（本機管理介面）</td>
+<td>管理 API 只能經 <code>127.0.0.1:4081</code>；LAN 的 4080 呼叫 <code>/api/admin/*</code> 回 404；Client 的 Super 工作階段不得呼叫本機管理 API（Dev63 已有 <code>app</code> 欄位檢查，需回歸）</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2>6. 原型最小改動清單</h2>
+<p>在獨立分支或複本進行，不動 Dev63 正式碼：</p>
+<ol>
+<li><strong>導航白名單</strong>：<code>hardenContents</code> 由 <code>startsWith(APP_ORIGIN + '/')</code> 改為「信任來源集合」（A：Server origin + <code>/app/</code>；B：維持 <code>app://istudy</code>）。</li>
+<li><strong>IPC 來源驗證</strong>：所有 <code>ipcMain.handle</code> 先呼叫 <code>assertTrusted(event)</code>，檢查 <code>event.senderFrame.url</code>（含主框架與子框架）；失敗寫 <code>clientlog</code> 並回錯誤。</li>
+<li><strong>Token 注入縮小</strong>：<code>filter.urls</code> 由 <code>server + '/*'</code> 改為 <code>server + '/api/*'</code>；登入前公開路徑不注入。<ul>
+<li>說明：Dev63 的影片串流位於 <code>/api/media/{id}/stream</code>，縮小到 <code>/api/*</code> <strong>不會</strong>影響播放。若 v7 新增非 <code>/api/</code> 的受保護資源，才需要另列。</li>
+</ul>
+</li>
+<li><strong>CSP 來源</strong>：A 方案改由 Nginx 回應標頭；B 方案維持主程序。兩者都保留 <code>script-src 'self'</code>、<code>frame-src 'none'</code>、<code>object-src 'none'</code>。</li>
+<li><strong>離線 fallback</strong>：本機打包一頁極小 HTML（顯示狀態、重試按鈕、版本），Server 不可達或 bundle 載入失敗時使用。</li>
+<li><strong>版本欄位</strong>：只用 <code>shellVersion</code>、<code>uiVersion</code>、<code>apiLevel</code>、<code>minShell</code> 四個值（v7 §03 已定）。</li>
+<li><strong>B 方案專屬</strong>：bundle 下載器（暫存 → SHA-256 校驗 → 改名 → 更新指標檔 → 保留上一版）。</li>
+</ol>
+<hr/>
+<h2>7. 實驗環境</h2>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>設定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>測試 Server</td>
+<td>另開 Nginx 站台，使用 <strong>4090（LAN）／4091（本機）</strong>，不使用 4080／4081</td>
+</tr>
+<tr>
+<td>後端</td>
+<td>可用 Dev63 的 PHP 以測試 DB 或 <code>ISTUDY_SENDFILE=php</code> 模式；或 <code>server/tests/integration/serve.sh</code> 的測試伺服器</td>
+</tr>
+<tr>
+<td>測試 DB</td>
+<td>全新隔離 DB（<code>istudy_spike</code>），不連 <code>istudy</code></td>
+</tr>
+<tr>
+<td>素材</td>
+<td>3 支 1080p H.264/AAC MP4（含 faststart）、1 份 PDF、1 份 VTT</td>
+</tr>
+<tr>
+<td>客戶端</td>
+<td>1 台 Win10（先）、1 台 Win7、1 台 Ubuntu</td>
+</tr>
+<tr>
+<td>惡意頁</td>
+<td>本機一頁靜態 HTML，內含呼叫 <code>window.istudy.*</code> 與外部連結的按鈕（只在測試機使用）</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2>8. 通過標準與決策</h2>
+<p><strong>必須全部通過才算該方案可行：</strong> SB-01～SB-09（安全）、SB-10～SB-14（功能）、SB-20～SB-24（可用性）。</p>
+<table>
+<thead>
+<tr>
+<th>結果</th>
+<th>決策</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A、B 都通過</td>
+<td>選 B（改動較小、離線可用）；A 留作備案</td>
+</tr>
+<tr>
+<td>只有 B 通過</td>
+<td>採 B</td>
+</tr>
+<tr>
+<td>只有 A 通過</td>
+<td>採 A，並把 IPC 來源驗證與離線 fallback 列為上線門檻</td>
+</tr>
+<tr>
+<td>都不通過</td>
+<td>暫停 Web/Shell 分離，維持 Dev63 本機打包渲染，僅更新後端與 Worker</td>
+</tr>
+<tr>
+<td>SB-30（Win7）失敗</td>
+<td>Win7 維持獨立 channel 與獨立 bundle；不要求與新版共用</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2>9. 時程與交付</h2>
+<table>
+<thead>
+<tr>
+<th>步驟</th>
+<th>內容</th>
+<th>估計</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>建立隔離環境、測試素材</td>
+<td>0.5 天</td>
+</tr>
+<tr>
+<td>2</td>
+<td>IPC 來源驗證 + Token 注入縮小（兩方案共用）</td>
+<td>1 天</td>
+</tr>
+<tr>
+<td>3</td>
+<td>方案 A 原型 + 離線 fallback</td>
+<td>1 天</td>
+</tr>
+<tr>
+<td>4</td>
+<td>方案 B 原型（bundle 下載與切換）</td>
+<td>1.5 天</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Win10 全矩陣、Win7、Ubuntu 抽測</td>
+<td>1.5 天</td>
+</tr>
+<tr>
+<td>6</td>
+<td>結果表、決策、風險更新</td>
+<td>0.5 天</td>
+</tr>
+</tbody>
+</table>
+<p><strong>交付物：</strong> 驗證結果表（本文件 §5 填寫版）、原型差異檔（patch）、一頁決策紀錄。不產出新的規格中心或測試平台。</p>
+<hr/>
+<h2>10. 已知限制</h2>
+<ul>
+<li>本文件根據靜態讀取撰寫；上述「現況」未在實機執行確認。</li>
+<li>Server App 專屬 IPC 與 <code>pkexec</code> 流程需另行盤點。</li>
+<li>未包含 HTTPS；若 Super 之後要求，另開決策，不在本 Spike 範圍。</li>
+<li>「同源 manifest 的 SHA-256 不等於發布者身分」這項限制與 v7 §05、§09 一致，維持原決策。</li>
+</ul>
+</section><section class="pane doc-integrated" id="v72analysis"><h2>22｜重構分析與建議（原文完整整合）</h2><div class="note-v72">以下完整保留 Claude 上傳文件的主張、表格、待決策項目及未驗證標記。屬於靜態審查，不表示原型、Win7、七台播放或實機權限測試已通過。</div><h1>iSTUDY ZERO-OPS 重構分析與建議（v7.1 修正版）</h1>
+<p>日期：2026-11-05
+依據：Dev63 原始碼封存（<code>source/dev63-test</code>）、《ZERO-OPS v7 完整計畫書》、《Dev63 完整靜態審查與 ZERO-OPS v7 重構計畫》、另一份交叉審查意見。
+性質：靜態閱讀與腳本掃描，<strong>未執行任何服務、測試或實機驗證</strong>。</p>
+<hr/>
+<h2>1. 結論</h2>
+<p>方向正確：保留 Dev63 的 PHP 路由、授權規則、Worker、React UI，改為原生部署並降低維護負擔。</p>
+<p>要調整的是<strong>做法與順序</strong>：</p>
+<ol>
+<li>不改名 <code>jobs</code>，只補確認的缺口。</li>
+<li>Page Atlas 不得擴權：有效權限 = UI 勾選 ∩ 後端角色。</li>
+<li>舊資料選擇性保留，不搬舊 schema。</li>
+<li>先做 ShellBridge 安全驗證與七台播放基準，再動後端。</li>
+<li>把「七件事同時改」拆成三個階段，每階段都有退出條件。</li>
+</ol>
+<hr/>
+<h2>2. 事實核對（哪些已看過程式、哪些仍是推論）</h2>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>狀態</th>
+<th>證據</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>120 條路由都有第一層守門（除登入前公開 7 條）</td>
+<td>已核對</td>
+<td>路由腳本掃描，見《Dev63_API角色對照矩陣.xlsx》</td>
+</tr>
+<tr>
+<td>Super 69、Admin 19、User 22、Admin（需 Super 授權）3、公開 4、選擇性登入 3</td>
+<td>已核對（靜態）</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>56 條管理路由依賴 <code>require_local_super</code>（本機 :4081＋Server App session）</td>
+<td>已核對</td>
+<td><code>auth.php</code>、各 route</td>
+</tr>
+<tr>
+<td>Token 由主程序 <code>onBeforeSendHeaders</code> 對 <code>server/*</code> 全部請求注入</td>
+<td>已核對</td>
+<td><code>bridge.ts installHeaderInjection</code></td>
+</tr>
+<tr>
+<td>導航只允許 <code>app://istudy/</code></td>
+<td>已核對</td>
+<td><code>security.ts hardenContents</code></td>
+</tr>
+<tr>
+<td>15 個 IPC 通道均無來源驗證</td>
+<td>已核對</td>
+<td>搜尋 <code>senderFrame</code>／<code>getURL</code> 無結果</td>
+</tr>
+<tr>
+<td>影片串流在 <code>/api/media/{id}/stream</code>，<code>&lt;video&gt;</code> 靠注入帶授權</td>
+<td>已核對</td>
+<td><code>Player.tsx</code>、<code>catalog.php</code></td>
+</tr>
+<tr>
+<td>Retry 會把 <code>attempts</code> 減 1，可能無限重排</td>
+<td>已核對（邏輯），未實測</td>
+<td><code>agent/worker/main.py</code></td>
+</tr>
+<tr>
+<td>啟動時 <code>recover()</code> 會重排 running 工作</td>
+<td>已核對</td>
+<td><code>main.py:165</code></td>
+</tr>
+<tr>
+<td>Worker 無「存活中卡死」的逾時／心跳</td>
+<td>未見相關程式；需再搜尋確認各 handler 是否自帶 timeout</td>
+<td>部分推論</td>
+</tr>
+<tr>
+<td>Win7 能否跑 React 19.2.8＋pdfjs-dist 6.2.108（chrome108 目標）</td>
+<td><strong>未驗證</strong></td>
+<td>建置只降語法，不補 API</td>
+</tr>
+<tr>
+<td>Python 3.14.4＋<code>sherpa-onnx==1.13.8</code>、<code>opencc==1.1.9</code> 可安裝</td>
+<td><strong>未驗證</strong></td>
+<td>審查報告自述</td>
+</tr>
+<tr>
+<td>VA-API <code>h264_vaapi</code> 在 FFmpeg 8.0.1 可用</td>
+<td><strong>未驗證</strong>（舊結果來自 6.1.1）</td>
+<td>v7 §12</td>
+</tr>
+<tr>
+<td>實際 DB schema 與 migration 一致</td>
+<td><strong>未驗證</strong></td>
+<td>沒有 <code>pg_dump --schema-only</code></td>
+</tr>
+<tr>
+<td>9 個「疑似密鑰檔」</td>
+<td>已看清單：皆為測試／mock 檔；且三個原始碼樹各有一份</td>
+<td><code>inventory/review-for-hardcoded-secrets.txt</code></td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2>3. 對其他審查意見的回應</h2>
+<table>
+<thead>
+<tr>
+<th>意見</th>
+<th>判斷</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>保留 <code>jobs</code>，不加 lease／fencing</td>
+<td><strong>同意</strong>。與 v7 §16「不過度設計」一致；只補逾時、心跳與 Retry 規則。</td>
+</tr>
+<tr>
+<td>Page Atlas：UI 設定 ∩ 後端角色</td>
+<td><strong>同意</strong>，並建議以矩陣 Atlas 欄為上限（見矩陣）。</td>
+</tr>
+<tr>
+<td>舊資料選擇性保留；先查是不是只有測試資料</td>
+<td><strong>同意</strong>。先查，再決定是否寫搬移腳本。</td>
+</tr>
+<tr>
+<td>版本以實機為候選基準、逐項驗證</td>
+<td><strong>同意</strong>；補充：驗證失敗時有明確退路（見 §6 決策表）。</td>
+</tr>
+<tr>
+<td>ShellBridge、七台基準前移</td>
+<td><strong>同意</strong>。</td>
+</tr>
+<tr>
+<td>Token 注入範圍過大，改成 <code>/api/*</code> 不能漏掉影音</td>
+<td><strong>部分修正</strong>：Dev63 的影片串流本來就在 <code>/api/</code> 下，縮小到 <code>/api/*</code> 不影響播放；<code>/_protected/*</code> 是 Nginx internal。若 v7 新增非 <code>/api/</code> 的受保護資源才需要另列。</td>
+</tr>
+<tr>
+<td>改載入遠端 UI 會被現有導航規則擋住</td>
+<td><strong>同意</strong>，且更嚴重的是 15 個 IPC 無來源驗證（見 ShellBridge 方案）。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>我先前說法的更正：</strong></p>
+<ul>
+<li>我曾說「只有 3 條完全公開」。以更嚴謹的分類為：免登入 4 條（<code>health</code>、<code>login-config</code>、<code>login</code>、<code>wol/public/devices</code>；後者限區網 IP）、選擇性登入 3 條（心跳、公開喚醒、<code>client/logs</code>）。</li>
+<li>我曾說「約 31 條只要登入」，修正為 22 條（其餘在上述公開／選擇性類別）。</li>
+<li>我曾說 Worker 缺 lease；更精確是：<strong>重啟後恢復已有</strong>，缺的是「活著但卡死」。</li>
+</ul>
+<hr/>
+<h2>4. 問題清單（依優先級）</h2>
+<h3>P0：不處理就不應開始重構</h3>
+<table>
+<thead>
+<tr>
+<th>編號</th>
+<th>問題</th>
+<th>證據</th>
+<th>建議</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P0-1</td>
+<td>遠端 UI 會讓 15 個 IPC 暴露給不可信來源</td>
+<td><code>preload.ts</code>、無 sender 驗證</td>
+<td>執行《ShellBridge 驗證方案》；所有 IPC 加 <code>assertTrusted(event)</code></td>
+</tr>
+<tr>
+<td>P0-2</td>
+<td>Token 注入涵蓋 <code>server/*</code> 全部請求</td>
+<td><code>bridge.ts</code></td>
+<td>縮到 <code>/api/*</code>；登入前公開路徑不注入</td>
+</tr>
+<tr>
+<td>P0-3</td>
+<td>Worker <code>Retry</code> 使 <code>attempts</code> 回退，可能永遠重試</td>
+<td><code>main.py</code></td>
+<td>區分「條件未滿足的等待」與「失敗重試」；等待設總期限；補單元測試</td>
+</tr>
+<tr>
+<td>P0-4</td>
+<td>Server 離線時 Client 無畫面（若 UI 全從 Server 載入）</td>
+<td>v7 架構</td>
+<td>本機 fallback 頁，或採方案 B（本機載入已校驗 bundle）</td>
+</tr>
+<tr>
+<td>P0-5</td>
+<td>基準缺失：Dev63 七台播放沒有 KPI 基準</td>
+<td><code>Player.tsx</code> 無 QoE 回報</td>
+<td>重構前先量一次基準（可用外部工具）</td>
+</tr>
+</tbody>
+</table>
+<h3>P1：需在對應階段處理</h3>
+<table>
+<thead>
+<tr>
+<th>編號</th>
+<th>問題</th>
+<th>建議</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1-1</td>
+<td>Admin 能力與 v7 的「Admin 只看 USB 匯入」不一致（現況 19 條 Admin 路由）</td>
+<td>決定是否縮減；縮減要同步改後端守門</td>
+</tr>
+<tr>
+<td>P1-2</td>
+<td>WOL 註解與程式不符（註解說 Admin 可查看／喚醒，程式全為 Super）</td>
+<td>先決定需求，再統一</td>
+</tr>
+<tr>
+<td>P1-3</td>
+<td><code>PATCH/DELETE /api/media/{id}</code> 不在 <code>/api/admin/</code> 路徑</td>
+<td>改路徑或 Nginx 加規則；補「LAN 呼叫必須 404」測試</td>
+</tr>
+<tr>
+<td>P1-4</td>
+<td>Win7：chrome108 目標只降語法；React 19、pdfjs-dist 6 未驗證</td>
+<td>早期上實機；必要時 pdf.js legacy build 或 Win7 獨立 bundle</td>
+</tr>
+<tr>
+<td>P1-5</td>
+<td>Python 3.14／sherpa-onnx／opencc wheel 未驗證</td>
+<td>先在隔離 venv 安裝並跑一段音訊；失敗則改用已驗證的 Python 版本</td>
+</tr>
+<tr>
+<td>P1-6</td>
+<td>FFmpeg 8.0.1 與 VA-API 未驗證（舊結果是 6.1.1）</td>
+<td>實測轉檔、faststart、音訊抽取、尾段字幕</td>
+</tr>
+<tr>
+<td>P1-7</td>
+<td>舊資料處理未決（字幕與人工編修最難重做）</td>
+<td>先確認是否為正式資料；是才寫選擇性搬移</td>
+</tr>
+<tr>
+<td>P1-8</td>
+<td>Retry 與 <code>recover()</code> 對「已完成副作用的工作」沒有重入保護（如 email、purge、備份）</td>
+<td>逐類型列出可重入性；不可重入者用既有狀態欄位保護，不另建框架</td>
+</tr>
+<tr>
+<td>P1-9</td>
+<td>Electron 22（Win7）搭配 electron-updater 6.3.9 能否自動更新未驗證</td>
+<td>先做 Win7 單機 vA→vB；失敗則 Win7 以手動安裝 + 公告</td>
+</tr>
+</tbody>
+</table>
+<h3>P2：記錄並排程</h3>
+<table>
+<thead>
+<tr>
+<th>編號</th>
+<th>問題</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P2-1</td>
+<td>Page Atlas 編號缺 IS-C-012，需確認是否刻意</td>
+</tr>
+<tr>
+<td>P2-2</td>
+<td>三份原始碼樹（<code>home-istudy</code> dev.53、<code>projects-istudy</code>、<code>dev63-test</code>）同封存，易誤用；重構時只以 <code>dev63-test</code> 為準，其餘標註封存</td>
+</tr>
+<tr>
+<td>P2-3</td>
+<td>專案已累積大量 <code>DEV63_*_20261104.md</code> 與 105 個測試檔；v7 要避免重複驗收，需把測試分級（見 §7）</td>
+</tr>
+<tr>
+<td>P2-4</td>
+<td>封存中有 <code>.github/workflows</code>；v7 說明不以 GitHub／CI 為日常條件，需確認是否保留</td>
+</tr>
+<tr>
+<td>P2-5</td>
+<td>疑似密鑰 9 檔看似皆為測試／mock，仍建議 Super 人工確認後再決定是否可公開上傳</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2>5. 建議的重構順序</h2>
+<h3>階段 0：驗證（不動正式服務）｜預估 1～2 週</h3>
+<table>
+<thead>
+<tr>
+<th>工作</th>
+<th>退出條件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ShellBridge Spike（A／B 比較）</td>
+<td>方案選定；SB-01～SB-24 通過</td>
+</tr>
+<tr>
+<td>Dev63 七台播放基準</td>
+<td>有起播、卡頓、掉幀、前向緩衝、Server 負載數據</td>
+</tr>
+<tr>
+<td>Win7 相容抽測（含 pdf.js、React 19）</td>
+<td>可用或確定獨立 bundle／降級</td>
+</tr>
+<tr>
+<td>隔離 venv 測 Python 3.14＋sherpa-onnx＋opencc</td>
+<td>能跑一段 ASR；否則決定 Python 版本</td>
+</tr>
+<tr>
+<td>FFmpeg 8.0.1＋VA-API 抽測</td>
+<td>轉檔與字幕尾段正常</td>
+</tr>
+<tr>
+<td>查舊 DB 資料性質</td>
+<td>決定是否需要選擇性搬移</td>
+</tr>
+<tr>
+<td>修 Retry 規格；補 Worker 逾時／心跳需求</td>
+<td>規格定稿（可在階段 1 實作）</td>
+</tr>
+</tbody>
+</table>
+<h3>階段 1：原生化後端，維持契約｜預估 2～3 週</h3>
+<ul>
+<li>原生 Nginx＋PHP-FPM＋PostgreSQL 18（新隔離 DB）＋Python venv＋systemd。</li>
+<li><strong>保留</strong> <code>jobs</code>、既有 API 語意、既有 React UI、既有 Shell（先不改 Web/Shell 分離）。</li>
+<li>新 schema 以 baseline 一次建立；不複製舊 migration 鏈；選擇性匯入重要資料。</li>
+<li>補強：Retry 規則、子程序逾時終止、<code>recover()</code> 保留並補測試。</li>
+<li>管理邊界：原生 Nginx <code>127.0.0.1:4081</code>；LAN 4080 呼叫 <code>/api/admin/*</code> 與 <code>PATCH/DELETE /api/media/{id}</code> 必須 404。</li>
+<li>沿用 Dev63 的 4080／4081 <strong>只在切換日</strong>；之前使用隔離埠。</li>
+</ul>
+<p><strong>退出條件：</strong> 新環境跑完 Dev63 既有整合測試的相關部分；Worker 18 類型逐個以真實樣本通過；API 角色矩陣的角色與狀態碼抽測通過。</p>
+<h3>階段 2：Web／Shell 分離｜預估 2～3 週</h3>
+<ul>
+<li>依階段 0 的結果實作 A 或 B。</li>
+<li>所有 IPC 加來源驗證；Token 注入縮小；本機 fallback。</li>
+<li>Page Atlas 進 DB（<code>ui_pages</code>、<code>ui_page_roles</code>），有效權限 = UI ∩ 後端。</li>
+<li>雙層更新：Web bundle 與 Shell 各自更新；四種更新日誌與離線重送。</li>
+</ul>
+<p><strong>退出條件：</strong> Win10 端到端自動更新（vA→vB）通過；SB 矩陣 100% 通過；播放中不刷新。</p>
+<h3>階段 3：維護、整合驗收與切換｜預估 1～2 週</h3>
+<ul>
+<li>Super 一鍵更新／備份／診斷（preflight → backup → migrate → switch → healthcheck → rollback）。</li>
+<li>七台同時播放對照階段 0 基準。</li>
+<li>針對<strong>更新與備份</strong>做必要的故障注入（中途斷電、磁碟滿），其他功能採影響範圍測試。</li>
+<li>一次切換；舊 iSTUDY 容器與 DB 保留唯讀備份到驗收完成後才清理。</li>
+<li><strong>不停 Docker Engine、不動 EachCore 容器與 DB。</strong></li>
+</ul>
+<hr/>
+<h2>6. 決策表（請 Super 確認）</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>決策</th>
+<th>建議</th>
+<th>若不採用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D1</td>
+<td><code>jobs</code> 是否改名</td>
+<td>不改</td>
+<td>改名需全面搜尋 SQL 與 UI 文案，且 Worker 的 <code>warn_unknown_types</code> 已顯示改名漏改會造成靜默卡住</td>
+</tr>
+<tr>
+<td>D2</td>
+<td>Page Atlas 權限</td>
+<td>UI ∩ 後端；Atlas 欄為上限</td>
+<td>後端同時改為讀 <code>ui_page_roles</code>（等於重做授權）</td>
+</tr>
+<tr>
+<td>D3</td>
+<td>Admin 範圍</td>
+<td>先保留現況 19 條，再由 Super 決定是否縮減</td>
+<td>縮減則同步改守門並補測試</td>
+</tr>
+<tr>
+<td>D4</td>
+<td>WOL：Admin 可否查看狀態／喚醒</td>
+<td>需求先定</td>
+<td>目前程式 = 全 Super</td>
+</tr>
+<tr>
+<td>D5</td>
+<td>舊資料</td>
+<td>先查；有正式資料才搬帳號、群組、權限、字幕</td>
+<td>不搬則需明確接受重做字幕</td>
+</tr>
+<tr>
+<td>D6</td>
+<td>PHP／Python／FFmpeg 版本</td>
+<td>以實機版本試裝，失敗才退</td>
+<td>先固定 LTS 版本可降低未知，但增加後續升級</td>
+</tr>
+<tr>
+<td>D7</td>
+<td>Web／Shell 方案</td>
+<td>依 Spike 結果；預設假設 B</td>
+<td>—</td>
+</tr>
+<tr>
+<td>D8</td>
+<td>Win7 策略</td>
+<td>獨立 channel；不承諾與新版共 bundle</td>
+<td>共 bundle 需通過 SB-30</td>
+</tr>
+<tr>
+<td>D9</td>
+<td>故障注入範圍</td>
+<td>僅更新與備份</td>
+<td>擴大會與 v7 §08 衝突</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2>7. 驗收收斂（避免重複驗收）</h2>
+<p>延用 v7 §08 的分級，不另增新規格中心：</p>
+<table>
+<thead>
+<tr>
+<th>變更類型</th>
+<th>最低檢查</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>React UI</td>
+<td>build＋當頁操作＋一次登入／播放冒煙</td>
+</tr>
+<tr>
+<td>PHP API</td>
+<td>受影響路由（用角色矩陣挑適用狀態碼）＋登入／權限＋health</td>
+</tr>
+<tr>
+<td>Worker</td>
+<td>對應任務樣本＋日誌＋錯誤恢復</td>
+</tr>
+<tr>
+<td>DB migration</td>
+<td>備份＋migration＋相關 CRUD</td>
+</tr>
+<tr>
+<td>Electron 外殼／updater</td>
+<td>對應 OS 的安裝版更新端到端</td>
+</tr>
+<tr>
+<td>架構／串流核心</td>
+<td>七台同步播放＋Super／Admin／更新與復原一次性整合驗收</td>
+</tr>
+</tbody>
+</table>
+<p>每個問題只記：症狀 → 根因 → 最小修正 → 一次針對性重測。</p>
+<hr/>
+<h2>8. 明確「不做」清單</h2>
+<ul>
+<li>不引入 Redis、RabbitMQ、Kubernetes、新播放器框架、Jellyfin。</li>
+<li>不建立 lease／fencing／分散式佇列。</li>
+<li>不新增 PKI、簽章服務、SSO、OAuth。</li>
+<li>不把 Page Atlas 擴成元件相依圖或截圖版本庫。</li>
+<li>不同時改版面與架構。</li>
+<li>不在新 DB 建立 legacy／v1／v2／tmp 表。</li>
+<li>不修改 EachCore；不停 Docker Engine。</li>
+</ul>
+<hr/>
+<h2>9. 風險登錄</h2>
+<table>
+<thead>
+<tr>
+<th>風險</th>
+<th>影響</th>
+<th>緩解</th>
+<th>對應階段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>遠端 UI 擴大原生能力暴露面</td>
+<td>高</td>
+<td>IPC 來源驗證、Token 縮小、方案 B</td>
+<td>0／2</td>
+</tr>
+<tr>
+<td>Win7 不相容新 Web</td>
+<td>高</td>
+<td>早期實機；獨立 bundle</td>
+<td>0</td>
+</tr>
+<tr>
+<td>版本跳升造成 ASR／FFmpeg 不可用</td>
+<td>高</td>
+<td>隔離環境先驗；保留可退版本</td>
+<td>0／1</td>
+</tr>
+<tr>
+<td>Worker 無限重試／卡死</td>
+<td>中</td>
+<td>Retry 規則、逾時、心跳</td>
+<td>1</td>
+</tr>
+<tr>
+<td>舊字幕與人工編修遺失</td>
+<td>中</td>
+<td>先查資料性質；選擇性搬移</td>
+<td>0／1</td>
+</tr>
+<tr>
+<td>同時修改過多</td>
+<td>中</td>
+<td>三階段、退出條件</td>
+<td>全部</td>
+</tr>
+<tr>
+<td>切換日無法回復</td>
+<td>高</td>
+<td>舊系統保留到驗收完成；備份＋回復演練</td>
+<td>3</td>
+</tr>
+<tr>
+<td>驗收範圍膨脹</td>
+<td>中</td>
+<td>§7 分級；故障注入僅限更新與備份</td>
+<td>全部</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2>10. 下一步（建議順序）</h2>
+<ol>
+<li>Super 回答 D3、D4、D5、D8。</li>
+<li>執行階段 0 的 ShellBridge Spike 與七台播放基準（可並行）。</li>
+<li>依結果鎖定方案後，再開始階段 1。</li>
+</ol>
+<hr/>
+<h2>附：本次交付檔案</h2>
+<table>
+<thead>
+<tr>
+<th>檔案</th>
+<th>內容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Dev63_API角色對照矩陣.xlsx</code></td>
+<td>120 條路由的守門、最低角色、可達範圍、第二層判斷、Atlas 可開放性、8 項待釐清事項</td>
+</tr>
+<tr>
+<td><code>ShellBridge_驗證方案.md</code></td>
+<td>現況、威脅模型、A／B 方案、SB 驗證矩陣、原型改動清單、實驗環境、決策規則</td>
+</tr>
+<tr>
+<td><code>iSTUDY_重構分析與建議_v7.1.md</code></td>
+<td>本文件</td>
+</tr>
+</tbody>
+</table>
+<p><strong>限制：</strong> 矩陣為靜態判讀，「資源層限縮」只偵測關鍵函式呼叫，不證明授權邏輯正確；專案內另有 <code>docs/DEV63_FIX11_ADMIN_API_MATRIX.csv</code> 與 <code>DEV63_PAGE_ATLAS_API_ROUTE_AUDIT.csv</code>，本表未逐列比對。</p>
+<h2>22.1｜整合後統一決策基線與衝突處理（本版補充）</h2><table><tr><th>主題</th><th>v7.2 統一執行原則</th><th>狀態</th></tr><tr><td>jobs/tasks</td><td>沿用 jobs 與 recover()，僅補 Retry 上限、卡死逾時／心跳；不引入 lease/fencing</td><td>建議採行</td></tr><tr><td>API 權限</td><td>後端授權為上限；Admin 19 條暫保留現況，WOL 維持 Super，未經核准不縮權／放權</td><td>暫行，待 Super 決策</td></tr><tr><td>舊資料</td><td>新 schema；先清查正式資料，必要時選擇性匯入帳號／群組／權限／字幕／人工編修及其關聯；不刪除舊 DB</td><td>待資料清查</td></tr><tr><td>ShellBridge</td><td>A/B 都需測試；優先評估 B，不把 B 視為已核准。15 IPC 來源驗證與 token 注入縮小列為驗收門檻</td><td>待 Spike</td></tr><tr><td>Win7</td><td>維持 Electron 22.3.27 獨立更新通道；是否共用 bundle 以實機結果為準</td><td>待實測</td></tr><tr><td>版本</td><td>主機 PHP/Python/FFmpeg 為候選基準，逐項驗證 wheel、VA-API、PDF.js 與原生服務；不直接宣稱相容</td><td>待實測</td></tr><tr><td>七台播放</td><td>Dev63 原系統基準前移至任何切換之前，與新系統對照</td><td>待量測</td></tr><tr><td>正式環境</td><td>測試環境使用 4090/4091、獨立 DB；不得改動 4080/4081、EachCore、正式 istudy DB；未授權不開 GitHub PR</td><td>必守限制</td></tr></table><p><b>文件優先順序：</b>本版 22.1 決策基線與第 20–22 章的明確待決事項，優先於舊章節衝突敘述；所有「建議／待決」不等於使用者已核准。第 21 章保留原方案的驗證矩陣及 A/B 決策規則。</p></section></main></div><script>const tabs=[...document.querySelectorAll('.tab')],panes=[...document.querySelectorAll('.pane')];function show(id){tabs.forEach(x=>x.classList.toggle('active',x.dataset.target===id));panes.forEach(x=>x.classList.toggle('active',x.id===id));history.replaceState(null,'','#'+id);window.scrollTo(0,0)}tabs.forEach(x=>x.addEventListener('click',()=>show(x.dataset.target)));show(document.getElementById(location.hash.slice(1))?.id||'overview');</script><footer style="padding:18px;text-align:center">iSTUDY ZERO-OPS v7.1｜Dev63 交叉審查修正版；靜態盤點與規劃不代表已完成實機驗收</footer><script>document.addEventListener('DOMContentLoaded',()=>{const inp=document.getElementById('matrixFilterV72');const tb=document.querySelectorAll('#apiMatrixV72 tbody tr');const count=document.getElementById('matrixCountV72');if(inp){inp.addEventListener('input',()=>{let n=0;const q=inp.value.toLowerCase().trim();tb.forEach(tr=>{const ok=tr.textContent.toLowerCase().includes(q);tr.hidden=!ok;if(ok)n++});count.textContent=`顯示 ${n} / ${tb.length} 條路由`})}});</script></body></html>
