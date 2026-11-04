@@ -78,3 +78,10 @@
 - 已將 [跨版本發行治理 SOP v2.0](VERSION_UPGRADE_SOP.md) 納入 [Dev63 HTML 計畫書](DEV63_PLAN_v2.0.html) 的新 Tab「20 升級SOP v2.0」，涵蓋 G-1/G0～G8、UEM／Doctor／Hostcheck、報告保存、回滾與 Win10 Client 相容。
 - **Full UEM 新實測**：使用者於 2026-11-04 執行 `sudo istudyctl uem --mode full`，耗時 **9.0 秒**；輸出一項 `教材權限（/Media，Agent uid 10001）` 警告，涉及 `/Media/PurgeTest` sticky bit；但最終彙總顯示 `注意 0`。**兩者矛盾，需讀取 `latest.json` 的 `doctor.items`、`issues`、`counts`、時間戳釐清，不能視為無警告 PASS。**
 - 下一步：`sudo istudyctl media-acl` 只讀檢查、保存 Full `latest.md`／`latest.json`；**未核准不得執行 `--fix`**。舊版 .deb／映像／DB／Media 回滾能力及 Dev63 Migration／Win10 Client 相容性仍待驗證，G5 apply 不放行。
+
+## 十、2026-11-04｜Dev61 Full UEM 附件核對及教材 ACL 修復
+
+- 使用者已執行 `sudo istudyctl media-acl --fix`（輸入「修復」確認），再執行 `sudo istudyctl media-acl` 顯示「教材權限正常」。這是 **ACL 單項修復成功**，仍需重跑 Full UEM 建立修復後基準。
+- 依使用者提供的 Full UEM `latest.json`／`latest.md`（2026-11-04 12:37:25，修復前）核對：版本來源均為 `1.0.0-dev.61`，PostgreSQL 18、三容器、ZFS mirror、4080/4081/5432 綁定位址、QSV/VA-API、Office、FunASR 均通過。
+- **UEM 報告統計缺陷待修**：`counts.PASS=29, WARN=0, INFO=1`，但 `doctor.items` 中 `media_acl.status=warn`，`issues` 有 1 筆 WARN，`overall=WARN`；彙總 counts 未涵蓋 Doctor 的警告，造成表頭「注意 0」誤導。需修改 UEM 統計與顯示規則，補回歸測試，區分主機項與 Doctor 項，避免雙重計數。
+- `/srv/istudy/backup` 與 PostgreSQL data 同位於 SSD；升級前需獨立備份、隔離還原驗證。**尚未核准 Dev63 apply。**
