@@ -3,7 +3,7 @@
 > **AI 最高規則**：根目錄 [AGENTS.md](AGENTS.md) 規定「未經使用者明確許可不得建立 PR」。開發交接採 [C 混合方案](docs/ISTUDY_DEV_PACKAGING_POLICY_2026-11-04.md)：原始碼 ZIP 不含 `.deb`、`dist/`、`node_modules/`；Ubuntu 優先進行正式組譯及驗收。另見 [Dev62／Dev63 差異盤點](docs/DEV62_DEV63_FILE_DIFF_AUDIT_2026-11-04.md) 和 [Server App 審查](docs/DEV63_SERVER_APP_PACKAGING_REVIEW_2026-11-04.md)。
 
 
-心賞氣悅・無相氣學 助教複習系統。這一版是 MVP：**Ubuntu Server 後端＋Server App＋Client App（Win10、Win11、Ubuntu、Win7）**。
+這一版是 MVP：**Ubuntu Server 後端＋Server App＋Client App（Win10、Win11、Ubuntu、Win7）**。
 
 - 部署步驟：[docs/DEPLOY.md](docs/DEPLOY.md)
 - 開發狀態、測試結果、與計畫書的差異：[docs/STATUS.md](docs/STATUS.md)
