@@ -511,7 +511,8 @@ class ApiTest(unittest.TestCase):
         csv = self.ok(call("GET", "/api/audit/export", token=admin))  # admin01 已被授權（test_06）
         self.assertTrue(csv.body.startswith(b"\xef\xbb\xbf"))
         self.assertEqual(call("DELETE", "/api/audit", {"confirm": "清除"}, admin).status, 403)
-        r = self.ok(call("DELETE", "/api/audit", {"confirm": "清除", "before": "2026-10-01"}, self.super, port=ADM)).json
+        before = (_dt.date.today() - _dt.timedelta(days=14)).isoformat()  # 動態日期：確保 30 天前建立的測試紀錄一定會被清除
+        r = self.ok(call("DELETE", "/api/audit", {"confirm": "清除", "before": before}, self.super, port=ADM)).json
         self.assertGreaterEqual(r["deleted"], 1)
         self.assertTrue(self.conn.val("SELECT 1 FROM audit_log WHERE action = 'audit.cleared'"), "清除本身也留下一筆紀錄")
 

@@ -44,3 +44,6 @@ istudy-db-*.sql.gz
 Thumbs.db
 .vscode/
 .idea/
+
+# Page Atlas generated analysis (CI artifact / local output)
+/artifacts/page-atlas-analysis.json

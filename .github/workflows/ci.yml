@@ -75,6 +75,14 @@ jobs:
         run: .github/ci_step.sh "Client 測試" npm run test:client
       - name: Client 打包驗證測試
         run: .github/ci_step.sh "Client 打包驗證測試" npm run test:packaging
+      - name: Page Atlas 靜態關聯分析器測試
+        run: .github/ci_step.sh "Page Atlas 測試" npm run test:page-atlas
+      - name: Page Atlas 實際 Repository 掃描
+        run: |
+          mkdir -p artifacts
+          node scripts/page-atlas/analyze.mjs > artifacts/page-atlas-analysis.json
+      # GitHub Actions Artifact 額度可能已滿；分析結果在本次 Runner 產生並驗證，
+      # 不上傳以避免配額問題導致無關的 CI 失敗。需要時可本機執行 npm run analyze:page-atlas。
       - name: 語法檢查（shell、Python、PHP）
         run: |
           set -euo pipefail
