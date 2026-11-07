@@ -9,7 +9,7 @@ require $src . '/auth.php';
 require $src . '/rules.php';
 require $src . '/perms.php';
 require $src . '/router.php';
-foreach (['public', 'me', 'catalog', 'personal', 'manage', 'admin', 'email', 'outgo', 'reports'] as $r) {
+foreach (['public', 'me', 'catalog', 'personal', 'manage', 'admin', 'email', 'outgo', 'reports', 'page_atlas'] as $r) {
     require $src . '/routes/' . $r . '.php';
 }
 date_default_timezone_set('Asia/Taipei');
